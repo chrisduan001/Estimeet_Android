@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidannotations.annotations.EFragment;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.R;
@@ -16,6 +18,7 @@ import estimeet.meetup.ui.presenter.MainPresenter;
 /**
  * Created by AmyDuan on 6/02/16.
  */
+@EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView {
 
     @Inject MainPresenter presenter;
@@ -32,7 +35,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return null;
     }
 
     private void initialize() {

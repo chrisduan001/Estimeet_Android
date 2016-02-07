@@ -44,7 +44,7 @@ public class ServiceModule {
     public Retrofit provideRetrofit(Gson gson) {
         OkHttpClient client = new OkHttpClient();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         client.interceptors().add(interceptor);
 
         return new Retrofit.Builder()

@@ -2,6 +2,8 @@ package estimeet.meetup.ui.activity;
 
 import android.os.Bundle;
 
+import org.androidannotations.annotations.EActivity;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.R;
@@ -15,6 +17,7 @@ import estimeet.meetup.util.Navigator;
 /**
  * Created by AmyDuan on 6/02/16.
  */
+@EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity implements HasComponent<MainComponent> {
 
     private MainComponent mainComponent;
@@ -23,7 +26,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeInjector();
-        setContentView(R.layout.activity_main);
 
         replaceFragment(R.id.container, new MainFragment());
     }
