@@ -21,6 +21,10 @@
             android:authorities="com.estimeet.meetup"
             android:name=".model.database.SqliteProvider"
             android:exported="false" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3079a9957e68f68df335e1a9b7c0639f58b480a4" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -1,18 +1,12 @@
 package estimeet.meetup.ui.activity;
 
 import android.os.Bundle;
-
 import org.androidannotations.annotations.EActivity;
-
-import javax.inject.Inject;
-
 import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
-import estimeet.meetup.di.Modules.MainModule;
 import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.MainComponent;
-import estimeet.meetup.ui.fragment.MainFragment;
-import estimeet.meetup.util.Navigator;
+import estimeet.meetup.ui.fragment.MainFragment_;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -27,13 +21,12 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         super.onCreate(savedInstanceState);
         initializeInjector();
 
-        replaceFragment(R.id.container, new MainFragment());
+        replaceFragment(R.id.container, new MainFragment_());
     }
 
     private void initializeInjector() {
         mainComponent = DaggerMainComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .mainModule(new MainModule())
                 .build();
     }
 

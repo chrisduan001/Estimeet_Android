@@ -41,5 +41,33 @@ public class MainInteractor extends BaseInteractor {
             user1.userID = 1;
             dataHelper.insertUserData(user1);
         }
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+    }
+
+    private static class PauseUserSubscriber extends DefaultSubscriber<String> {
+        private final DataHelper dataHelper;
+
+        public PauseUserSubscriber(DataHelper dataHelper) {
+            this.dataHelper = dataHelper;
+        }
+
+        @Override
+        public void onNext(String s) {
+            super.onNext(s);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
     }
 }
