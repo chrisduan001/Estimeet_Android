@@ -2,4 +2,6 @@
     <string name="app_name">Meetup</string>
     <string name="network_error">A network error occured</string>
     <string name="http_generic_error">An error occured. Please try again</string>
+    <string name="text_enter_mobile_number">Enter your mobile number</string>
+    <string name="sign_in">Sign in</string>
 </resources>
