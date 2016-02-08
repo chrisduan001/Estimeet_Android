@@ -54,6 +54,7 @@ dependencies {
 
     apt "org.androidannotations:androidannotations:3.3.2"
     compile "org.androidannotations:androidannotations-api:3.3.2"
+
     compile('com.digits.sdk.android:digits:1.9.3@aar') {
         transitive = true;
     }

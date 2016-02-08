@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CustomDigitsTheme" parent="Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+        <item name="android:windowBackground">@android:color/background_dark</item>
+        <item name="android:textColorLink">@android:color/white</item>
+        <item name="colorAccent">#77A500</item>
+    </style>
+
 </resources>

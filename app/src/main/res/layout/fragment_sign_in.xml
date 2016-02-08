@@ -3,10 +3,4 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <estimeet.meetup.util.DigitsButton
-        android:id="@+id/digits_button"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
-
 </LinearLayout>
