@@ -1,5 +1,7 @@
 package estimeet.meetup.ui.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 import com.digits.sdk.android.AuthCallback;
@@ -20,6 +22,7 @@ import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.SignInPresenter;
+import estimeet.meetup.util.Navigator;
 
 /**
  * Created by AmyDuan on 8/02/16.
@@ -27,11 +30,29 @@ import estimeet.meetup.ui.presenter.SignInPresenter;
 @EFragment(R.layout.fragment_sign_in)
 public class SignInFragment extends BaseFragment implements SignInPresenter.SignInView {
 
+    //call back to activity listener
+    public interface SignInListener {
+        void onPhoneVerified();
+    }
+
     @Inject SignInPresenter presenter;
 
     @ViewById(R.id.sign_in_button) Button btnSignIn;
 
+    private SignInListener signInListener;
+
     //region lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SignInListener) {
+            this.signInListener = (SignInListener) context;
+        } else {
+            throw new UnsupportedOperationException("Activity must implement " +
+                    SignInListener.class.getSimpleName());
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -78,6 +99,8 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
                 TwitterAuthToken token = (TwitterAuthToken) digitsSession.getAuthToken();
                 DigitsOAuthSigning oAuthSigning = new DigitsOAuthSigning(config, token);
                 final Map<String, String> authHeaders = oAuthSigning.getOAuthEchoHeadersForVerifyCredentials();
+
+                signInListener.onPhoneVerified();
             }
 
             @Override

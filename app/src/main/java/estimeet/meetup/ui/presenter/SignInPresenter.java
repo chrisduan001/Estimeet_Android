@@ -24,6 +24,11 @@ public class SignInPresenter extends BasePresenter {
 
     }
 
+    @Override
+    public void onRequestPermissionCallback(boolean isGranted) {
+
+    }
+
     public void setView(SignInView view) {
         this.view = view;
     }

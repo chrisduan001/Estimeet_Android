@@ -3,6 +3,7 @@ package estimeet.meetup.di.components;
 import dagger.Component;
 import estimeet.meetup.di.PerActivity;
 import estimeet.meetup.ui.fragment.MainFragment;
+import estimeet.meetup.ui.fragment.ProfileFragment;
 import estimeet.meetup.ui.fragment.SignInFragment;
 
 /**
@@ -13,4 +14,5 @@ import estimeet.meetup.ui.fragment.SignInFragment;
 public interface MainComponent {
     void inject(MainFragment fragment);
     void inject(SignInFragment fragment);
+    void inject(ProfileFragment fragment);
 }

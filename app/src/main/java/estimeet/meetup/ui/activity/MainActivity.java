@@ -7,13 +7,16 @@ import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.ui.fragment.MainFragment_;
+import estimeet.meetup.ui.fragment.ProfileFragment;
+import estimeet.meetup.ui.fragment.ProfileFragment_;
+import estimeet.meetup.ui.fragment.SignInFragment;
 import estimeet.meetup.ui.fragment.SignInFragment_;
 
 /**
  * Created by AmyDuan on 6/02/16.
  */
 @EActivity(R.layout.activity_main)
-public class MainActivity extends BaseActivity implements HasComponent<MainComponent> {
+public class MainActivity extends BaseActivity implements HasComponent<MainComponent>, SignInFragment.SignInListener {
 
     private MainComponent mainComponent;
 
@@ -41,5 +44,22 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     @Override
     public MainComponent getComponent() {
         return mainComponent;
+    }
+
+    //region fragment callback
+    @Override
+    public void onPhoneVerified() {
+        replaceFragment(R.id.container, new ProfileFragment_());
+    }
+
+    //endregion
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() <= 0) {
+            this.finish();
+        }
     }
 }

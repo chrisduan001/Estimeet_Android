@@ -16,4 +16,7 @@ public abstract class BasePresenter implements IBasePresenter {
     public void onDestory() {
 
     }
+
+    @Override
+    public void onRequestPermissionCallback(boolean isGranted) {}
 }

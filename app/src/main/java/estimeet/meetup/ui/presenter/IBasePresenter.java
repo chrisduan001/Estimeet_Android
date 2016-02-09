@@ -8,4 +8,6 @@ public interface IBasePresenter {
     void onResume();
     void onPause();
     void onDestory();
+
+    void onRequestPermissionCallback(boolean isGranted);
 }
