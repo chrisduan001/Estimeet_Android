@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:layout_margin="20dp">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp">
 
     <ImageView
         android:id="@+id/profile_image"
@@ -23,6 +25,7 @@
         android:text="@string/profile_enter_name_hint"/>
 
     <EditText
+        android:id="@+id/et_user_name"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
@@ -63,5 +66,15 @@
             android:textColor="@android:color/darker_gray"/>
 
     </RelativeLayout>
+    
+    <Button
+        android:id="@+id/fb_login_display_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/facebook_button"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="@string/fb_button_text"/>
 
 </LinearLayout>

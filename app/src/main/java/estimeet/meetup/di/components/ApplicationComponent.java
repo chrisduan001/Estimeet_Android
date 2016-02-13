@@ -1,5 +1,7 @@
 package estimeet.meetup.di.components;
 
+import com.squareup.picasso.Picasso;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -20,4 +22,5 @@ public interface ApplicationComponent {
 
     DataHelper dataHelper();
     ServiceHelper serviceHelper();
+    Picasso picasso();
 }

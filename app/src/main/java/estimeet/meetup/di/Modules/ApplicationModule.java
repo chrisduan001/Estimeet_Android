@@ -2,6 +2,8 @@ package estimeet.meetup.di.Modules;
 
 import android.content.Context;
 
+import com.squareup.picasso.Picasso;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -22,5 +24,10 @@ public class ApplicationModule {
     @Provides @Singleton
     public Context provideApplicationContext() {
         return this.application;
+    }
+
+    @Provides @Singleton
+    public Picasso providePicasso() {
+        return Picasso.with(this.application);
     }
 }

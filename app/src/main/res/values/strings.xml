@@ -4,8 +4,13 @@
     <string name="http_generic_error">An error occured. Please try again</string>
     <string name="text_enter_mobile_number">Enter your mobile number</string>
     <string name="sign_in">Sign in</string>
+
     <string name="profile_enter_name_hint">Enter Your Name</string>
     <string name="profile_or_text">or</string>
+
+    <string name="facebook_id">1725764340993391</string>
+
     <string name="error_unable_to_crop_image">An error occured while crop the image</string>
     <string name="error_create_temp_file">An error occured when accessing your camera</string>
+    <string name="fb_button_text">Import from facebook</string>
 </resources>

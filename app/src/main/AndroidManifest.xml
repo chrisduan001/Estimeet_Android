@@ -23,15 +23,23 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <provider
             android:authorities="com.estimeet.meetup"
             android:name=".model.database.SqliteProvider"
             android:exported="false" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3079a9957e68f68df335e1a9b7c0639f58b480a4" />
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_id" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

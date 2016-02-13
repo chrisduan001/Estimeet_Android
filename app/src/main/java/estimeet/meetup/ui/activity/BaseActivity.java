@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.facebook.FacebookSdk;
+
 import javax.inject.Inject;
 import estimeet.meetup.MainApplication;
 import estimeet.meetup.di.Modules.ActivityModule;
