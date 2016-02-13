@@ -58,6 +58,8 @@ dependencies {
     compile('com.digits.sdk.android:digits:1.9.3@aar') {
         transitive = true;
     }
+
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
 }
 
 apt {

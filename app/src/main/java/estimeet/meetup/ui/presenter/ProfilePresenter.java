@@ -1,9 +1,11 @@
 package estimeet.meetup.ui.presenter;
 
+import android.Manifest;
+import android.graphics.Bitmap;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.ui.BaseView;
-import estimeet.meetup.ui.PermissionType;
 
 /**
  * Created by AmyDuan on 9/02/16.
@@ -14,7 +16,6 @@ public class ProfilePresenter extends BasePresenter {
 
     @Inject
     public ProfilePresenter() {
-
     }
 
     //region fragment callback
@@ -24,11 +25,9 @@ public class ProfilePresenter extends BasePresenter {
     }
 
     @Override
-    public void onRequestPermissionCallback(boolean isGranted) {
+    public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
-            view.showShortToastMessage("Camera opening");
-        } else {
-            view.showShortToastMessage("Permission denied");
+            view.startCameraAction();
         }
     }
 
@@ -39,12 +38,13 @@ public class ProfilePresenter extends BasePresenter {
         this.view = view;
     }
 
-    public void takePhoto() {
-        view.checkPermission(PermissionType.CAMERA);
+    public void intentToStartCamera() {
+        view.checkPermission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
     //endregion
 
     public interface ProfileView extends BaseView {
-
+        void setUserPhoto(Bitmap bitmap);
+        void startCameraAction();
     }
 }

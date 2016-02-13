@@ -6,4 +6,6 @@
     <string name="sign_in">Sign in</string>
     <string name="profile_enter_name_hint">Enter Your Name</string>
     <string name="profile_or_text">or</string>
+    <string name="error_unable_to_crop_image">An error occured while crop the image</string>
+    <string name="error_create_temp_file">An error occured when accessing your camera</string>
 </resources>

@@ -1,5 +1,7 @@
 package estimeet.meetup.ui.presenter;
 
+import android.graphics.Bitmap;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.interactor.SignInInteractor;
@@ -21,11 +23,6 @@ public class SignInPresenter extends BasePresenter {
 
     @Override
     public void onResume() {
-
-    }
-
-    @Override
-    public void onRequestPermissionCallback(boolean isGranted) {
 
     }
 

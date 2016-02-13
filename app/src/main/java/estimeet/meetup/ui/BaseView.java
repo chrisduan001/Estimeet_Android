@@ -7,5 +7,5 @@ public interface BaseView {
     void showShortToastMessage(String message);
     void showLongToastMessage(String message);
 
-    void checkPermission(int permissionType);
+    void checkPermission(String... permissions);
 }

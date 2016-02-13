@@ -1,6 +1,6 @@
 package estimeet.meetup.ui.presenter;
 
-import estimeet.meetup.ui.BaseView;
+import android.graphics.Bitmap;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -18,5 +18,6 @@ public abstract class BasePresenter implements IBasePresenter {
     }
 
     @Override
-    public void onRequestPermissionCallback(boolean isGranted) {}
+    public void onPermissionResult(boolean isGranted) {}
+
 }
