@@ -12,8 +12,6 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;

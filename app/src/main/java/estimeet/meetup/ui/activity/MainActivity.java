@@ -8,8 +8,6 @@ import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.ui.fragment.MainFragment_;
-import estimeet.meetup.ui.fragment.ProfileFragment_;
-import estimeet.meetup.ui.fragment.SignInFragment;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -27,7 +25,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         initializeInjector();
 
         if (NEEDSIGNIN) {
-            startActivity(new Intent(this, SignInActivity_.class));
+            startNewActivity(new Intent(this, SignInActivity_.class));
+            this.finish();
         } else {
             replaceFragment(R.id.container, new MainFragment_());
         }

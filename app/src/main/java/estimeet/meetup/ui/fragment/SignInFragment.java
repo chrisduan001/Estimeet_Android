@@ -1,6 +1,5 @@
 package estimeet.meetup.ui.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,11 +18,9 @@ import org.androidannotations.annotations.ViewById;
 import java.util.Map;
 import javax.inject.Inject;
 import estimeet.meetup.R;
-import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.SignInPresenter;
-import estimeet.meetup.util.Navigator;
 
 /**
  * Created by AmyDuan on 8/02/16.

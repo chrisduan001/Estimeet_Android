@@ -1,15 +1,11 @@
 package estimeet.meetup.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +16,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
-
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -29,7 +24,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.inject.Inject;
 import estimeet.meetup.R;
-import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.ProfilePresenter;
@@ -40,6 +34,10 @@ import estimeet.meetup.util.CircleTransform;
  */
 @EFragment(R.layout.fragment_profile)
 public class ProfileFragment extends BaseFragment implements ProfilePresenter.ProfileView {
+
+    public interface SignInListener {
+        void onGetStarted();
+    }
 
     @Inject ProfilePresenter presenter;
     @Inject Picasso picasso;
@@ -52,9 +50,20 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     private static final int CROP_IMAGE_CODE = 101;
     private static final int FACEBOOK_LOGIN_CODE = 200;
 
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
+    private SignInListener signInListener;
 
     //region lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SignInListener) {
+            this.signInListener = (SignInListener) context;
+        } else {
+            throw new UnsupportedOperationException("Activity must implement " +
+                    SignInListener.class.getSimpleName());
+        }
+    }
 
     @Nullable
     @Override
@@ -130,6 +139,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     protected void fbButtonClicked() {
         setupFacebookAction();
         presenter.registerCallBack(callbackManager);
+    }
+
+    @Click(R.id.btn_get_started)
+    protected void getStartButtonClicked() {
+        signInListener.onGetStarted();
     }
     //endregion
 

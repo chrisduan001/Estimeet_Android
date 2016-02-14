@@ -1,7 +1,5 @@
 package estimeet.meetup.ui.presenter;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by AmyDuan on 6/02/16.
  */

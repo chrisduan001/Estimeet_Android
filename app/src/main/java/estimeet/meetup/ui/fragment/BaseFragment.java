@@ -1,8 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -103,9 +101,4 @@ public abstract class BaseFragment extends Fragment {
         getPresenter().onPermissionResult(result);
     }
     //endregion
-
-    protected void startActivity() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 100);
-    }
 }
