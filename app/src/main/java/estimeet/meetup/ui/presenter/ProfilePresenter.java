@@ -61,12 +61,10 @@ public class ProfilePresenter extends BasePresenter {
             public void onSuccess(LoginResult loginResult) {
                 initFbRequest(loginResult.getAccessToken());
             }
-
             @Override
             public void onCancel() {
 
             }
-
             @Override
             public void onError(FacebookException error) {
 

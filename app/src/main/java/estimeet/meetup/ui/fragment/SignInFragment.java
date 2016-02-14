@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
+import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.SignInPresenter;
 import estimeet.meetup.util.Navigator;
@@ -67,7 +68,7 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     }
 
     private void initialize() {
-        getComponent(MainComponent.class).inject(this);
+        getComponent(SignInComponent.class).inject(this);
     }
 
     @Override

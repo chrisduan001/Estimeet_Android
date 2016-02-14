@@ -30,6 +30,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
+import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.ProfilePresenter;
 import estimeet.meetup.util.CircleTransform;
@@ -110,7 +111,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     }
 
     private void initialize() {
-        getComponent(MainComponent.class).inject(this);
+        getComponent(SignInComponent.class).inject(this);
     }
     //endregion
 

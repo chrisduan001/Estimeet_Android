@@ -6,12 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.facebook.FacebookSdk;
-
 import javax.inject.Inject;
 import estimeet.meetup.MainApplication;
-import estimeet.meetup.di.Modules.ActivityModule;
 import estimeet.meetup.di.components.ApplicationComponent;
 import estimeet.meetup.util.Navigator;
 
@@ -31,10 +27,6 @@ public class BaseActivity extends AppCompatActivity{
 
     protected ApplicationComponent getApplicationComponent() {
         return ((MainApplication) getApplication()).getApplicationComponent();
-    }
-
-    protected ActivityModule getActivityModule() {
-        return new ActivityModule(this);
     }
 
     //region fragment action
