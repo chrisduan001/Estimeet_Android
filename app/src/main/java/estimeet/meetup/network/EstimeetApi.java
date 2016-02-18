@@ -1,7 +1,10 @@
 package estimeet.meetup.network;
 
+import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.User;
+import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -15,4 +18,9 @@ public interface EstimeetApi {
 
     @GET("/pauserequest")
     Observable<String> pauseRequest();
+
+    @POST("/SignIn/SignInUser")
+    Observable<User> signInUser(
+            @Body AuthUser body
+    );
 }

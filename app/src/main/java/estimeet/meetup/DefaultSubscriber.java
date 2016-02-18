@@ -19,6 +19,9 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onNext(T t) {
+    }
 
+    protected void throwError(String errorMessage) {
+        onError(new Throwable(errorMessage));
     }
 }

@@ -21,7 +21,7 @@ public class MainPresenter extends BasePresenter {
 
     @Override
     public void onResume() {
-        interactor.queryUser();
+
     }
 
     public void setView(MainView view) {

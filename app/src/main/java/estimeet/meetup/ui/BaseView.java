@@ -8,4 +8,7 @@ public interface BaseView {
     void showLongToastMessage(String message);
 
     void checkPermission(String... permissions);
+
+    void showProgressDialog(String message);
+    void dismissProgressDialog();
 }

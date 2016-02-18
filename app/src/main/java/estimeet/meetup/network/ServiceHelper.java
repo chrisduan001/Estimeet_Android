@@ -3,6 +3,7 @@ package estimeet.meetup.network;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.User;
 import rx.Observable;
 
@@ -25,5 +26,9 @@ public class ServiceHelper {
 
     public Observable<String> pauseRequest() {
         return estimeetApi.pauseRequest();
+    }
+
+    public Observable<User> signInUser(AuthUser authUser) {
+        return estimeetApi.signInUser(authUser);
     }
 }

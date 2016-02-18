@@ -30,7 +30,7 @@ import retrofit.converter.GsonConverter;
 @Module
 public class ServiceModule {
 
-    private static final String API_URL = "https://estimeetprojapi.azurewebsites.net/api/register";
+    private static final String API_URL = "https://estimeetprojapi.azurewebsites.net/api";
     private static final String TEST_URL = "https://estimeetapi.azurewebsites.net/api/";
 
     @Provides
@@ -85,7 +85,7 @@ public class ServiceModule {
         };
 
         return new RestAdapter.Builder()
-                .setEndpoint(TEST_URL)
+                .setEndpoint(API_URL)
                 .setConverter(new GsonConverter(gson))
                 .setLogLevel(RestAdapter.LogLevel.HEADERS_AND_ARGS)
                 .setErrorHandler(errorHandler)

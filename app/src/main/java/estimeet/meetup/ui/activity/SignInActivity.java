@@ -17,7 +17,7 @@ import estimeet.meetup.ui.fragment.SignInFragment_;
  */
 @EActivity(R.layout.activity_sign_in)
 public class SignInActivity extends BaseActivity implements HasComponent<SignInComponent>,
-        SignInFragment.SignInListener, ProfileFragment.SignInListener {
+        SignInFragment.SignInCallback, ProfileFragment.SignInListener {
     private SignInComponent signInComponent;
 
     @Override
@@ -41,8 +41,13 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
 
     //region fragment callback
     @Override
-    public void onPhoneVerified() {
-        replaceFragment(R.id.container, new ProfileFragment_());
+    public void onSigninSuccessful(boolean isProfileCompleted) {
+        if (isProfileCompleted) {
+            startNewActivity(new Intent(this, MainActivity_.class));
+            this.finish();
+        } else {
+            replaceFragment(R.id.container, new ProfileFragment_());
+        }
     }
 
     @Override
@@ -50,6 +55,5 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
         startNewActivity(new Intent(this, MainActivity_.class));
         this.finish();
     }
-
     //endregion
 }

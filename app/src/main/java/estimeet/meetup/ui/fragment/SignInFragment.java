@@ -3,6 +3,8 @@ package estimeet.meetup.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ProgressBar;
+
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthConfig;
@@ -24,30 +26,39 @@ import estimeet.meetup.ui.presenter.SignInPresenter;
 
 /**
  * Created by AmyDuan on 8/02/16.
+ *
+ *   Sign-in process:
+ * 1. user get verified by digits
+ * 2. send digits auth (header and token) to server
+ * 3. server verify
+ *      3.1 if user registered before: get user password, dpuri and navigate to main activity
+ *      3.2 first time user: get user password (will be used for update profile dp, name etc)
  */
+
 @EFragment(R.layout.fragment_sign_in)
 public class SignInFragment extends BaseFragment implements SignInPresenter.SignInView {
 
     //call back to activity listener
-    public interface SignInListener {
-        void onPhoneVerified();
+    public interface SignInCallback {
+        void onSigninSuccessful(boolean isProfileCompleted);
     }
 
     @Inject SignInPresenter presenter;
 
-    @ViewById(R.id.sign_in_button) Button btnSignIn;
+    @ViewById(R.id.sign_in_button)  Button btnSignIn;
+    @ViewById(R.id.progress_bar)    ProgressBar progressBar;
 
-    private SignInListener signInListener;
+    private SignInCallback signInCallback;
 
     //region lifecycle
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignInListener) {
-            this.signInListener = (SignInListener) context;
+        if (context instanceof SignInCallback) {
+            this.signInCallback = (SignInCallback) context;
         } else {
             throw new UnsupportedOperationException("Activity must implement " +
-                    SignInListener.class.getSimpleName());
+                    SignInCallback.class.getSimpleName());
         }
     }
 
@@ -72,44 +83,41 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     protected BasePresenter getPresenter() {
         return presenter;
     }
+
+    @Override
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
     //endregion
 
     //region button click
     @Click(R.id.sign_in_button)
     protected void signInClicked() {
+        presenter.createDigitsAuthCallback();
+    }
+    //endregion
+
+    //region call presenter
+    private void setView() {
+        presenter.setView(this);
+    }
+    //endregion
+
+    //region presenter callback
+    @Override
+    public void setAuthCallback(AuthCallback callback) {
         //todo..hard coded country code, for 1st version only
         DigitsAuthConfig builder = new DigitsAuthConfig.Builder()
-                .withAuthCallBack(callback())
+                .withAuthCallBack(callback)
                 .withThemeResId(R.style.CustomDigitsTheme)
                 .withPhoneNumber("+64").build();
 
         Digits.authenticate(builder);
     }
-    //endregion
 
-    //region call presenter
-    private AuthCallback callback () {
-        return new AuthCallback() {
-            @Override
-            public void success(DigitsSession digitsSession, String s) {
-                showShortToastMessage("Successful");
-                TwitterAuthConfig config = TwitterCore.getInstance().getAuthConfig();
-                TwitterAuthToken token = (TwitterAuthToken) digitsSession.getAuthToken();
-                DigitsOAuthSigning oAuthSigning = new DigitsOAuthSigning(config, token);
-                final Map<String, String> authHeaders = oAuthSigning.getOAuthEchoHeadersForVerifyCredentials();
-
-                signInListener.onPhoneVerified();
-            }
-
-            @Override
-            public void failure(DigitsException e) {
-                showShortToastMessage(e.getMessage());
-            }
-        };
-    }
-
-    private void setView() {
-        presenter.setView(this);
+    @Override
+    public void onSignInSuccessful(boolean isProfileCompleted) {
+        signInCallback.onSigninSuccessful(isProfileCompleted);
     }
     //endregion
 }

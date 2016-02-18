@@ -4,7 +4,10 @@ import android.text.TextUtils;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -19,7 +22,13 @@ public class StringConverter extends TypeAdapter<String> {
 
     @Override
     public String read(JsonReader in) throws IOException {
-        String value = in.nextString();
-        return TextUtils.isEmpty(value) ? null : value;
+        if (in.peek() != JsonToken.NULL) {
+            String value = in.nextString();
+            return TextUtils.isEmpty(value) ? null : value;
+        } else {
+            in.skipValue();
+            return null;
+        }
+
     }
 }

@@ -4,6 +4,8 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract BasePresenter getPresenter();
 
+    protected ProgressBar getProgressBar() {
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     protected <T> T getComponent(Class<T> componentType) {
         return componentType.cast(((HasComponent<T>) getActivity()).getComponent());
@@ -50,6 +56,14 @@ public abstract class BaseFragment extends Fragment {
 
     public void showLongToastMessage(String message) {
         showToastMessage(false, message);
+    }
+
+    public void showProgressDialog(String message) {
+        getProgressBar().setVisibility(View.VISIBLE);
+    }
+
+    public void dismissProgressDialog() {
+        getProgressBar().setVisibility(View.INVISIBLE);
     }
 
     private void showToastMessage(boolean isShort, String message) {
