@@ -11,6 +11,7 @@ import com.twitter.sdk.android.core.TwitterCore;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import estimeet.meetup.interactor.SignInInteractor;
 import estimeet.meetup.model.PostModel.AuthUser;

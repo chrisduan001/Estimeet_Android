@@ -3,10 +3,15 @@ package estimeet.meetup.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import org.androidannotations.annotations.EActivity;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.components.DaggerSignInComponent;
 import estimeet.meetup.di.components.SignInComponent;
+import estimeet.meetup.model.User;
 import estimeet.meetup.ui.fragment.ProfileFragment;
 import estimeet.meetup.ui.fragment.ProfileFragment_;
 import estimeet.meetup.ui.fragment.SignInFragment;
@@ -20,18 +25,26 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
         SignInFragment.SignInCallback, ProfileFragment.SignInListener {
     private SignInComponent signInComponent;
 
+    @Inject @Named("currentUser") User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeInjector();
 
-        replaceFragment(R.id.container, new SignInFragment_());
+        if (user.userId != 0) {
+            replaceFragment(R.id.container, new ProfileFragment_());
+        } else {
+            replaceFragment(R.id.container, new SignInFragment_());
+        }
     }
 
     private void initializeInjector() {
         signInComponent = DaggerSignInComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .build();
+
+        signInComponent.inject(this);
     }
 
     @Override

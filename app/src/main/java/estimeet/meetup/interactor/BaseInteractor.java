@@ -1,5 +1,6 @@
 package estimeet.meetup.interactor;
 
+import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 /**
@@ -7,12 +8,18 @@ import estimeet.meetup.network.ServiceHelper;
  */
 public class BaseInteractor {
 
-    protected ServiceHelper serviceHelper;
-    protected DataHelper dataHelper;
+    protected static ServiceHelper serviceHelper;
+    protected static DataHelper dataHelper;
+    protected static MeetUpSharedPreference sharedPreference;
 
-    public BaseInteractor(ServiceHelper serviceHelper, DataHelper dataHelper) {
-        this.serviceHelper = serviceHelper;
-        this.dataHelper = dataHelper;
+    public BaseInteractor(ServiceHelper service, DataHelper data) {
+        this(service, data, null);
+    }
+
+    public BaseInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
+        serviceHelper = service;
+        dataHelper = data;
+        sharedPreference = sp;
     }
 
 }

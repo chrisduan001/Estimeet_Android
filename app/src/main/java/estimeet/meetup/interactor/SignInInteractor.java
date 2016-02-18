@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
+import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
@@ -30,19 +31,16 @@ import rx.schedulers.Schedulers;
  */
 public class SignInInteractor extends BaseInteractor {
 
-    private SignInListener listener;
     private SignInSubscriber signInSubscriber;
 
     @Inject
-    public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper) {
-        super(serviceHelper, dataHelper);
+    public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sharedPreference) {
+        super(serviceHelper, dataHelper, sharedPreference);
     }
 
     //region fragment call
     public void call(SignInListener listener) {
-        this.listener = listener;
-
-        signInSubscriber = new SignInSubscriber(dataHelper, listener);
+        signInSubscriber = new SignInSubscriber(listener);
     }
 
     public void signInUser(AuthUser user) {
@@ -72,11 +70,9 @@ public class SignInInteractor extends BaseInteractor {
     //endregion
 
     private static class SignInSubscriber extends DefaultSubscriber<User> {
-        private final DataHelper dataHelper;
         private final SignInListener listener;
 
-        public SignInSubscriber(DataHelper dataHelper, SignInListener listener) {
-            this.dataHelper = dataHelper;
+        public SignInSubscriber(SignInListener listener) {
             this.listener = listener;
         }
 
@@ -85,12 +81,7 @@ public class SignInInteractor extends BaseInteractor {
             if (user.hasError()) {
                 throwError(user.errorMessage);
             } else {
-                //when user.name == empty,
-                //user will need to enter profile page to setup the name and dp
-                if (user.isProfileCompleted()) {
-                    //todo.. save to sharedpreference
-                }
-
+                sharedPreference.storeUser(user);
                 listener.onSignInSuccessful(user);
             }
         }

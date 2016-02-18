@@ -2,6 +2,7 @@ package estimeet.meetup.di.components;
 
 import dagger.Component;
 import estimeet.meetup.di.PerActivity;
+import estimeet.meetup.ui.activity.MainActivity;
 import estimeet.meetup.ui.fragment.MainFragment;
 
 /**
@@ -10,5 +11,6 @@ import estimeet.meetup.ui.fragment.MainFragment;
 @PerActivity
 @Component(dependencies = ApplicationComponent.class)
 public interface MainComponent {
+    void inject(MainActivity activity);
     void inject(MainFragment fragment);
 }
