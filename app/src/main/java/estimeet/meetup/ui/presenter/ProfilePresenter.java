@@ -1,48 +1,58 @@
 package estimeet.meetup.ui.presenter;
 
 import android.Manifest;
-import android.os.Bundle;
+import android.graphics.Bitmap;
+import android.text.TextUtils;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import estimeet.meetup.interactor.ProfileInteractor;
+import estimeet.meetup.model.PostModel.UpdateModel;
+import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
 
 /**
  * Created by AmyDuan on 9/02/16.
  */
-public class ProfilePresenter extends BasePresenter {
+public class ProfilePresenter extends BasePresenter implements ProfileInteractor.ProfileListener {
 
     private ProfileView view;
+    private ProfileInteractor interactor;
+
+    @Inject @Named("currentUser") User user;
 
     @Inject
-    public ProfilePresenter() {
+    public ProfilePresenter(ProfileInteractor interactor) {
+        this.interactor = interactor;
+        interactor.call(this);
     }
 
-    //region fragment callback
     @Override
     public void onResume() {
 
     }
 
     @Override
+    public void onPause() {
+        interactor.unSubscribe();
+    }
+
+    //override from base presenter
+    @Override
     public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
             view.startCameraAction();
         }
     }
-
-    //endregion
 
     //region fragment call
     public void setView(ProfileView view) {
@@ -57,46 +67,58 @@ public class ProfilePresenter extends BasePresenter {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                initFbRequest(loginResult.getAccessToken());
+                interactor.initFbRequest(loginResult.getAccessToken());
             }
+
             @Override
             public void onCancel() {
 
             }
+
             @Override
             public void onError(FacebookException error) {
 
             }
         });
     }
-    //endregion
 
-    //region facebook
-    private void initFbRequest(AccessToken accessToken) {
-        Bundle bundle = new Bundle();
-        bundle.putString("fields", "id,name,picture");
+    public void onUpdateProfile(String name, Bitmap bitmap) {
+        if (TextUtils.isEmpty(name)) {
+            view.onInvalidName();
+        }
 
-        new GraphRequest(accessToken, "me", bundle, HttpMethod.GET, new GraphRequest.Callback() {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
 
-            @Override
-            public void onCompleted(GraphResponse response) {
-                try {
-                    JSONObject mainObj = response.getJSONObject();
-                    String id = response.getJSONObject().getString("id");
-                    String dpUri = "https://graph.facebook.com/" + id + "/picture?type=large";
-                    String name = mainObj.getString("name");
-                    view.onReceivedFbData(name, dpUri);
+        UpdateModel updateModel = new UpdateModel(user.userId, user.password, name, byteArray);
 
-                } catch (Exception e) {
-                    throw new RuntimeException("Facebook parse error");
-                }
-            }
-        }).executeAsync();
+        interactor.initUpdateProfile(user.token, updateModel);
     }
     //endregion
+
+    //region interactor callback
+    @Override
+    public void onError(int errorCode) {
+        //todo..set error message based on errorcode
+        view.showShortToastMessage("");
+    }
+
+    @Override
+    public void onFacebookResponse(String name, String dpUri) {
+        view.onReceivedFbData(name, dpUri);
+    }
+
+    @Override
+    public void onUpdateProfileSuccessful() {
+        view.onProfileCompleted();
+    }
+    //region
 
     public interface ProfileView extends BaseView {
         void startCameraAction();
         void onReceivedFbData(String name, String dpUri);
+        void onProfileCompleted();
+        void onInvalidName();
     }
 }

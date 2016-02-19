@@ -22,7 +22,7 @@ import estimeet.meetup.ui.fragment.SignInFragment_;
  */
 @EActivity(R.layout.activity_sign_in)
 public class SignInActivity extends BaseActivity implements HasComponent<SignInComponent>,
-        SignInFragment.SignInCallback, ProfileFragment.SignInListener {
+        SignInFragment.SignInCallback, ProfileFragment.SignInCallback {
     private SignInComponent signInComponent;
 
     @Inject @Named("currentUser") User user;

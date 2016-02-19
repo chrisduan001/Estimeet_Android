@@ -1,5 +1,6 @@
 package estimeet.meetup.interactor;
 
+import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
@@ -20,6 +21,10 @@ public class BaseInteractor {
         serviceHelper = service;
         dataHelper = data;
         sharedPreference = sp;
+    }
+
+    private static class RenewAuthToken extends DefaultSubscriber<String> {
+
     }
 
 }

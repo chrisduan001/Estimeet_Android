@@ -79,7 +79,7 @@ public class SignInInteractor extends BaseInteractor {
         @Override
         public void onNext(User user) {
             if (user.hasError()) {
-                throwError(user.errorMessage);
+                throwError(user.errorCode + "");
             } else {
                 sharedPreference.storeUser(user);
                 listener.onSignInSuccessful(user);
@@ -93,7 +93,7 @@ public class SignInInteractor extends BaseInteractor {
 
         @Override
         public void onError(Throwable e) {
-            listener.onError(e.getLocalizedMessage());
+            listener.onError(Integer.parseInt(e.getLocalizedMessage()));
         }
     }
 

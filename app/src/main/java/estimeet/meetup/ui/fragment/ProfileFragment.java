@@ -3,6 +3,7 @@ package estimeet.meetup.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,7 +36,7 @@ import estimeet.meetup.util.CircleTransform;
 @EFragment(R.layout.fragment_profile)
 public class ProfileFragment extends BaseFragment implements ProfilePresenter.ProfileView {
 
-    public interface SignInListener {
+    public interface SignInCallback {
         void onGetStarted();
     }
 
@@ -51,17 +52,17 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     private static final int FACEBOOK_LOGIN_CODE = 200;
 
     private CallbackManager callbackManager;
-    private SignInListener signInListener;
+    private SignInCallback signInCallback;
 
     //region lifecycle
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignInListener) {
-            this.signInListener = (SignInListener) context;
+        if (context instanceof SignInCallback) {
+            this.signInCallback = (SignInCallback) context;
         } else {
             throw new UnsupportedOperationException("Activity must implement " +
-                    SignInListener.class.getSimpleName());
+                    SignInCallback.class.getSimpleName());
         }
     }
 
@@ -143,7 +144,8 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
 
     @Click(R.id.btn_get_started)
     protected void getStartButtonClicked() {
-        signInListener.onGetStarted();
+        presenter.onUpdateProfile(userNameEt.getText().toString(),
+                ((BitmapDrawable) profileImage.getDrawable()).getBitmap());
     }
     //endregion
 
@@ -157,6 +159,16 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public void onReceivedFbData(String name, String dpUri) {
         userNameEt.setText(name);
         picasso.load(dpUri).resize(300, 300).centerCrop().transform(circleTransform).into(profileImage);
+    }
+
+    @Override
+    public void onProfileCompleted() {
+        signInCallback.onGetStarted();
+    }
+
+    @Override
+    public void onInvalidName() {
+        userNameEt.setError(getString(R.string.error_invialid_name));
     }
 
     //endregion

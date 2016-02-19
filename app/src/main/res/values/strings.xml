@@ -14,4 +14,5 @@
     <string name="error_create_temp_file">An error occured when accessing your camera</string>
     <string name="fb_button_text">Import from facebook</string>
     <string name="get_started_text">Get Started!!</string>
+    <string name="error_invialid_name">Please enter your name</string>
 </resources>

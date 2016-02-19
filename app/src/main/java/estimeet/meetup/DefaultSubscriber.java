@@ -1,5 +1,6 @@
 package estimeet.meetup;
 
+import estimeet.meetup.model.BaseModel;
 import rx.Subscriber;
 
 /**
@@ -19,6 +20,12 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onNext(T t) {
+        if (t instanceof BaseModel) {
+            BaseModel model = (BaseModel) t;
+            if (model.hasError() && !model.hasAuthError()) {
+                throwError(model.errorCode + "");
+            }
+        }
     }
 
     protected void throwError(String errorMessage) {

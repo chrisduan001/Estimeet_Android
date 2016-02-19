@@ -39,11 +39,11 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     @Inject
     public SignInPresenter(SignInInteractor interactor) {
         this.signInInteractor = interactor;
+        signInInteractor.call(this);
     }
 
     @Override
     public void onResume() {
-        signInInteractor.call(this);
     }
 
     @Override

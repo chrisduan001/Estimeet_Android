@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import estimeet.meetup.model.PostModel.AuthUser;
+import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.User;
 import rx.Observable;
 
@@ -30,5 +31,9 @@ public class ServiceHelper {
 
     public Observable<User> signInUser(AuthUser authUser) {
         return estimeetApi.signInUser(authUser);
+    }
+
+    public Observable<User> updateProfile(String token, UpdateModel model) {
+        return estimeetApi.updateProfile(token, model);
     }
 }

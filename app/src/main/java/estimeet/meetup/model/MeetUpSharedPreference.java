@@ -16,6 +16,7 @@ public class MeetUpSharedPreference {
     private static final String DP = "USER_DP";
     private static final String PHONE = "PHONE_NUMBER";
     private static final String PASSWORD = "PASSWORD";
+    private static final String TOKEN = "AUTH_TOKEN";
 
     private final SharedPreferences sharedPreferences;
 
@@ -34,6 +35,7 @@ public class MeetUpSharedPreference {
         user.dpUri = sharedPreferences.getString(DP, "");
         user.phoneNumber = sharedPreferences.getString(PHONE, "");
         user.password = sharedPreferences.getString(PASSWORD, "");
+        user.token = sharedPreferences.getString(TOKEN, "");
 
         return user;
     }
@@ -45,6 +47,7 @@ public class MeetUpSharedPreference {
         editor.putString(DP, TextUtils.isEmpty(DP) ? "" : user.dpUri);
         editor.putString(PHONE, user.phoneNumber);
         editor.putString(PASSWORD, user.password);
+        editor.putString(TOKEN, user.token);
         editor.apply();
     }
 

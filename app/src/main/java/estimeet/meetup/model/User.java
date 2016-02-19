@@ -30,6 +30,9 @@ public class User extends BaseModel {
     @SerializedName("password")
     public String password;
 
+    @SerializedName("token")
+    public String token;
+
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues(3);
         values.put(SqliteContract.UserColumns.ID, userId);
