@@ -4,6 +4,7 @@ import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.User;
 import retrofit.http.Body;
+import retrofit.http.Field;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
@@ -24,6 +25,12 @@ public interface EstimeetApi {
     @POST("/SignIn/SignInUser")
     Observable<User> signInUser(
             @Body AuthUser body
+    );
+
+    @POST("/token")
+    Observable<String> renewToken(
+            @Field("id") long id,
+            @Field("deviceId") String deviceId
     );
 
     @POST("/SignIn/UpdateProfile")

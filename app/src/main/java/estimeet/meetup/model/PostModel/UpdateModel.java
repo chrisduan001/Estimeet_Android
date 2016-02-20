@@ -7,7 +7,7 @@ public class UpdateModel {
 
     private long userId;
     private String password;
-    private String name;
+    public String name;
     private byte[] image;
 
     public UpdateModel(){}

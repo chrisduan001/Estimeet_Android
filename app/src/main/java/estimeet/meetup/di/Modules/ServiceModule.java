@@ -31,7 +31,6 @@ import retrofit.converter.GsonConverter;
 public class ServiceModule {
 
     private static final String API_URL = "https://estimeetprojapi.azurewebsites.net/api";
-    private static final String TEST_URL = "https://estimeetapi.azurewebsites.net/api/";
 
     @Provides
     @Singleton

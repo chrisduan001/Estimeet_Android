@@ -1,5 +1,6 @@
 package estimeet.meetup.interactor;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
@@ -12,40 +13,41 @@ import org.json.JSONObject;
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
+import estimeet.meetup.model.MeetUpSharedPreference;
+import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by AmyDuan on 19/02/16.
  */
-public class ProfileInteractor extends BaseInteractor {
+public class ProfileInteractor extends BaseInteractor<User> {
 
     private ProfileListener listener;
-    private ProfileUpdateSubscriber profileSubscriber;
+    private ProfileUpdateSubscriber subscriber;
 
     @Inject
-    public ProfileInteractor(ServiceHelper service, DataHelper data) {
-        super(service, data);
+    public ProfileInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
+        super(service, data, sp);
     }
 
     //region present call
-    public void call(ProfileListener listener) {
+    public void initUpdateProfile(String token, UpdateModel user, final ProfileListener listener) {
         this.listener = listener;
-        profileSubscriber = new ProfileUpdateSubscriber();
-    }
+        subscriber = new ProfileUpdateSubscriber();
 
-    public void initUpdateProfile(String token, UpdateModel user) {
-        serviceHelper.updateProfile(token, user).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(profileSubscriber);
+        execute(serviceHelper.updateProfile(token, user), subscriber, true);
     }
 
     public void unSubscribe() {
-        profileSubscriber.unsubscribe();
+        if (!subscriber.isUnsubscribed()) {
+            subscriber.unsubscribe();
+        }
     }
     //endregion
 
@@ -73,14 +75,25 @@ public class ProfileInteractor extends BaseInteractor {
     }
     //endregion
 
-    private static class ProfileUpdateSubscriber extends DefaultSubscriber<User> {
+    private class ProfileUpdateSubscriber extends DefaultSubscriber<User> {
+
         @Override
         public void onNext(User user) {
             super.onNext(user);
+
+            if (user.hasAuthError()) {
+                renewAuthToken(user.userId, user.password);
+            } else {
+                sharedPreference.storeUser(user);
+                listener.onUpdateProfileSuccessful();
+                clearCache();
+            }
         }
 
         @Override
         public void onError(Throwable e) {
+            clearCache();
+            listener.onError(Integer.parseInt(e.getLocalizedMessage()));
         }
     }
 

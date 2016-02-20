@@ -54,7 +54,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     private CallbackManager callbackManager;
     private SignInCallback signInCallback;
 
-    //region lifecycle
+    //region lifecycle & view
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -147,6 +147,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
         presenter.onUpdateProfile(userNameEt.getText().toString(),
                 ((BitmapDrawable) profileImage.getDrawable()).getBitmap());
     }
+
+    @Click(R.id.et_user_name)
+    protected void onUserNameSelected() {
+        userNameEt.setError(null);
+    }
     //endregion
 
     //region presenter callback
@@ -158,6 +163,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     @Override
     public void onReceivedFbData(String name, String dpUri) {
         userNameEt.setText(name);
+        userNameEt.setError(null);
         picasso.load(dpUri).resize(300, 300).centerCrop().transform(circleTransform).into(profileImage);
     }
 
@@ -170,7 +176,6 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public void onInvalidName() {
         userNameEt.setError(getString(R.string.error_invialid_name));
     }
-
     //endregion
 
     //region facebook action

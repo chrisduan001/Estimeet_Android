@@ -33,7 +33,6 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Inject
     public ProfilePresenter(ProfileInteractor interactor) {
         this.interactor = interactor;
-        interactor.call(this);
     }
 
     @Override
@@ -85,6 +84,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     public void onUpdateProfile(String name, Bitmap bitmap) {
         if (TextUtils.isEmpty(name)) {
             view.onInvalidName();
+            return;
         }
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -93,7 +93,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
         UpdateModel updateModel = new UpdateModel(user.userId, user.password, name, byteArray);
 
-        interactor.initUpdateProfile(user.token, updateModel);
+        interactor.initUpdateProfile(user.token, updateModel, this);
     }
     //endregion
 

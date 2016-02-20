@@ -32,14 +32,14 @@ import estimeet.meetup.ui.fragment.SignInFragment;
 public class SignInPresenter extends BasePresenter implements SignInInteractor.SignInListener {
 
     private SignInView view;
-
+    private final SignInInteractor.SignInListener listener;
     @Inject SignInInteractor signInInteractor;
 
     //region lifecycle
     @Inject
     public SignInPresenter(SignInInteractor interactor) {
         this.signInInteractor = interactor;
-        signInInteractor.call(this);
+        this.listener = this;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
             public void success(DigitsSession digitsSession, String s) {
                 //todo..temp progress dialog, change to a better one later
                 view.showProgressDialog("Loading");
-                signInInteractor.onAuthSuccessful(digitsSession, s);
+                signInInteractor.onAuthSuccessful(digitsSession, s, listener);
             }
 
             @Override
@@ -83,9 +83,9 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
 
     @Override
-    public void onError(String message) {
+    public void onError(int errorCode) {
         view.dismissProgressDialog();
-        view.showShortToastMessage(message);
+        view.showShortToastMessage(errorCode + "");
     }
     //endregion
 

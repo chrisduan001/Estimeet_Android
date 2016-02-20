@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import estimeet.meetup.MainApplication;
+import estimeet.meetup.di.PerActivity;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.User;
 
@@ -40,8 +41,8 @@ public class ApplicationModule {
         return application.getSharedPreferences("com.estimeet.meetup_shared_preference", Context.MODE_PRIVATE);
     }
 
-    @Provides @Singleton @Named("currentUser")
-    User provideUser(MeetUpSharedPreference sharedPreference) {
+    @Provides @Named("currentUser")
+    public User provideUser(MeetUpSharedPreference sharedPreference) {
         return sharedPreference.getUserFromSp();
     }
 }

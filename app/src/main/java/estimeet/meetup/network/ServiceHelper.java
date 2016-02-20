@@ -7,6 +7,8 @@ import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.User;
 import rx.Observable;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 /**
  * Created by AmyDuan on 25/01/16.
@@ -31,6 +33,10 @@ public class ServiceHelper {
 
     public Observable<User> signInUser(AuthUser authUser) {
         return estimeetApi.signInUser(authUser);
+    }
+
+    public Observable<String> renewToken(long id, String deviceId) {
+        return estimeetApi.renewToken(id, deviceId);
     }
 
     public Observable<User> updateProfile(String token, UpdateModel model) {

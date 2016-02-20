@@ -16,6 +16,7 @@ import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -29,8 +30,9 @@ import rx.schedulers.Schedulers;
  *      3.1 if user registered before: get user password, dpuri and navigate to main activity
  *      3.2 first time user: get user password (will be used for update profile dp, name etc)
  */
-public class SignInInteractor extends BaseInteractor {
+public class SignInInteractor extends BaseInteractor<User> {
 
+    private SignInListener listener;
     private SignInSubscriber signInSubscriber;
 
     @Inject
@@ -39,23 +41,19 @@ public class SignInInteractor extends BaseInteractor {
     }
 
     //region fragment call
-    public void call(SignInListener listener) {
-        signInSubscriber = new SignInSubscriber(listener);
-    }
-
-    public void signInUser(AuthUser user) {
-        serviceHelper.signInUser(user).subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(signInSubscriber);
+    private void signInUser(AuthUser user, SignInListener listener) {
+        this.listener = listener;
+        signInSubscriber = new SignInSubscriber();
+        execute(serviceHelper.signInUser(user), signInSubscriber, false);
     }
 
     public void unSubscribe() {
-        if (!signInSubscriber.isUnsubscribed()) {
+        if (signInSubscriber != null && !signInSubscriber.isUnsubscribed()) {
             signInSubscriber.unsubscribe();
         }
     }
 
-    public void onAuthSuccessful(DigitsSession digitsSession, String s) {
+    public void onAuthSuccessful(final DigitsSession digitsSession, String s, final SignInListener listener) {
         TwitterAuthConfig config = TwitterCore.getInstance().getAuthConfig();
         TwitterAuthToken token = (TwitterAuthToken) digitsSession.getAuthToken();
         DigitsOAuthSigning oAuthSigning = new DigitsOAuthSigning(config, token);
@@ -65,16 +63,11 @@ public class SignInInteractor extends BaseInteractor {
         String phoneNumber = digitsSession.getPhoneNumber().replace("+", "");
         long id = digitsSession.getId();
 
-        signInUser(new AuthUser(authToken, authProvider, phoneNumber, id));
+        signInUser(new AuthUser(authToken, authProvider, phoneNumber, id), listener);
     }
     //endregion
 
-    private static class SignInSubscriber extends DefaultSubscriber<User> {
-        private final SignInListener listener;
-
-        public SignInSubscriber(SignInListener listener) {
-            this.listener = listener;
-        }
+    private class SignInSubscriber extends DefaultSubscriber<User> {
 
         @Override
         public void onNext(User user) {
