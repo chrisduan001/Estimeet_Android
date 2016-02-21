@@ -7,6 +7,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.digits.sdk.android.Digits;
+
 import java.util.ArrayList;
 import java.util.List;
 import estimeet.meetup.di.HasComponent;
@@ -64,6 +67,10 @@ public abstract class BaseFragment extends Fragment {
 
     public void dismissProgressDialog() {
         getProgressBar().setVisibility(View.INVISIBLE);
+    }
+
+    public void onAuthFailed() {
+        Digits.getSessionManager().clearActiveSession();
     }
 
     private void showToastMessage(boolean isShort, String message) {

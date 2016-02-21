@@ -9,6 +9,7 @@ import estimeet.meetup.network.ServiceHelper;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -58,16 +59,23 @@ public class BaseInteractor<T> {
                 .subscribe(subscriber);
     }
 
-    protected void renewAuthToken(long id, String deviceId) {
-        execute(getRenewTokenObservable(id, deviceId), getCachedSubscriber(), false);
+    protected void renewAuthToken(long id, String deviceId, BaseListener listener) {
+        execute(getRenewTokenObservable(id, deviceId, listener), getCachedSubscriber(), false);
     }
 
-    private Observable<T> getRenewTokenObservable(long id, String deviceId) {
+    //sign out user if authentication fails
+    private Observable<T> getRenewTokenObservable(long id, String deviceId, final BaseListener listener) {
         return serviceHelper.renewToken(id, deviceId).flatMap(new Func1<String, Observable<T>>() {
             @Override
             public Observable<T> call(String s) {
                 sharedPreference.updateUserToken(s);
                 return getCachedObservable();
+            }
+        }).doOnError(new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                sharedPreference.removeSharedPreference();
+                listener.onAuthFailed();
             }
         });
     }

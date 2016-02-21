@@ -33,9 +33,9 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
         initializeInjector();
 
         if (user.userId != 0) {
-            replaceFragment(R.id.container, new ProfileFragment_());
+            showProfileFragment();
         } else {
-            replaceFragment(R.id.container, new SignInFragment_());
+            showSignInFragment();
         }
     }
 
@@ -45,6 +45,14 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
                 .build();
 
         signInComponent.inject(this);
+    }
+
+    private void showProfileFragment() {
+        replaceFragment(R.id.container, new ProfileFragment_());
+    }
+
+    private void showSignInFragment() {
+        replaceFragment(R.id.container, new SignInFragment_());
     }
 
     @Override
@@ -67,6 +75,11 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
     public void onGetStarted() {
         startNewActivity(new Intent(this, MainActivity_.class));
         this.finish();
+    }
+
+    @Override
+    public void onAuthFailed() {
+        showSignInFragment();
     }
     //endregion
 }

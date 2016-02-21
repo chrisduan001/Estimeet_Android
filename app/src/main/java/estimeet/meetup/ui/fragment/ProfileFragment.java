@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.digits.sdk.android.Digits;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -38,6 +40,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
 
     public interface SignInCallback {
         void onGetStarted();
+        void onAuthFailed();
     }
 
     @Inject ProfilePresenter presenter;
@@ -155,6 +158,12 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     //endregion
 
     //region presenter callback
+    @Override
+    public void onAuthFailed() {
+        super.onAuthFailed();
+        signInCallback.onAuthFailed();
+    }
+
     @Override
     public void startCameraAction() {
         Crop.pickImage(getContext(), this, CAPTURE_IMAGE_CODE);

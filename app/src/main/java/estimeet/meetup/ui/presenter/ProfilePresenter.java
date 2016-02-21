@@ -105,6 +105,12 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     }
 
     @Override
+    public void onAuthFailed() {
+        super.onAuthFailed();
+        view.onAuthFailed();
+    }
+
+    @Override
     public void onFacebookResponse(String name, String dpUri) {
         view.onReceivedFbData(name, dpUri);
     }

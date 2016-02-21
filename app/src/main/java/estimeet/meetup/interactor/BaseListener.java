@@ -5,4 +5,5 @@ package estimeet.meetup.interactor;
  */
 public interface BaseListener {
     void onError(int errorCode);
+    void onAuthFailed();
 }

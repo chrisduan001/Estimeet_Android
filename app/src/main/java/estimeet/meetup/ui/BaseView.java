@@ -11,4 +11,6 @@ public interface BaseView {
 
     void showProgressDialog(String message);
     void dismissProgressDialog();
+
+    void onAuthFailed();
 }

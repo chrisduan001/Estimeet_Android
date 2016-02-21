@@ -1,5 +1,4 @@
 package estimeet.meetup.model.PostModel;
-
 /**
  * Created by AmyDuan on 18/02/16.
  */

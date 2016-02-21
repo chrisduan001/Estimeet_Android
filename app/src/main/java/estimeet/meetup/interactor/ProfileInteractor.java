@@ -82,7 +82,7 @@ public class ProfileInteractor extends BaseInteractor<User> {
             super.onNext(user);
 
             if (user.hasAuthError()) {
-                renewAuthToken(user.userId, user.password);
+                renewAuthToken(user.userId, user.password, listener);
             } else {
                 sharedPreference.storeUser(user);
                 listener.onUpdateProfileSuccessful();
