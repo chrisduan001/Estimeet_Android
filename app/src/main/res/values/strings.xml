@@ -16,4 +16,5 @@
     <string name="error_invialid_name">Please enter your name</string>
     <string name="network_error">2013</string>
     <string name="http_generic_error">500</string>
+    <string name="http_auth_error">401</string>
 </resources>

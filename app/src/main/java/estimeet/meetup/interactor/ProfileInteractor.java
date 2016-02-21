@@ -16,6 +16,7 @@ import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.UpdateModel;
+import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
@@ -37,15 +38,18 @@ public class ProfileInteractor extends BaseInteractor<User> {
     }
 
     //region present call
-    public void initUpdateProfile(String token, UpdateModel user, final ProfileListener listener) {
+    public void call(final ProfileListener listener) {
         this.listener = listener;
-        subscriber = new ProfileUpdateSubscriber();
+    }
+
+    public void initUpdateProfile(String token, UpdateModel user) {
+        subscriber = new ProfileUpdateSubscriber(user);
 
         execute(serviceHelper.updateProfile(token, user), subscriber, true);
     }
 
     public void unSubscribe() {
-        if (!subscriber.isUnsubscribed()) {
+        if (subscriber != null && !subscriber.isUnsubscribed()) {
             subscriber.unsubscribe();
         }
     }
@@ -77,21 +81,31 @@ public class ProfileInteractor extends BaseInteractor<User> {
 
     private class ProfileUpdateSubscriber extends DefaultSubscriber<User> {
 
+        private int id;
+        private String password;
+
+        public ProfileUpdateSubscriber(UpdateModel model) {
+            id = model.id;
+            password = model.password;
+        }
+
         @Override
         public void onNext(User user) {
             super.onNext(user);
 
-            if (user.hasAuthError()) {
-                renewAuthToken(user.userId, user.password, listener);
-            } else {
-                sharedPreference.storeUser(user);
-                listener.onUpdateProfileSuccessful();
-                clearCache();
-            }
+            sharedPreference.storeUser(user);
+            listener.onUpdateProfileSuccessful();
+            clearCache();
         }
 
         @Override
         public void onError(Throwable e) {
+            if (Integer.parseInt(e.getLocalizedMessage()) == 401) {
+                //auth token expired or haven't got auth token yet
+                renewAuthToken(id, password, listener);
+
+                return;
+            }
             clearCache();
             listener.onError(Integer.parseInt(e.getLocalizedMessage()));
         }

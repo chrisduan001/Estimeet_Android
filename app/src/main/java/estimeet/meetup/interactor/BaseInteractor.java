@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
+import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import rx.Observable;
@@ -59,24 +60,32 @@ public class BaseInteractor<T> {
                 .subscribe(subscriber);
     }
 
-    protected void renewAuthToken(long id, String deviceId, BaseListener listener) {
-        execute(getRenewTokenObservable(id, deviceId, listener), getCachedSubscriber(), false);
+    protected void renewAuthToken(int id, String deviceId, BaseListener listener) {
+        serviceHelper.renewToken(id, deviceId).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RenewTokenSubscriber(listener));
     }
 
     //sign out user if authentication fails
-    private Observable<T> getRenewTokenObservable(long id, String deviceId, final BaseListener listener) {
-        return serviceHelper.renewToken(id, deviceId).flatMap(new Func1<String, Observable<T>>() {
-            @Override
-            public Observable<T> call(String s) {
-                sharedPreference.updateUserToken(s);
-                return getCachedObservable();
-            }
-        }).doOnError(new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
+    private class RenewTokenSubscriber extends DefaultSubscriber<TokenResponse> {
+
+        private BaseListener listener;
+        public RenewTokenSubscriber(BaseListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onNext(TokenResponse tokenResponse) {
+            sharedPreference.updateUserToken(tokenResponse.access_token);
+            execute(getCachedObservable(), getCachedSubscriber(), false);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e.getLocalizedMessage().equals("401")) {
                 sharedPreference.removeSharedPreference();
                 listener.onAuthFailed();
             }
-        });
+        }
     }
 }

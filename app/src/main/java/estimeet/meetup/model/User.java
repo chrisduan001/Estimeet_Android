@@ -14,6 +14,8 @@ import estimeet.meetup.model.database.SqliteContract;
  * Created by AmyDuan on 25/01/16.
  */
 public class User extends BaseModel {
+    @SerializedName("id")
+    public int id;
 
     @SerializedName("userId")
     public long userId;

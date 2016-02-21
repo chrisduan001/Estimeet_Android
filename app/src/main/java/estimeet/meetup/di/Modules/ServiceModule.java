@@ -76,7 +76,11 @@ public class ServiceModule {
                         message = r.getString(R.string.network_error);
                         break;
                     default:
-                        message = r.getString(R.string.http_generic_error);
+                        //returns code 401 if token auth failed
+                        message = r.getString(cause.getResponse().getStatus() == 401
+                                || (cause.getResponse().getUrl().contains("estimeetauth/token")
+                                && cause.getResponse().getStatus() == 400) ?
+                                R.string.http_auth_error :  R.string.http_generic_error);
                         break;
                 }
                 return new RuntimeException(message, cause);

@@ -22,7 +22,7 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
     public void onNext(T t) {
         if (t instanceof BaseModel) {
             BaseModel model = (BaseModel) t;
-            if (model.hasError() && !model.hasAuthError()) {
+            if (model.hasError()) {
                 throwError(model.errorCode + "");
             }
         }

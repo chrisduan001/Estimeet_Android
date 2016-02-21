@@ -15,8 +15,4 @@ public class BaseModel {
     public boolean hasError() {
         return errorCode != 0;
     }
-
-    public boolean hasAuthError() {
-        return errorCode == 401;
-    }
 }

@@ -37,7 +37,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     @Override
     public void onResume() {
-
+        interactor.call(this);
     }
 
     @Override
@@ -91,9 +91,9 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
 
-        UpdateModel updateModel = new UpdateModel(user.userId, user.password, name, byteArray);
+        UpdateModel updateModel = new UpdateModel(user.id, user.userId, user.password, name, byteArray);
 
-        interactor.initUpdateProfile(user.token, updateModel, this);
+        interactor.initUpdateProfile(user.token, updateModel);
     }
     //endregion
 

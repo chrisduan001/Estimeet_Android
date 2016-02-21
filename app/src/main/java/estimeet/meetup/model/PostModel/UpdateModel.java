@@ -4,14 +4,16 @@ package estimeet.meetup.model.PostModel;
  */
 public class UpdateModel {
 
-    private long userId;
-    private String password;
-    public String name;
+    public int id;
+    public long userId;
+    public String password;
+    private String name;
     private byte[] image;
 
     public UpdateModel(){}
 
-    public UpdateModel(long userId, String password, String name, byte[] image) {
+    public UpdateModel(int id, long userId, String password, String name, byte[] image) {
+        this.id = id;
         this.userId = userId;
         this.password = password;
         this.name = name;

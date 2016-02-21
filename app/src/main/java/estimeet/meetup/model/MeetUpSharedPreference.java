@@ -11,7 +11,8 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class MeetUpSharedPreference {
-    private static final String ID = "USER_ID";
+    private static final String ID = "ID";
+    private static final String USER_ID = "USER_ID";
     private static final String NAME = "USER_NAME";
     private static final String DP = "USER_DP";
     private static final String PHONE = "PHONE_NUMBER";
@@ -33,10 +34,11 @@ public class MeetUpSharedPreference {
         if (user == null || user.userId == 0) {
             user = new User();
 
-            user.userId = sharedPreferences.getLong(ID, 0);
+            user.userId = sharedPreferences.getLong(USER_ID, 0);
             if (user.userId == 0) {
                 return user;
             }
+            user.id = sharedPreferences.getInt(ID, 0);
             user.userName = sharedPreferences.getString(NAME, "");
             user.dpUri = sharedPreferences.getString(DP, "");
             user.phoneNumber = sharedPreferences.getString(PHONE, "");
@@ -49,7 +51,8 @@ public class MeetUpSharedPreference {
 
     public void storeUser(User user) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(ID, user.userId);
+        editor.putInt(ID, user.id);
+        editor.putLong(USER_ID, user.userId);
         editor.putString(NAME, TextUtils.isEmpty(NAME) ? "" : user.userName);
         editor.putString(DP, TextUtils.isEmpty(DP) ? "" : user.dpUri);
         editor.putString(PHONE, user.phoneNumber);
