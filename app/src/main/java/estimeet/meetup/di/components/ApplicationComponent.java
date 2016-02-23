@@ -25,7 +25,5 @@ public interface ApplicationComponent {
     DataHelper dataHelper();
     ServiceHelper serviceHelper();
     Picasso picasso();
-    MeetUpSharedPreference sharedPreferences();
-
-    @Named("currentUser") User user();
+    MeetUpSharedPreference meetUpSharedPreference();
 }

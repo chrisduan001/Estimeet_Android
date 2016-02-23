@@ -18,7 +18,7 @@ import estimeet.meetup.ui.presenter.MainPresenter;
 public class MainFragment extends BaseFragment implements MainPresenter.MainView {
 
     @Inject MainPresenter presenter;
-    @Inject @Named("currentUser") User user;
+    User user;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

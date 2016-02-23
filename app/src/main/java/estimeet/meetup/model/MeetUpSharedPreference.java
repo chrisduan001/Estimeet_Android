@@ -2,7 +2,9 @@ package estimeet.meetup.model;
 
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 
+import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -18,10 +20,9 @@ public class MeetUpSharedPreference {
     private static final String PHONE = "PHONE_NUMBER";
     private static final String PASSWORD = "PASSWORD";
     private static final String TOKEN = "AUTH_TOKEN";
+    private static final String EXPIRES = "TOKEN_EXPIRE_TIME";
 
     private final SharedPreferences sharedPreferences;
-
-    private static User user = null;
 
     @Inject
     public MeetUpSharedPreference(SharedPreferences sharedPreferences) {
@@ -29,22 +30,16 @@ public class MeetUpSharedPreference {
     }
 
     public User getUserFromSp() {
-        //user == null, user haven't register yet
-        //userid == 0, user haven't finish update profile yet
-        if (user == null || user.userId == 0) {
-            user = new User();
+        User user = new User();
 
-            user.userId = sharedPreferences.getLong(USER_ID, 0);
-            if (user.userId == 0) {
-                return user;
-            }
-            user.id = sharedPreferences.getInt(ID, 0);
-            user.userName = sharedPreferences.getString(NAME, "");
-            user.dpUri = sharedPreferences.getString(DP, "");
-            user.phoneNumber = sharedPreferences.getString(PHONE, "");
-            user.password = sharedPreferences.getString(PASSWORD, "");
-            user.token = sharedPreferences.getString(TOKEN, "");
-        }
+        user.userId = sharedPreferences.getLong(USER_ID, 0);
+        user.id = sharedPreferences.getInt(ID, 0);
+        user.userName = sharedPreferences.getString(NAME, "");
+        user.dpUri = sharedPreferences.getString(DP, "");
+        user.phoneNumber = sharedPreferences.getString(PHONE, "");
+        user.password = sharedPreferences.getString(PASSWORD, "");
+        user.token = sharedPreferences.getString(TOKEN, "");
+        user.expiresTime = sharedPreferences.getLong(EXPIRES, 0);
 
         return user;
     }
@@ -58,12 +53,16 @@ public class MeetUpSharedPreference {
         editor.putString(PHONE, user.phoneNumber);
         editor.putString(PASSWORD, user.password);
         editor.putString(TOKEN, user.token);
+        editor.putLong(EXPIRES, user.expiresTime);
         editor.apply();
     }
 
-    public void updateUserToken(String token) {
+    public void updateUserToken(String token, long expireInSeconds) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TOKEN, token);
+        long time = Calendar.getInstance().getTimeInMillis()/1000 + expireInSeconds;
+        //shoudl renew at least 10 min before expires
+        editor.putLong(EXPIRES, time - 600);
         editor.apply();
     }
 

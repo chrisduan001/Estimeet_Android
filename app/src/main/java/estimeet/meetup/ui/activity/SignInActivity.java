@@ -1,8 +1,11 @@
 package estimeet.meetup.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import org.androidannotations.annotations.EActivity;
+
+import java.util.EventListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,19 +26,32 @@ import estimeet.meetup.ui.fragment.SignInFragment_;
 @EActivity(R.layout.activity_sign_in)
 public class SignInActivity extends BaseActivity implements HasComponent<SignInComponent>,
         SignInFragment.SignInCallback, ProfileFragment.SignInCallback {
-    private SignInComponent signInComponent;
 
-    @Inject @Named("currentUser") User user;
+    private static final String USER_ID = "SIGNIN_ACTIVITY_USER_ID";
+
+    public static Intent getCallingIntent(Context context, long userId) {
+        Intent intent = new Intent(context, SignInActivity_.class);
+        intent.putExtra(USER_ID, userId);
+        return intent;
+    }
+
+    private SignInComponent signInComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeInjector();
 
-        if (user.userId != 0) {
-            showProfileFragment();
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            if (intent.getLongExtra(USER_ID, 0) != 0) {
+                showProfileFragment();
+            } else {
+                showSignInFragment();
+            }
         } else {
-            showSignInFragment();
+            throw new RuntimeException("Missing intent parameter for SignInActivity");
         }
     }
 

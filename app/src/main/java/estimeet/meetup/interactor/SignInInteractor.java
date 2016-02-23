@@ -13,11 +13,13 @@ import javax.inject.Inject;
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.AuthUser;
+import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -33,7 +35,7 @@ import rx.schedulers.Schedulers;
 public class SignInInteractor extends BaseInteractor<User> {
 
     private SignInListener listener;
-    private SignInSubscriber signInSubscriber;
+    private TokenSubscriber tokenSubscriber;
 
     @Inject
     public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sharedPreference) {
@@ -43,13 +45,13 @@ public class SignInInteractor extends BaseInteractor<User> {
     //region fragment call
     private void signInUser(AuthUser user, SignInListener listener) {
         this.listener = listener;
-        signInSubscriber = new SignInSubscriber();
-        execute(serviceHelper.signInUser(user), signInSubscriber, false);
+        tokenSubscriber = new TokenSubscriber();
+        initSignIn(user);
     }
 
     public void unSubscribe() {
-        if (signInSubscriber != null && !signInSubscriber.isUnsubscribed()) {
-            signInSubscriber.unsubscribe();
+        if (tokenSubscriber != null && !tokenSubscriber.isUnsubscribed()) {
+            tokenSubscriber.unsubscribe();
         }
     }
 
@@ -67,21 +69,26 @@ public class SignInInteractor extends BaseInteractor<User> {
     }
     //endregion
 
-    private class SignInSubscriber extends DefaultSubscriber<User> {
-
-        @Override
-        public void onNext(User user) {
-            if (user.hasError()) {
-                throwError(user.errorCode + "");
-            } else {
-                sharedPreference.storeUser(user);
-                listener.onSignInSuccessful(user);
+    //region network
+    private void initSignIn(AuthUser user) {
+        serviceHelper.signInUser(user).flatMap(new Func1<User, Observable<TokenResponse>>() {
+            @Override
+            public Observable<TokenResponse> call(User user) {
+                if (user.hasError()) {
+                    throw new RuntimeException(user.errorCode + "");
+                } else {
+                    sharedPreference.storeUser(user);
+                }
+                return getTokenObservable(user);
             }
-        }
+        }).subscribe(new TokenSubscriber());
+    }
 
+    private class TokenSubscriber extends DefaultSubscriber<TokenResponse> {
         @Override
-        public void onCompleted() {
-            super.onCompleted();
+        public void onNext(TokenResponse tokenResponse) {
+            sharedPreference.updateUserToken(tokenResponse.access_token, tokenResponse.expires_in);
+            listener.onSignInSuccessful(sharedPreference.getUserFromSp());
         }
 
         @Override
@@ -89,6 +96,8 @@ public class SignInInteractor extends BaseInteractor<User> {
             listener.onError(Integer.parseInt(e.getLocalizedMessage()));
         }
     }
+
+    //endregion
 
     public interface SignInListener extends BaseListener {
         void onSignInSuccessful(User user);

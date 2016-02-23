@@ -35,6 +35,9 @@ public class User extends BaseModel {
     @SerializedName("token")
     public String token;
 
+    @SerializedName("expires_in")
+    public long expiresTime;
+
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues(3);
         values.put(SqliteContract.UserColumns.ID, userId);

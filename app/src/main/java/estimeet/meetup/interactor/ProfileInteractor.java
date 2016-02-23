@@ -102,7 +102,7 @@ public class ProfileInteractor extends BaseInteractor<User> {
         public void onError(Throwable e) {
             if (Integer.parseInt(e.getLocalizedMessage()) == 401) {
                 //auth token expired or haven't got auth token yet
-                renewAuthToken(id, password, listener);
+ //               renewAuthToken(id, password, listener);
 
                 return;
             }

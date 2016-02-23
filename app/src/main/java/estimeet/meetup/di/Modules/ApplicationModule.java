@@ -40,9 +40,4 @@ public class ApplicationModule {
     public SharedPreferences provideSharedPreferences() {
         return application.getSharedPreferences("com.estimeet.meetup_shared_preference", Context.MODE_PRIVATE);
     }
-
-    @Provides @Named("currentUser")
-    public User provideUser(MeetUpSharedPreference sharedPreference) {
-        return sharedPreference.getUserFromSp();
-    }
 }

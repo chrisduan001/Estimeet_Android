@@ -11,6 +11,7 @@ import javax.inject.Named;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
+import estimeet.meetup.di.Modules.MainModule;
 import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.model.User;
@@ -33,7 +34,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
         if (user.userId == 0 || TextUtils.isEmpty(user.userName)) {
             //user not sigin or user haven't finished their profile yet
-            startNewActivity(new Intent(this, SignInActivity_.class));
+            startNewActivity(SignInActivity.getCallingIntent(this, user.userId));
             this.finish();
         } else {
             replaceFragment(R.id.container, new MainFragment_());
@@ -43,6 +44,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     private void initializeInjector() {
         mainComponent = DaggerMainComponent.builder()
                 .applicationComponent(getApplicationComponent())
+                .mainModule(new MainModule(this))
                 .build();
 
         mainComponent.inject(this);

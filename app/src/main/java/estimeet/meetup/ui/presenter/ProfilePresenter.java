@@ -28,7 +28,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     private ProfileView view;
     private ProfileInteractor interactor;
 
-    @Inject @Named("currentUser") User user;
+    User user;
 
     @Inject
     public ProfilePresenter(ProfileInteractor interactor) {

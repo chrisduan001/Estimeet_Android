@@ -2,15 +2,16 @@ package estimeet.meetup.interactor;
 
 import android.support.annotation.NonNull;
 
+import java.util.Calendar;
+
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.TokenResponse;
+import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -24,7 +25,6 @@ public class BaseInteractor<T> {
     protected MeetUpSharedPreference sharedPreference;
 
     private Observable<T> observable;
-    private DefaultSubscriber<T> subscriber;
 
     public BaseInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
         serviceHelper = service;
@@ -32,60 +32,51 @@ public class BaseInteractor<T> {
         sharedPreference = sp;
     }
 
-    protected void cacheFunction(Observable<T> observable, DefaultSubscriber<T> subscriber) {
+    protected void cacheFunction(Observable<T> observable) {
         this.observable = observable;
-        this.subscriber = subscriber;
     }
 
     private Observable<T> getCachedObservable() {
         return observable;
     }
 
-    private DefaultSubscriber<T> getCachedSubscriber() {
-        return subscriber;
-    }
 
     protected void clearCache() {
         observable = null;
-        subscriber = null;
     }
 
     protected void execute(@NonNull Observable<T> observable, @NonNull DefaultSubscriber<T> subscriber,
                            boolean cacheObservable) {
         if (cacheObservable) {
-            cacheFunction(observable, subscriber);
+            cacheFunction(observable);
         }
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
 
-    protected void renewAuthToken(int id, String deviceId, BaseListener listener) {
-        serviceHelper.renewToken(id, deviceId).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RenewTokenSubscriber(listener));
+    protected Observable<TokenResponse> getTokenObservable(User user) {
+        return serviceHelper.renewToken(user.id, user.password);
     }
 
-    //sign out user if authentication fails
-    private class RenewTokenSubscriber extends DefaultSubscriber<TokenResponse> {
-
-        private BaseListener listener;
-        public RenewTokenSubscriber(BaseListener listener) {
-            this.listener = listener;
+    protected void makeRequest(User user, final Observable<T> observable,
+                                           DefaultSubscriber<T> subscriber) {
+        if (isTokenExpired(user.expiresTime)) {
+            getTokenObservable(user)
+                    .flatMap(new Func1<TokenResponse, Observable<T>>() {
+                        @Override
+                        public Observable<T> call(TokenResponse tokenResponse) {
+                            sharedPreference.updateUserToken(tokenResponse.access_token,
+                                    tokenResponse.expires_in);
+                            return observable;
+                        }
+                    }).subscribe(subscriber);
+        } else {
+            execute(observable, subscriber, false);
         }
+    }
 
-        @Override
-        public void onNext(TokenResponse tokenResponse) {
-            sharedPreference.updateUserToken(tokenResponse.access_token);
-            execute(getCachedObservable(), getCachedSubscriber(), false);
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            if (e.getLocalizedMessage().equals("401")) {
-                sharedPreference.removeSharedPreference();
-                listener.onAuthFailed();
-            }
-        }
+    private boolean isTokenExpired(long expiresTime) {
+        return Calendar.getInstance().getTimeInMillis()/1000 > expiresTime;
     }
 }
