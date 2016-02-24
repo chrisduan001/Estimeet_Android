@@ -1,6 +1,8 @@
 package estimeet.meetup.ui.fragment;
 
 import android.os.Bundle;
+import android.widget.ProgressBar;
+
 import org.androidannotations.annotations.EFragment;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,6 +32,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         if (user == null) {
             getPresenter();
         }
+    }
+
+    @Override
+    protected ProgressBar getProgressBar() {
+        return null;
     }
 
     @Override

@@ -21,6 +21,7 @@ import estimeet.meetup.ui.presenter.BasePresenter;
 public abstract class BaseFragment extends Fragment {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
+
     //region lifecycle
     @Override
     public void onResume() {
@@ -43,9 +44,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract BasePresenter getPresenter();
 
-    protected ProgressBar getProgressBar() {
-        return null;
-    }
+    protected abstract ProgressBar getProgressBar();
 
     @SuppressWarnings("unchecked")
     protected <T> T getComponent(Class<T> componentType) {

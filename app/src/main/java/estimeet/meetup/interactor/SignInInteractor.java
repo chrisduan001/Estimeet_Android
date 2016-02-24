@@ -77,11 +77,13 @@ public class SignInInteractor extends BaseInteractor<User> {
                 if (user.hasError()) {
                     throw new RuntimeException(user.errorCode + "");
                 } else {
-                    sharedPreference.storeUser(user);
+                    sharedPreference.storeUserInfo(user);
                 }
                 return getTokenObservable(user);
             }
-        }).subscribe(new TokenSubscriber());
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new TokenSubscriber());
     }
 
     private class TokenSubscriber extends DefaultSubscriber<TokenResponse> {
@@ -93,7 +95,7 @@ public class SignInInteractor extends BaseInteractor<User> {
 
         @Override
         public void onError(Throwable e) {
-            listener.onError(Integer.parseInt(e.getLocalizedMessage()));
+            listener.onError(e.getLocalizedMessage());
         }
     }
 

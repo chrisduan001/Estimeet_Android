@@ -83,9 +83,10 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
 
     @Override
-    public void onError(int errorCode) {
+    public void onError(String errorMessage) {
+        //todo..set error message based on errorcode
         view.dismissProgressDialog();
-        view.showShortToastMessage(errorCode + "");
+        view.showShortToastMessage(errorMessage + "");
     }
     //endregion
 

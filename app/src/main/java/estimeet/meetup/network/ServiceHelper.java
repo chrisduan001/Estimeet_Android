@@ -8,8 +8,6 @@ import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
 import rx.Observable;
-import rx.functions.Action0;
-import rx.functions.Action1;
 
 /**
  * Created by AmyDuan on 25/01/16.
@@ -41,6 +39,7 @@ public class ServiceHelper {
     }
 
     public Observable<User> updateProfile(String token, UpdateModel model) {
+        token = "Bearer " + token;
         return estimeetApi.updateProfile(token, model);
     }
 }

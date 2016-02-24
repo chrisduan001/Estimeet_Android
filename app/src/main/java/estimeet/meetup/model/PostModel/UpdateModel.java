@@ -7,16 +7,16 @@ public class UpdateModel {
     public int id;
     public long userId;
     public String password;
-    private String name;
-    private byte[] image;
+    private String userName;
+    private String imageString;
 
     public UpdateModel(){}
 
-    public UpdateModel(int id, long userId, String password, String name, byte[] image) {
+    public UpdateModel(int id, long userId, String password, String name, String imageString) {
         this.id = id;
         this.userId = userId;
         this.password = password;
-        this.name = name;
-        this.image = image;
+        this.userName = name;
+        this.imageString = imageString;
     }
 }

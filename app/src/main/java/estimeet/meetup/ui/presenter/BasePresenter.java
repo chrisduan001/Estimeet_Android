@@ -18,5 +18,7 @@ public abstract class BasePresenter implements IBasePresenter {
     @Override
     public void onPermissionResult(boolean isGranted) {}
 
-    public void onAuthFailed() {}
+    public void onAuthFailed() {
+
+    }
 }

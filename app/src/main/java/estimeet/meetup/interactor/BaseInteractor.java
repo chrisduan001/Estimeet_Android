@@ -24,32 +24,13 @@ public class BaseInteractor<T> {
     protected DataHelper dataHelper;
     protected MeetUpSharedPreference sharedPreference;
 
-    private Observable<T> observable;
-
     public BaseInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
         serviceHelper = service;
         dataHelper = data;
         sharedPreference = sp;
     }
 
-    protected void cacheFunction(Observable<T> observable) {
-        this.observable = observable;
-    }
-
-    private Observable<T> getCachedObservable() {
-        return observable;
-    }
-
-
-    protected void clearCache() {
-        observable = null;
-    }
-
-    protected void execute(@NonNull Observable<T> observable, @NonNull DefaultSubscriber<T> subscriber,
-                           boolean cacheObservable) {
-        if (cacheObservable) {
-            cacheFunction(observable);
-        }
+    private void execute(@NonNull Observable<T> observable, @NonNull DefaultSubscriber<T> subscriber) {
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
@@ -59,10 +40,10 @@ public class BaseInteractor<T> {
         return serviceHelper.renewToken(user.id, user.password);
     }
 
-    protected void makeRequest(User user, final Observable<T> observable,
-                                           DefaultSubscriber<T> subscriber) {
+    protected void makeRequest(User user, @NonNull final Observable<T> observable,
+                                          @NonNull DefaultSubscriber<T> subscriber) {
         if (isTokenExpired(user.expiresTime)) {
-            getTokenObservable(user)
+            execute(getTokenObservable(user)
                     .flatMap(new Func1<TokenResponse, Observable<T>>() {
                         @Override
                         public Observable<T> call(TokenResponse tokenResponse) {
@@ -70,9 +51,9 @@ public class BaseInteractor<T> {
                                     tokenResponse.expires_in);
                             return observable;
                         }
-                    }).subscribe(subscriber);
+                    }), subscriber);
         } else {
-            execute(observable, subscriber, false);
+            execute(observable, subscriber);
         }
     }
 

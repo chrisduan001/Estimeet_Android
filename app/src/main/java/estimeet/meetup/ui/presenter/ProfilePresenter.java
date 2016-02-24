@@ -3,6 +3,7 @@ package estimeet.meetup.ui.presenter;
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -13,11 +14,8 @@ import com.facebook.login.LoginResult;
 import java.io.ByteArrayOutputStream;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import estimeet.meetup.interactor.ProfileInteractor;
-import estimeet.meetup.model.PostModel.UpdateModel;
-import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -27,8 +25,6 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     private ProfileView view;
     private ProfileInteractor interactor;
-
-    User user;
 
     @Inject
     public ProfilePresenter(ProfileInteractor interactor) {
@@ -87,27 +83,29 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
             return;
         }
 
+        view.showProgressDialog("Loading");
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
 
-        UpdateModel updateModel = new UpdateModel(user.id, user.userId, user.password, name, byteArray);
-
-        interactor.initUpdateProfile(user.token, updateModel);
+        String imageString = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+        interactor.initUpdateProfile(name, imageString);
     }
     //endregion
 
     //region interactor callback
     @Override
-    public void onError(int errorCode) {
+    public void onError(String errorMessage) {
         //todo..set error message based on errorcode
-        view.showShortToastMessage("");
+        view.showShortToastMessage(errorMessage);
+        dismissProgressDialog();
     }
 
     @Override
     public void onAuthFailed() {
         super.onAuthFailed();
         view.onAuthFailed();
+        dismissProgressDialog();
     }
 
     @Override
@@ -118,8 +116,13 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onUpdateProfileSuccessful() {
         view.onProfileCompleted();
+        dismissProgressDialog();
     }
     //region
+
+    private void dismissProgressDialog() {
+        view.dismissProgressDialog();
+    }
 
     public interface ProfileView extends BaseView {
         void startCameraAction();

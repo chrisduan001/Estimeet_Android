@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.digits.sdk.android.Digits;
 import com.facebook.CallbackManager;
@@ -49,6 +50,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
 
     @ViewById(R.id.profile_image)       ImageView profileImage;
     @ViewById(R.id.et_user_name)        EditText userNameEt;
+    @ViewById(R.id.progress_bar)        ProgressBar progressBar;
 
     private static final int CAPTURE_IMAGE_CODE = 100;
     private static final int CROP_IMAGE_CODE = 101;
@@ -131,6 +133,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     @Override
     protected BasePresenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
     //region button click

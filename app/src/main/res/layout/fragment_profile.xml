@@ -1,81 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="20dp">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/download"
-        android:scaleType="centerInside"
-        android:contentDescription="@null"/>
-
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-        android:textColor="@color/colorMain"
-        android:textSize="24sp"
-        android:text="@string/profile_enter_name_hint"/>
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
 
-    <EditText
-        android:id="@+id/et_user_name"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:hint="@null"
-        android:background="@drawable/round_edit_text"/>
-
-    <Button
-        android:id="@+id/btn_get_started"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="30dp"
-        android:textSize="16sp"
-        android:text="@string/get_started_text"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_button"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp">
-
-        <View
-            android:id="@+id/line_view"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_centerVertical="true"
-            android:background="@android:color/darker_gray"/>
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/download"
+            android:scaleType="centerInside"
+            android:contentDescription="@null"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorMain"
             android:textSize="24sp"
-            android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="@string/profile_or_text"
-            android:background="#fff"
-            android:textColor="@android:color/darker_gray"/>
+            android:text="@string/profile_enter_name_hint"/>
 
-    </RelativeLayout>
-    
-    <Button
-        android:id="@+id/fb_login_display_button"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/facebook_button"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:text="@string/fb_button_text"/>
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:hint="@null"
+            android:background="@drawable/round_edit_text"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_get_started"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:textSize="16sp"
+            android:text="@string/get_started_text"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_button"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp">
+
+            <View
+                android:id="@+id/line_view"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/profile_or_text"
+                android:background="#fff"
+                android:textColor="@android:color/darker_gray"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/fb_login_display_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/facebook_button"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="@string/fb_button_text"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/merge_progress_bar" />
+
+</FrameLayout>

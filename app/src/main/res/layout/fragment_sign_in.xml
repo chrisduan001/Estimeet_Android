@@ -15,12 +15,6 @@
         android:textColor="@color/white"
         android:text="@string/sign_in"/>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        style="?android:progressBarStyleLarge" />
+    <include layout="@layout/merge_progress_bar" />
 
 </FrameLayout>

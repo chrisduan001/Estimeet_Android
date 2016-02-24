@@ -2,7 +2,6 @@ package estimeet.meetup.model;
 
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 
 import java.util.Calendar;
 import javax.inject.Inject;
@@ -44,16 +43,20 @@ public class MeetUpSharedPreference {
         return user;
     }
 
-    public void storeUser(User user) {
+    public void storeUserInfo(User user) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(ID, user.id);
         editor.putLong(USER_ID, user.userId);
-        editor.putString(NAME, TextUtils.isEmpty(NAME) ? "" : user.userName);
-        editor.putString(DP, TextUtils.isEmpty(DP) ? "" : user.dpUri);
         editor.putString(PHONE, user.phoneNumber);
         editor.putString(PASSWORD, user.password);
-        editor.putString(TOKEN, user.token);
-        editor.putLong(EXPIRES, user.expiresTime);
+        editor.apply();
+    }
+
+    public void updateUserProfile(String name, String imageUri) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(NAME, name);
+        editor.putString(DP, imageUri);
+
         editor.apply();
     }
 
