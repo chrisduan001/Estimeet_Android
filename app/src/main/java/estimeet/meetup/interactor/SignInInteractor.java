@@ -1,5 +1,7 @@
 package estimeet.meetup.interactor;
 
+import android.text.TextUtils;
+
 import com.digits.sdk.android.DigitsOAuthSigning;
 import com.digits.sdk.android.DigitsSession;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -78,6 +80,9 @@ public class SignInInteractor extends BaseInteractor<User> {
                     throw new RuntimeException(user.errorCode + "");
                 } else {
                     sharedPreference.storeUserInfo(user);
+                    if (!TextUtils.isEmpty(user.userName) && !TextUtils.isEmpty(user.dpUri)) {
+                        sharedPreference.updateUserProfile(user.userName, user.dpUri);
+                    }
                 }
                 return getTokenObservable(user);
             }
