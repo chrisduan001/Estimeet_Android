@@ -42,7 +42,7 @@ public class ProfileInteractor extends BaseInteractor<User> {
 
         User user = sharedPreference.getUserFromSp();
 
-        UpdateModel updateModel = new UpdateModel(user.id, user.userId, user.password, name, imageString);
+        UpdateModel updateModel = new UpdateModel(user.id, user.userId, name, imageString);
         makeRequest(user, serviceHelper.updateProfile(user.token, updateModel), subscriber);
     }
 

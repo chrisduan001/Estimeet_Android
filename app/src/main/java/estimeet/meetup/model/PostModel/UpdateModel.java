@@ -12,7 +12,7 @@ public class UpdateModel {
 
     public UpdateModel(){}
 
-    public UpdateModel(int id, long userId, String password, String name, String imageString) {
+    public UpdateModel(int id, long userId, String name, String imageString) {
         this.id = id;
         this.userId = userId;
         this.password = password;
