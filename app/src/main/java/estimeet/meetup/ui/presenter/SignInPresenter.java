@@ -2,22 +2,11 @@ package estimeet.meetup.ui.presenter;
 
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.DigitsException;
-import com.digits.sdk.android.DigitsOAuthSigning;
 import com.digits.sdk.android.DigitsSession;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthToken;
-import com.twitter.sdk.android.core.TwitterCore;
-
-import java.util.Map;
-
 import javax.inject.Inject;
-import javax.inject.Named;
-
 import estimeet.meetup.interactor.SignInInteractor;
-import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
-import estimeet.meetup.ui.fragment.SignInFragment;
 
 /**
  * Created by AmyDuan on 8/02/16.
@@ -33,6 +22,12 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
 
     private SignInView view;
     private final SignInInteractor.SignInListener listener;
+    //needs to set this field to class variable, otherwise the callback will be called
+    //as the AuthCallback holds a weak reference and will be set to null when nav to digits auth page
+    //authcallback will be cleaned manually at onDestory
+    @SuppressWarnings("FieldCanBeLocal")
+    private AuthCallback authCallback;
+
     @Inject SignInInteractor signInInteractor;
 
     //region lifecycle
@@ -51,6 +46,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         super.onPause();
         signInInteractor.unSubscribe();
     }
+
+    @Override
+    public void onDestory() {
+        super.onDestory();
+        authCallback = null;
+    }
+
     //endregion
 
     //region fragment call
@@ -59,7 +61,11 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
 
     public void createDigitsAuthCallback() {
-        view.setAuthCallback(new AuthCallback() {
+        view.setAuthCallback(getAuthCallback());
+    }
+
+    private AuthCallback getAuthCallback() {
+        authCallback = new AuthCallback() {
             @Override
             public void success(DigitsSession digitsSession, String s) {
                 //todo..temp progress dialog, change to a better one later
@@ -71,7 +77,9 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
             public void failure(DigitsException e) {
                 view.showShortToastMessage(e.getLocalizedMessage());
             }
-        });
+        };
+
+        return authCallback;
     }
     //endregion
 

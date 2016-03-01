@@ -6,19 +6,20 @@ package estimeet.meetup.ui.presenter;
 public abstract class BasePresenter implements IBasePresenter {
 
     @Override
-    public void onPause() {
+    public void onResume() {
+    }
 
+    @Override
+    public void onPause() {
     }
 
     @Override
     public void onDestory() {
-
     }
 
     @Override
     public void onPermissionResult(boolean isGranted) {}
 
     public void onAuthFailed() {
-
     }
 }
