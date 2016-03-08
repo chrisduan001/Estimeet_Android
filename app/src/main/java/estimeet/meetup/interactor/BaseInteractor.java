@@ -43,6 +43,7 @@ public class BaseInteractor<T> {
     protected void makeRequest(User user, @NonNull final Observable<T> observable,
                                           @NonNull DefaultSubscriber<T> subscriber) {
         if (isTokenExpired(user.expiresTime)) {
+            //check token expire date first, if token is expired then needs to make request to renew token
             execute(getTokenObservable(user)
                     .flatMap(new Func1<TokenResponse, Observable<T>>() {
                         @Override

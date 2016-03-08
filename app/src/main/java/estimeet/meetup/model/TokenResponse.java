@@ -11,7 +11,7 @@ public class TokenResponse {
 
     @SerializedName("token_type")
     private String token_type;
-
+    //in seconds
     @SerializedName("expires_in")
     public long expires_in;
 }
