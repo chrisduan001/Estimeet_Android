@@ -81,6 +81,7 @@ public class ProfileInteractor extends BaseInteractor<User> {
 
         @Override
         public void onNext(User user) {
+            //super.onnext checks if there is any error with model, if there is throw an error with error code
             super.onNext(user);
 
             sharedPreference.updateUserProfile(user.userName, user.dpUri);

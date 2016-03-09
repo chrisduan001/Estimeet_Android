@@ -6,26 +6,17 @@
     android:orientation="vertical"
     android:background="#FFF8F8">
 
-    <Button
+    <estimeet.meetup.util.CustomRoundButton
         android:id="@+id/sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_gravity="bottom"
         android:layout_margin="20dp"
-        android:background="@drawable/digits_button"
-        android:textColor="@color/white"
-        android:text="@string/sign_in"/>
-
-    <estimeet.meetup.util.CustomRoundButton
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_gravity="bottom"
         custom:customButtonRound="20"
         custom:customButtonColor="@color/colorMain"
         custom:customButtonTextColor="@color/white"
-        custom:customButtonText="SIGN IN"
-        custom:customButtonTextSize="18"
-        android:layout_margin="20dp"
-        />
+        custom:customButtonText="@string/sign_in"
+        custom:customButtonTextSize="18"/>
 
     <include layout="@layout/merge_progress_bar" />
 

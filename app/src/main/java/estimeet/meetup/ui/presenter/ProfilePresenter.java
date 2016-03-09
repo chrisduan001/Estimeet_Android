@@ -96,14 +96,14 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     //region interactor callback
     @Override
     public void onError(String errorMessage) {
-        //todo..set error message based on errorcode
-        view.showShortToastMessage(errorMessage);
         dismissProgressDialog();
+        if (!TextUtils.isEmpty(getErrorString(errorMessage))) {
+            view.showShortToastMessage(errorMessage);
+        }
     }
 
     @Override
     public void onAuthFailed() {
-        super.onAuthFailed();
         view.onAuthFailed();
         dismissProgressDialog();
     }

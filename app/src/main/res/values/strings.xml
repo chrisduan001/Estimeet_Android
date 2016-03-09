@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Meetup</string>
     <string name="text_enter_mobile_number">Enter your mobile number</string>
-    <string name="sign_in">Sign in</string>
+    <string name="sign_in">SIGN IN</string>
 
     <string name="profile_enter_name_hint">Enter Your Name</string>
     <string name="profile_or_text">or</string>
@@ -17,4 +17,6 @@
     <string name="network_error">2013</string>
     <string name="http_generic_error">500</string>
     <string name="http_auth_error">401</string>
+
+    <string name="error_500">An error occurred on server, please try again later</string>
 </resources>

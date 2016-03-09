@@ -11,13 +11,14 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 
 import estimeet.meetup.R;
 
 /**
  * Created by Hayden on 2016-03-04.
  */
-public class CustomRoundButton extends View {
+public class CustomRoundButton extends Button {
 
     private int buttonColour;
     private String buttonText;
@@ -70,7 +71,7 @@ public class CustomRoundButton extends View {
 
         //Draw rounded rectangle
         rect.set(0,0,width,height);
-        canvas.drawRoundRect(rect,buttonRound, buttonRound, paintColorStyle);
+        canvas.drawRoundRect(rect, buttonRound, buttonRound, paintColorStyle);
 
         //Changes text colour
         paintColorStyle.setColor(buttonTextColour);

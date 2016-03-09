@@ -53,6 +53,8 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         authCallback = null;
     }
 
+    @Override
+    public void onAuthFailed() {}
     //endregion
 
     //region fragment call

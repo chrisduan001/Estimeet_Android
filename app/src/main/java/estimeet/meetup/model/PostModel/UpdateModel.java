@@ -6,7 +6,6 @@ public class UpdateModel {
 
     public int id;
     public long userId;
-    public String password;
     private String userName;
     private String imageString;
 
@@ -15,7 +14,6 @@ public class UpdateModel {
     public UpdateModel(int id, long userId, String name, String imageString) {
         this.id = id;
         this.userId = userId;
-        this.password = password;
         this.userName = name;
         this.imageString = imageString;
     }

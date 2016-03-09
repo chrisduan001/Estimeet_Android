@@ -24,6 +24,11 @@ public class MainPresenter extends BasePresenter {
 
     }
 
+    @Override
+    public void onAuthFailed() {
+
+    }
+
     public void setView(MainView view) {
         this.view = view;
     }
