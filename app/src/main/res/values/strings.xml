@@ -18,5 +18,7 @@
     <string name="http_generic_error">500</string>
     <string name="http_auth_error">401</string>
 
+    <string name="progress_loading">Loading</string>
+
     <string name="error_500">An error occurred on server, please try again later</string>
 </resources>

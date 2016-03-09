@@ -19,6 +19,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.soundcloud.android.crop.Crop;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
@@ -180,7 +181,19 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public void onReceivedFbData(String name, String dpUri) {
         userNameEt.setText(name);
         userNameEt.setError(null);
-        picasso.load(dpUri).resize(300, 300).centerCrop().transform(circleTransform).into(profileImage);
+
+        showProgressDialog(getString(R.string.progress_loading));
+        picasso.load(dpUri).resize(300, 300).centerCrop().transform(circleTransform).into(profileImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                dismissProgressDialog();
+            }
+
+            @Override
+            public void onError() {
+                dismissProgressDialog();
+            }
+        });
     }
 
     @Override
@@ -200,9 +213,9 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
         callbackManager = CallbackManager.Factory.create();
     }
-
     //endregion
 
+    //crop image action
     private Uri createTempFileUri() throws IOException {
         return Uri.fromFile(File.createTempFile("IMG_" + System.currentTimeMillis(), ".jpg"));
     }

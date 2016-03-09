@@ -1,6 +1,7 @@
 package estimeet.meetup.ui.presenter;
 
 import android.Manifest;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -15,6 +16,8 @@ import java.io.ByteArrayOutputStream;
 
 import javax.inject.Inject;
 
+import estimeet.meetup.MainApplication;
+import estimeet.meetup.R;
 import estimeet.meetup.interactor.ProfileInteractor;
 import estimeet.meetup.ui.BaseView;
 
@@ -83,7 +86,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
             return;
         }
 
-        view.showProgressDialog("Loading");
+        view.showProgressDialog(MainApplication.getContext().getString(R.string.progress_loading));
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -97,8 +100,9 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onError(String errorMessage) {
         dismissProgressDialog();
-        if (!TextUtils.isEmpty(getErrorString(errorMessage))) {
-            view.showShortToastMessage(errorMessage);
+        String msg = getErrorString(errorMessage);
+        if (!TextUtils.isEmpty(msg)) {
+            view.showShortToastMessage(msg);
         }
     }
 

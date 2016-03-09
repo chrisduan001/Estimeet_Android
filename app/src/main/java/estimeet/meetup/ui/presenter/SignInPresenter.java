@@ -1,9 +1,15 @@
 package estimeet.meetup.ui.presenter;
 
+import android.content.res.Resources;
+import android.text.TextUtils;
+
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
 import javax.inject.Inject;
+
+import estimeet.meetup.MainApplication;
+import estimeet.meetup.R;
 import estimeet.meetup.interactor.SignInInteractor;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
@@ -71,7 +77,7 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
             @Override
             public void success(DigitsSession digitsSession, String s) {
                 //todo..temp progress dialog, change to a better one later
-                view.showProgressDialog("Loading");
+                view.showProgressDialog(MainApplication.getContext().getString(R.string.progress_loading));
                 signInInteractor.onAuthSuccessful(digitsSession, s, listener);
             }
 
@@ -96,7 +102,10 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     public void onError(String errorMessage) {
         //todo..set error message based on errorcode
         view.dismissProgressDialog();
-        view.showShortToastMessage(errorMessage + "");
+        String msg = getErrorString(errorMessage);
+        if (!TextUtils.isEmpty(msg)) {
+            view.showShortToastMessage(msg);
+        }
     }
     //endregion
 

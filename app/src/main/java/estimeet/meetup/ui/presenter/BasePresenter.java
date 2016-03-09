@@ -2,6 +2,7 @@ package estimeet.meetup.ui.presenter;
 
 import android.content.res.Resources;
 
+import estimeet.meetup.MainApplication;
 import estimeet.meetup.R;
 
 /**
@@ -34,7 +35,7 @@ public abstract class BasePresenter implements IBasePresenter {
                     onAuthFailed();
                     return null;
                 case 500:
-                    return Resources.getSystem().getString(R.string.error_500);
+                    return MainApplication.getContext().getString(R.string.error_500);
                 default:
                     return null;
             }
