@@ -173,6 +173,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     }
 
     @Override
+    public void showProgressDialog() {
+        showProgressDialog(getString(R.string.progress_loading));
+    }
+
+    @Override
     public void startCameraAction() {
         Crop.pickImage(getContext(), this, CAPTURE_IMAGE_CODE);
     }
@@ -205,6 +210,12 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public void onInvalidName() {
         userNameEt.setError(getString(R.string.error_invialid_name));
     }
+
+    @Override
+    public void onServerError() {
+        showShortToastMessage(getString(R.string.error_500));
+    }
+
     //endregion
 
     //region facebook action

@@ -1,9 +1,6 @@
 package estimeet.meetup.ui.presenter;
 
-import android.content.res.Resources;
-
-import estimeet.meetup.MainApplication;
-import estimeet.meetup.R;
+import estimeet.meetup.ui.BaseView;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -27,21 +24,26 @@ public abstract class BasePresenter implements IBasePresenter {
 
     public abstract void onAuthFailed();
 
-    protected String getErrorString(String errorCode) {
+    //if error code processed/error occurred return 0, else return errorcode for presenter to process
+    protected int processErrorCode(String errorCode, BaseView baseView) {
+        int result = 0;
         try {
             int code = Integer.parseInt(errorCode);
             switch (code) {
                 case 100:
                     onAuthFailed();
-                    return null;
+                    break;
                 case 500:
-                    return MainApplication.getContext().getString(R.string.error_500);
+                    baseView.onServerError();
+                    break;
                 default:
-                    return null;
+                    result = code;
+                    break;
             }
         } catch (NumberFormatException e) {
             //in case the error code is an actual error message instead of error code
-            return errorCode;
+            return 0;
         }
+        return result;
     }
 }

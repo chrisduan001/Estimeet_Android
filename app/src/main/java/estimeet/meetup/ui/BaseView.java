@@ -4,12 +4,11 @@ package estimeet.meetup.ui;
  * Created by AmyDuan on 6/02/16.
  */
 public interface BaseView {
-    void showShortToastMessage(String message);
-    void showLongToastMessage(String message);
+    void onServerError();
 
     void checkPermission(String... permissions);
 
-    void showProgressDialog(String message);
+    void showProgressDialog();
     void dismissProgressDialog();
 
     void onAuthFailed();

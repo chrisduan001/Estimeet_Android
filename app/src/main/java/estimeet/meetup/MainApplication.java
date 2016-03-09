@@ -20,7 +20,6 @@ public class MainApplication extends Application {
     private static final String TWITTER_KEY = "LBQcvuD4RwAY2Y5HaIqKR0b19";
     private static final String TWITTER_SECRET = "X3BOAxjLa5bGTOQGkWBMJNkvo9NZDIjoOymG8gkaN9oi0Q1hbl";
 
-    private static Context mContext;
     private ApplicationComponent applicationComponent;
 
     @Override
@@ -29,11 +28,6 @@ public class MainApplication extends Application {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits());
         initializeInjector();
-        mContext = this;
-    }
-
-    public static Context getContext() {
-        return mContext;
     }
 
     private void initializeInjector() {

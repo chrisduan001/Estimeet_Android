@@ -57,4 +57,14 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     protected BasePresenter getPresenter() {
         return presenter;
     }
+
+    @Override
+    public void onServerError() {
+        showShortToastMessage(getString(R.string.error_500));
+    }
+
+    @Override
+    public void showProgressDialog() {
+        showProgressDialog(getString(R.string.progress_loading));
+    }
 }

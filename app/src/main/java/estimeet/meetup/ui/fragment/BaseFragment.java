@@ -1,5 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import com.digits.sdk.android.Digits;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 
@@ -51,25 +54,22 @@ public abstract class BaseFragment extends Fragment {
         return componentType.cast(((HasComponent<T>) getActivity()).getComponent());
     }
 
-    //region presenter callback
-    public void showShortToastMessage(String message) {
+    //region fragment call
+    protected void showShortToastMessage(String message) {
         showToastMessage(true, message);
     }
 
-    public void showLongToastMessage(String message) {
-        showToastMessage(false, message);
-    }
-
-    public void showProgressDialog(String message) {
+    protected void showProgressDialog(String message) {
         getProgressBar().setVisibility(View.VISIBLE);
     }
 
-    public void dismissProgressDialog() {
-        getProgressBar().setVisibility(View.INVISIBLE);
-    }
-
-    public void onAuthFailed() {
-        Digits.getSessionManager().clearActiveSession();
+    protected void showAlertDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(getString(R.string.button_ok), null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void showToastMessage(boolean isShort, String message) {
@@ -77,7 +77,18 @@ public abstract class BaseFragment extends Fragment {
     }
     //endregion
 
+    //region presenter callback
+    public void dismissProgressDialog() {
+        getProgressBar().setVisibility(View.INVISIBLE);
+    }
+
+    public void onAuthFailed() {
+        Digits.getSessionManager().clearActiveSession();
+    }
+    //endregion
+
     //region permission
+    //called from the presenter
     public void checkPermission(String... permissions) {
         List<String> permissionsToRequest = new ArrayList<>();
         for (String permission: permissions) {

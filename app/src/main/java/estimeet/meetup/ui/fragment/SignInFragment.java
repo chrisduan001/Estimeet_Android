@@ -112,5 +112,20 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     public void onSignInSuccessful(boolean isProfileCompleted) {
         signInCallback.onSigninSuccessful(isProfileCompleted);
     }
+
+    @Override
+    public void onDigitsError() {
+        showShortToastMessage(getString(R.string.error_digits));
+    }
+
+    @Override
+    public void onServerError() {
+        showShortToastMessage(getString(R.string.error_500));
+    }
+
+    @Override
+    public void showProgressDialog() {
+        showProgressDialog(getString(R.string.progress_loading));
+    }
     //endregion
 }

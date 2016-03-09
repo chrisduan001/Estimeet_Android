@@ -1,10 +1,14 @@
 package estimeet.meetup.ui.presenter;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -28,6 +32,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     private ProfileView view;
     private ProfileInteractor interactor;
+    private boolean isRequestContactPermission;
 
     @Inject
     public ProfilePresenter(ProfileInteractor interactor) {
@@ -48,13 +53,19 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
-            view.startCameraAction();
+            if (isRequestContactPermission) {
+
+            } else {
+                view.startCameraAction();
+            }
         }
+        isRequestContactPermission = false;
     }
 
     //region fragment call
     public void setView(ProfileView view) {
         this.view = view;
+        requestContactPermission();
     }
 
     public void intentToStartCamera() {
@@ -86,7 +97,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
             return;
         }
 
-        view.showProgressDialog(MainApplication.getContext().getString(R.string.progress_loading));
+        view.showProgressDialog();
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -100,10 +111,9 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onError(String errorMessage) {
         dismissProgressDialog();
-        String msg = getErrorString(errorMessage);
-        if (!TextUtils.isEmpty(msg)) {
-            view.showShortToastMessage(msg);
-        }
+        //don't have to handle returned value from processerrorcode
+        //only 2 error types could happen here
+        processErrorCode(errorMessage, view);
     }
 
     @Override
@@ -122,16 +132,23 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
         view.onProfileCompleted();
         dismissProgressDialog();
     }
-    //region
+    //endregion
 
+    //region logic
     private void dismissProgressDialog() {
         view.dismissProgressDialog();
     }
 
+    private void requestContactPermission() {
+        isRequestContactPermission = true;
+        view.checkPermission(Manifest.permission.READ_CONTACTS);
+    }
+    //endregion
     public interface ProfileView extends BaseView {
         void startCameraAction();
         void onReceivedFbData(String name, String dpUri);
         void onProfileCompleted();
         void onInvalidName();
+        void showPrePermissionAlert();
     }
 }

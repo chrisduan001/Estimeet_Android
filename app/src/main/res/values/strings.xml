@@ -7,9 +7,8 @@
     <string name="profile_or_text">or</string>
 
     <string name="facebook_id">1725764340993391</string>
+    <string name="button_ok">Ok</string>
 
-    <string name="error_unable_to_crop_image">An error occurred while crop the image</string>
-    <string name="error_create_temp_file">An error occurred when accessing your camera</string>
     <string name="fb_button_text">Import from facebook</string>
     <string name="get_started_text">Get Started!!</string>
 
@@ -20,5 +19,8 @@
 
     <string name="progress_loading">Loading</string>
 
+    <string name="error_unable_to_crop_image">An error occurred while crop the image</string>
+    <string name="error_create_temp_file">An error occurred when accessing your camera</string>
     <string name="error_500">An error occurred on server, please try again later</string>
+    <string name="error_digits">An error occurred while process your phone number please try again</string>
 </resources>

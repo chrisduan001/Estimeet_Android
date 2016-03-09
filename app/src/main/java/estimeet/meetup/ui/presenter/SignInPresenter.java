@@ -77,13 +77,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
             @Override
             public void success(DigitsSession digitsSession, String s) {
                 //todo..temp progress dialog, change to a better one later
-                view.showProgressDialog(MainApplication.getContext().getString(R.string.progress_loading));
+                view.showProgressDialog();
                 signInInteractor.onAuthSuccessful(digitsSession, s, listener);
             }
 
             @Override
             public void failure(DigitsException e) {
-                view.showShortToastMessage(e.getLocalizedMessage());
+                view.onDigitsError();
             }
         };
 
@@ -102,15 +102,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     public void onError(String errorMessage) {
         //todo..set error message based on errorcode
         view.dismissProgressDialog();
-        String msg = getErrorString(errorMessage);
-        if (!TextUtils.isEmpty(msg)) {
-            view.showShortToastMessage(msg);
-        }
+        processErrorCode(errorMessage, view);
     }
     //endregion
 
     public interface SignInView extends BaseView {
         void setAuthCallback(AuthCallback callback);
         void onSignInSuccessful(boolean isProfileCompleted);
+        void onDigitsError();
     }
 }
