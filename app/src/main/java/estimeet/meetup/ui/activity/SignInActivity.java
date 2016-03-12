@@ -80,8 +80,7 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
     @Override
     public void onSigninSuccessful(boolean isProfileCompleted) {
         if (isProfileCompleted) {
-            startNewActivity(new Intent(this, MainActivity_.class));
-            this.finish();
+            startMainActivity();
         } else {
             replaceFragment(R.id.container, new ProfileFragment_());
         }
@@ -89,7 +88,11 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
 
     @Override
     public void onGetStarted() {
-        startNewActivity(new Intent(this, MainActivity_.class));
+        startMainActivity();
+    }
+
+    private void startMainActivity() {
+        MainActivity_.intent(this).start();
         this.finish();
     }
 

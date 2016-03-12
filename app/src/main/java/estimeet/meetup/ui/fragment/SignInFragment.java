@@ -16,6 +16,7 @@ import estimeet.meetup.R;
 import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.SignInPresenter;
+import estimeet.meetup.util.ContactList;
 
 /**
  * Created by AmyDuan on 8/02/16.
@@ -114,6 +115,11 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     }
 
     @Override
+    public void onReadContactPermissionGranted() {
+        presenter.sendContactList(ContactList.getUserContactList(getActivity()));
+    }
+
+    @Override
     public void onDigitsError() {
         showShortToastMessage(getString(R.string.error_digits));
     }
@@ -121,6 +127,11 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     @Override
     public void onServerError() {
         showShortToastMessage(getString(R.string.error_500));
+    }
+
+    @Override
+    public void onNetWorkError() {
+        showShortToastMessage(getString(R.string.error_network));
     }
 
     @Override

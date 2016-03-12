@@ -36,6 +36,9 @@ public abstract class BasePresenter implements IBasePresenter {
                 case 500:
                     baseView.onServerError();
                     break;
+                case 2013:
+                    baseView.onNetWorkError();
+                    break;
                 default:
                     result = code;
                     break;

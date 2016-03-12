@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.AuthUser;
+import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
@@ -37,7 +38,7 @@ import rx.schedulers.Schedulers;
 public class SignInInteractor extends BaseInteractor<User> {
 
     private SignInListener listener;
-    private TokenSubscriber tokenSubscriber;
+    private SigninSubscriber signinSubscriber;
 
     @Inject
     public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sharedPreference) {
@@ -47,13 +48,13 @@ public class SignInInteractor extends BaseInteractor<User> {
     //region fragment call
     private void signInUser(AuthUser user, SignInListener listener) {
         this.listener = listener;
-        tokenSubscriber = new TokenSubscriber();
+        signinSubscriber = new SigninSubscriber();
         initSignIn(user);
     }
 
     public void unSubscribe() {
-        if (tokenSubscriber != null && !tokenSubscriber.isUnsubscribed()) {
-            tokenSubscriber.unsubscribe();
+        if (signinSubscriber != null && !signinSubscriber.isUnsubscribed()) {
+            signinSubscriber.unsubscribe();
         }
     }
 
@@ -69,37 +70,37 @@ public class SignInInteractor extends BaseInteractor<User> {
 
         signInUser(new AuthUser(authToken, authProvider, phoneNumber, id), listener);
     }
+
+    public void sendContacts(String contacts) {
+        User user = sharedPreference.getUserFromSp();
+        SendContact contactModel = new SendContact(user.id, user.userId, contacts);
+        makeRequest(user, serviceHelper.sendContacts(user.token, contactModel), new DefaultSubscriber<User>(), true);
+    }
     //endregion
 
     //region network
     private void initSignIn(AuthUser user) {
-        serviceHelper.signInUser(user).flatMap(new Func1<User, Observable<TokenResponse>>() {
-            @Override
-            public Observable<TokenResponse> call(User user) {
-                if (user.hasError()) {
-                    throw new RuntimeException(user.errorCode + "");
-                } else {
-                    sharedPreference.storeUserInfo(user);
-                    if (!TextUtils.isEmpty(user.userName) && !TextUtils.isEmpty(user.dpUri)) {
-                        sharedPreference.updateUserProfile(user.userName, user.dpUri);
-                    }
-                }
-                return getTokenObservable(user);
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new TokenSubscriber());
+        makeRequest(null, serviceHelper.signInUser(user), signinSubscriber, false);
     }
 
-    private class TokenSubscriber extends DefaultSubscriber<TokenResponse> {
+    private class SigninSubscriber extends DefaultSubscriber<User> {
         @Override
-        public void onNext(TokenResponse tokenResponse) {
-            sharedPreference.updateUserToken(tokenResponse.access_token, tokenResponse.expires_in);
-            listener.onSignInSuccessful(sharedPreference.getUserFromSp());
+        public void onNext(User user) {
+            super.onNext(user);
+
+            sharedPreference.storeUserInfo(user);
+            if (!TextUtils.isEmpty(user.userName) && !TextUtils.isEmpty(user.dpUri)) {
+                sharedPreference.updateUserProfile(user.userName, user.dpUri);
+            }
+            listener.onSignInSuccessful(user);
         }
 
         @Override
         public void onError(Throwable e) {
+            if (e.getLocalizedMessage().equals("404")) {
+                listener.onAuthFailed();
+                return;
+            }
             listener.onError(e.getLocalizedMessage());
         }
     }

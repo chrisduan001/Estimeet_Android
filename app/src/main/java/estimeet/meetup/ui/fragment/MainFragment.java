@@ -1,8 +1,10 @@
 package estimeet.meetup.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,8 +21,25 @@ import estimeet.meetup.ui.presenter.MainPresenter;
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView {
 
+    public interface MainCallback {
+    }
+
     @Inject MainPresenter presenter;
     User user;
+
+    private MainCallback mainCallback;
+
+    //region lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MainCallback) {
+            this.mainCallback = (MainCallback) context;
+        } else {
+            throw new UnsupportedOperationException("Activity must implement " +
+                    MainCallback.class.getSimpleName());
+        }
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -35,8 +54,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    protected ProgressBar getProgressBar() {
-        return null;
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -44,9 +63,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         super.onDestroy();
     }
 
+    //endregion
+
     @Override
-    public void onResume() {
-        super.onResume();
+    protected ProgressBar getProgressBar() {
+        return null;
     }
 
     private void initialize() {
@@ -61,6 +82,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public void onServerError() {
         showShortToastMessage(getString(R.string.error_500));
+    }
+
+    @Override
+    public void onNetWorkError() {
+        showShortToastMessage(getString(R.string.error_network));
     }
 
     @Override

@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import estimeet.meetup.model.PostModel.AuthUser;
+import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
@@ -22,16 +23,12 @@ public class ServiceHelper {
         this.estimeetApi = restApi;
     }
 
-    public Observable<User> getUser(int userId) {
-        return estimeetApi.getUser(userId);
-    }
-
-    public Observable<String> pauseRequest() {
-        return estimeetApi.pauseRequest();
-    }
-
     public Observable<User> signInUser(AuthUser authUser) {
         return estimeetApi.signInUser(authUser);
+    }
+
+    public Observable<User> sendContacts(String token, SendContact contactModel) {
+        return estimeetApi.sendContacts(buildToken(token), contactModel);
     }
 
     public Observable<TokenResponse> renewToken(int id, String deviceId) {
@@ -39,7 +36,11 @@ public class ServiceHelper {
     }
 
     public Observable<User> updateProfile(String token, UpdateModel model) {
-        token = "Bearer " + token;
-        return estimeetApi.updateProfile(token, model);
+
+        return estimeetApi.updateProfile(buildToken(token), model);
+    }
+
+    private String buildToken(String token) {
+        return "Bearer " + token;
     }
 }

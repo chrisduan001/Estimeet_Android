@@ -73,7 +73,8 @@ public class ServiceModule {
                 String message;
                 switch (cause.getKind()) {
                     case NETWORK:
-                        message = r.getString(R.string.network_error);
+                        //network error
+                        message = "2013";
                         break;
                     default:
                         //returns code 401 if token auth failed

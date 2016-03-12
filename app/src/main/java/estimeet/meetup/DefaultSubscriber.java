@@ -1,5 +1,7 @@
 package estimeet.meetup;
 
+import android.util.Log;
+
 import estimeet.meetup.model.BaseModel;
 import rx.Subscriber;
 
@@ -15,7 +17,7 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-
+        Log.d(getClass().getSimpleName(), "Error occurred");
     }
 
     @Override
@@ -23,12 +25,8 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
         if (t instanceof BaseModel) {
             BaseModel model = (BaseModel) t;
             if (model.hasError()) {
-                throwError(model.errorCode + "");
+                throw new RuntimeException(model.errorCode + "");
             }
         }
-    }
-
-    protected void throwError(String errorMessage) {
-        onError(new Throwable(errorMessage));
     }
 }

@@ -1,5 +1,6 @@
 package estimeet.meetup.ui.presenter;
 
+import android.Manifest;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
@@ -13,6 +14,7 @@ import estimeet.meetup.R;
 import estimeet.meetup.interactor.SignInInteractor;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
+import estimeet.meetup.util.ContactList;
 
 /**
  * Created by AmyDuan on 8/02/16.
@@ -60,7 +62,21 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
 
     @Override
-    public void onAuthFailed() {}
+    public void onAuthFailed() {
+        view.dismissProgressDialog();
+        view.onAuthFailed();
+    }
+
+    @Override
+    public void onPermissionResult(boolean isGranted) {
+        if (isGranted) {
+            view.showProgressDialog();
+            view.onReadContactPermissionGranted();
+        }
+        view.dismissProgressDialog();
+        view.onSignInSuccessful(false);
+    }
+
     //endregion
 
     //region fragment call
@@ -70,6 +86,10 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
 
     public void createDigitsAuthCallback() {
         view.setAuthCallback(getAuthCallback());
+    }
+
+    public void sendContactList(String contacts) {
+        signInInteractor.sendContacts(contacts);
     }
 
     private AuthCallback getAuthCallback() {
@@ -95,7 +115,12 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     @Override
     public void onSignInSuccessful(User user) {
         view.dismissProgressDialog();
-        view.onSignInSuccessful(user.isProfileCompleted());
+        //request user friend list if they logged in for the first time
+        if (!user.isProfileCompleted()) {
+            view.checkPermission(Manifest.permission.READ_CONTACTS);
+        } else {
+            view.onSignInSuccessful(true);
+        }
     }
 
     @Override
@@ -110,5 +135,6 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         void setAuthCallback(AuthCallback callback);
         void onSignInSuccessful(boolean isProfileCompleted);
         void onDigitsError();
+        void onReadContactPermissionGranted();
     }
 }

@@ -216,6 +216,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
         showShortToastMessage(getString(R.string.error_500));
     }
 
+    @Override
+    public void onNetWorkError() {
+        showShortToastMessage(getString(R.string.error_network));
+    }
+
     //endregion
 
     //region facebook action

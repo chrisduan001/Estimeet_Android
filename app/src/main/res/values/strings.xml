@@ -13,7 +13,6 @@
     <string name="get_started_text">Get Started!!</string>
 
     <string name="error_invialid_name">Please enter your name</string>
-    <string name="network_error">2013</string>
     <string name="http_generic_error">500</string>
     <string name="http_auth_error">401</string>
 
@@ -23,4 +22,5 @@
     <string name="error_create_temp_file">An error occurred when accessing your camera</string>
     <string name="error_500">An error occurred on server, please try again later</string>
     <string name="error_digits">An error occurred while process your phone number please try again</string>
+    <string name="error_network">Request failed, please check your internet and try again</string>
 </resources>

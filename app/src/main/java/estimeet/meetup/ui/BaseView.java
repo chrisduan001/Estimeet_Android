@@ -5,6 +5,7 @@ package estimeet.meetup.ui;
  */
 public interface BaseView {
     void onServerError();
+    void onNetWorkError();
 
     void checkPermission(String... permissions);
 

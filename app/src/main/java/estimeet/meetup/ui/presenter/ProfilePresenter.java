@@ -32,7 +32,6 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     private ProfileView view;
     private ProfileInteractor interactor;
-    private boolean isRequestContactPermission;
 
     @Inject
     public ProfilePresenter(ProfileInteractor interactor) {
@@ -53,19 +52,13 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
-            if (isRequestContactPermission) {
-
-            } else {
-                view.startCameraAction();
-            }
+            view.startCameraAction();
         }
-        isRequestContactPermission = false;
     }
 
     //region fragment call
     public void setView(ProfileView view) {
         this.view = view;
-        requestContactPermission();
     }
 
     public void intentToStartCamera() {
@@ -139,16 +132,11 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
         view.dismissProgressDialog();
     }
 
-    private void requestContactPermission() {
-        isRequestContactPermission = true;
-        view.checkPermission(Manifest.permission.READ_CONTACTS);
-    }
     //endregion
     public interface ProfileView extends BaseView {
         void startCameraAction();
         void onReceivedFbData(String name, String dpUri);
         void onProfileCompleted();
         void onInvalidName();
-        void showPrePermissionAlert();
     }
 }

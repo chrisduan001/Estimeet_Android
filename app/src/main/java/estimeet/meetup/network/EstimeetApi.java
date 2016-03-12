@@ -1,6 +1,7 @@
 package estimeet.meetup.network;
 
 import estimeet.meetup.model.PostModel.AuthUser;
+import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
@@ -28,6 +29,12 @@ public interface EstimeetApi {
     @POST("/SignIn/SignInUser")
     Observable<User> signInUser(
             @Body AuthUser body
+    );
+
+    @POST("/Profile/buildFriendsFromContacts")
+    Observable<User> sendContacts(
+        @Header("Authorization") String token,
+        @Body SendContact contactModel
     );
 
     @FormUrlEncoded
