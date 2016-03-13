@@ -43,6 +43,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public interface SignInCallback {
         void onGetStarted();
         void onAuthFailed();
+        void navToFriendList();
     }
 
     @Inject ProfilePresenter presenter;
@@ -210,6 +211,12 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public void onInvalidName() {
         userNameEt.setError(getString(R.string.error_invialid_name));
     }
+
+    @Override
+    public void onNonEmptyFriendList() {
+        signInCallback.navToFriendList();
+    }
+
     //endregion
 
     //region facebook action

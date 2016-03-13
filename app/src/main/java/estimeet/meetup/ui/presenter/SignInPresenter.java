@@ -139,9 +139,14 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
 
     @Override
-    public void onFriendListCompleted(List<Friend> friends) {
+    public void onFriendListCompleted(boolean isAnyFriends) {
         view.dismissProgressDialog();
-        view.onSignInSuccessful(true);
+        if (isAnyFriends) {
+            view.onNonEmptyFriendsList();
+        } else {
+            view.onSignInSuccessful(true);
+        }
+
     }
     //endregion
 
@@ -150,5 +155,6 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         void onSignInSuccessful(boolean isProfileCompleted);
         void onDigitsError();
         void onReadContactPermissionGranted();
+        void onNonEmptyFriendsList();
     }
 }

@@ -132,9 +132,13 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     }
 
     @Override
-    public void onFriendListCompleted(List<Friend> friends) {
-        view.onProfileCompleted();
+    public void onFriendListCompleted(boolean isAnyFriends) {
         dismissProgressDialog();
+        if (isAnyFriends) {
+            view.onNonEmptyFriendList();
+        } else {
+            view.onProfileCompleted();
+        }
     }
 
     //endregion
@@ -150,5 +154,6 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
         void onReceivedFbData(String name, String dpUri);
         void onProfileCompleted();
         void onInvalidName();
+        void onNonEmptyFriendList();
     }
 }
