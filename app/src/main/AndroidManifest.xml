@@ -23,7 +23,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.SignInActivity_" />
+        <activity android:name=".ui.activity.SignInActivity_"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
