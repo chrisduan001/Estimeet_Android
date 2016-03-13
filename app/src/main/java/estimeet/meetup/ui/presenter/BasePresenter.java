@@ -23,30 +23,4 @@ public abstract class BasePresenter implements IBasePresenter {
     public void onPermissionResult(boolean isGranted) {}
 
     public abstract void onAuthFailed();
-
-    //if error code processed/error occurred return 0, else return errorcode for presenter to process
-    protected int processErrorCode(String errorCode, BaseView baseView) {
-        int result = 0;
-        try {
-            int code = Integer.parseInt(errorCode);
-            switch (code) {
-                case 100:
-                    onAuthFailed();
-                    break;
-                case 500:
-                    baseView.onServerError();
-                    break;
-                case 2013:
-                    baseView.onNetWorkError();
-                    break;
-                default:
-                    result = code;
-                    break;
-            }
-        } catch (NumberFormatException e) {
-            //in case the error code is an actual error message instead of error code
-            return 0;
-        }
-        return result;
-    }
 }

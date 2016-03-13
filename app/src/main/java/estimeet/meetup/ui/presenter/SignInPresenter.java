@@ -38,8 +38,8 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     @SuppressWarnings("FieldCanBeLocal")
     private AuthCallback authCallback;
 
-    @Inject SignInInteractor signInInteractor;
-    @Inject FriendsInteractor friendsInteractor;
+    private SignInInteractor signInInteractor;
+    private FriendsInteractor friendsInteractor;
 
     //region lifecycle
     @Inject
@@ -55,8 +55,8 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
 
     @Override
     public void onPause() {
-        super.onPause();
         signInInteractor.unSubscribe();
+        friendsInteractor.unSubscribe();
     }
 
     @Override
@@ -130,13 +130,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
 
     @Override
     public void onError(String errorMessage) {
-        //todo..set error message based on errorcode
         view.dismissProgressDialog();
-        processErrorCode(errorMessage, view);
+        view.onError(errorMessage);
     }
 
     @Override
     public void onFriendListCompleted() {
+        view.dismissProgressDialog();
         view.onSignInSuccessful(true);
     }
     //endregion

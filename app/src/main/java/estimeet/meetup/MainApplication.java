@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.digits.sdk.android.Digits;
+import com.facebook.stetho.Stetho;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import estimeet.meetup.di.Modules.ApplicationModule;
@@ -28,6 +29,8 @@ public class MainApplication extends Application {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits());
         initializeInjector();
+
+        Stetho.initializeWithDefaults(this);
     }
 
     private void initializeInjector() {

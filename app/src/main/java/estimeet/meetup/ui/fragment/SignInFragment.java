@@ -125,16 +125,6 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     }
 
     @Override
-    public void onServerError() {
-        showShortToastMessage(getString(R.string.error_500));
-    }
-
-    @Override
-    public void onNetWorkError() {
-        showShortToastMessage(getString(R.string.error_network));
-    }
-
-    @Override
     public void showProgressDialog() {
         showProgressDialog(getString(R.string.progress_loading));
     }

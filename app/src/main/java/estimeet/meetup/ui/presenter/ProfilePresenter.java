@@ -22,20 +22,24 @@ import javax.inject.Inject;
 
 import estimeet.meetup.MainApplication;
 import estimeet.meetup.R;
+import estimeet.meetup.interactor.FriendsInteractor;
 import estimeet.meetup.interactor.ProfileInteractor;
 import estimeet.meetup.ui.BaseView;
 
 /**
  * Created by AmyDuan on 9/02/16.
  */
-public class ProfilePresenter extends BasePresenter implements ProfileInteractor.ProfileListener {
+public class ProfilePresenter extends BasePresenter implements ProfileInteractor.ProfileListener,
+        FriendsInteractor.GetFreindsListener{
 
     private ProfileView view;
     private ProfileInteractor interactor;
+    private FriendsInteractor friendsInteractor;
 
     @Inject
-    public ProfilePresenter(ProfileInteractor interactor) {
+    public ProfilePresenter(ProfileInteractor interactor, FriendsInteractor fInteractor) {
         this.interactor = interactor;
+        this.friendsInteractor = fInteractor;
     }
 
     @Override
@@ -46,6 +50,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onPause() {
         interactor.unSubscribe();
+        friendsInteractor.unSubscribe();
     }
 
     //override from base presenter
@@ -104,9 +109,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onError(String errorMessage) {
         dismissProgressDialog();
-        //don't have to handle returned value from processerrorcode
-        //only 2 error types could happen here
-        processErrorCode(errorMessage, view);
+        view.onError(errorMessage);
     }
 
     @Override
@@ -122,9 +125,16 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     @Override
     public void onUpdateProfileSuccessful() {
+        friendsInteractor.call(this);
+        friendsInteractor.getFriendsList(null);
+    }
+
+    @Override
+    public void onFriendListCompleted() {
         view.onProfileCompleted();
         dismissProgressDialog();
     }
+
     //endregion
 
     //region logic

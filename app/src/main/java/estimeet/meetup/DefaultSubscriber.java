@@ -21,7 +21,7 @@ public abstract class DefaultSubscriber<T> extends Subscriber<T> {
         Log.d(getClass().getSimpleName(), "Error occurred");
         try {
             int errCode = Integer.parseInt(e.getLocalizedMessage());
-            if (errCode >= 400 && errCode < 500) {
+            if (errCode >= 400 && errCode < 500 || errCode == 100) {
                 onAuthError();
             } else {
                 onError(errCode + "");

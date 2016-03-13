@@ -32,6 +32,9 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
 
     public void getFriendsList(User user) {
         subscriber = new FriendListSubscriber();
+        if (user == null) {
+            user = sharedPreference.getUserFromSp();
+        }
         makeRequest(user, serviceHelper.getFriendsList(user.token, user.id, user.userId), subscriber, true);
     }
 

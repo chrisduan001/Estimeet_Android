@@ -23,4 +23,5 @@
     <string name="error_500">An error occurred on server, please try again later</string>
     <string name="error_digits">An error occurred while process your phone number please try again</string>
     <string name="error_network">Request failed, please check your internet and try again</string>
+    <string name="error_generic">An error occurred, please try again</string>
 </resources>

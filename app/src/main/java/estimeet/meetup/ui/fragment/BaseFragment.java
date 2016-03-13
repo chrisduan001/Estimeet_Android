@@ -72,6 +72,22 @@ public abstract class BaseFragment extends Fragment {
         alertDialog.show();
     }
 
+    public void onError(String errCode) {
+        int code = Integer.parseInt(errCode);
+
+        switch (code) {
+            case 500:
+                showShortToastMessage(getString(R.string.error_500));
+                break;
+            case 1000:
+                showShortToastMessage(getString(R.string.error_generic));
+                break;
+            case 2013:
+                showShortToastMessage(getString(R.string.error_network));
+                break;
+        }
+    }
+
     private void showToastMessage(boolean isShort, String message) {
         Toast.makeText(getActivity(), message, isShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
     }

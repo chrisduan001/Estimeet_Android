@@ -210,17 +210,6 @@ public class ProfileFragment extends BaseFragment implements ProfilePresenter.Pr
     public void onInvalidName() {
         userNameEt.setError(getString(R.string.error_invialid_name));
     }
-
-    @Override
-    public void onServerError() {
-        showShortToastMessage(getString(R.string.error_500));
-    }
-
-    @Override
-    public void onNetWorkError() {
-        showShortToastMessage(getString(R.string.error_network));
-    }
-
     //endregion
 
     //region facebook action
