@@ -17,6 +17,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,7 @@ import estimeet.meetup.MainApplication;
 import estimeet.meetup.R;
 import estimeet.meetup.interactor.FriendsInteractor;
 import estimeet.meetup.interactor.ProfileInteractor;
+import estimeet.meetup.model.Friend;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -130,7 +132,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     }
 
     @Override
-    public void onFriendListCompleted() {
+    public void onFriendListCompleted(List<Friend> friends) {
         view.onProfileCompleted();
         dismissProgressDialog();
     }

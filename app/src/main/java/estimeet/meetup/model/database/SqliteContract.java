@@ -12,7 +12,7 @@ public class SqliteContract {
 
     public interface Tables {
         String USERS = "Users";
-        String FRIENDS = "Friend";
+        String FRIENDS = "Friends";
         String DP_IMAGE = "DpImages";
     }
 
@@ -26,6 +26,7 @@ public class SqliteContract {
         String ID = "ID";
         String USER_ID = "UserID";
         String USER_NAME = "UserName";
+        String IMAGE_URI = "ImageUri";
     }
 
     public interface DpImageColumns {
@@ -43,6 +44,34 @@ public class SqliteContract {
         }
 
         public static String getUserId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+    public static class Friends implements FriendColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(Tables.FRIENDS).build();
+
+        public static final String DEFAULT_SORT = FriendColumns.USER_NAME;
+
+        public static Uri buildFriendUri(int id) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        public static String getFriendId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+    public static class Images implements DpImageColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(Tables.DP_IMAGE).build();
+
+        public static final String DEFAULT_SORT = DpImageColumns.ID;
+
+        public static Uri buildImageUri(int id) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        public static String getImageId(Uri uri) {
             return uri.getPathSegments().get(1);
         }
     }

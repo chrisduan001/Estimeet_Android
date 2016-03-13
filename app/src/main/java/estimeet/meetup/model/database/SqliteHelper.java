@@ -16,7 +16,7 @@ import static estimeet.meetup.model.database.SqliteContract.DpImageColumns;
 public class SqliteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "meetup.db";
-    private static final int DATABASE_VERSION = 101;
+    private static final int DATABASE_VERSION = 103;
 
     public SqliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,12 +34,14 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + FriendColumns.ID + " INTEGER NOT NULL,"
             + FriendColumns.USER_ID + " INTEGER NOT NULL,"
             + FriendColumns.USER_NAME + " TEXT NOT NULL,"
+            + FriendColumns.IMAGE_URI + " TEXT NOT NULL,"
             + "UNIQUE (" + FriendColumns.ID + "))";
 
     private static final String IMAGE_TABLE = "CREATE TABLE " + SqliteContract.Tables.DP_IMAGE + "("
+            + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + DpImageColumns.ID + " INTEGER NOT NULL,"
             + DpImageColumns.USER_IMAGE + " BLOB NOT NULL,"
-            + "INIQUE (" + DpImageColumns.ID + "))";
+            + "UNIQUE (" + DpImageColumns.ID + "))";
 
     @Override
     public void onCreate(SQLiteDatabase db) {

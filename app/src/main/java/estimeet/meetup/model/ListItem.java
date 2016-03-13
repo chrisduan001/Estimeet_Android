@@ -8,6 +8,6 @@ import java.util.List;
  * Created by AmyDuan on 12/03/16.
  */
 public class ListItem<T> extends BaseModel {
-    @SerializedName("ListItem")
+    @SerializedName("GenericItems")
     public List<T> items;
 }

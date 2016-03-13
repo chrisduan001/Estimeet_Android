@@ -29,6 +29,7 @@ public class Friend extends BaseModel {
         contentValues.put(SqliteContract.FriendColumns.ID, id);
         contentValues.put(SqliteContract.FriendColumns.USER_ID, userId);
         contentValues.put(SqliteContract.FriendColumns.USER_NAME, userName);
+        contentValues.put(SqliteContract.FriendColumns.IMAGE_URI, dpUri);
         return contentValues;
     }
 
