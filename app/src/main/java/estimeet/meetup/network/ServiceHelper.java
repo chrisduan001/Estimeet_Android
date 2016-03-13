@@ -38,7 +38,6 @@ public class ServiceHelper {
     }
 
     public Observable<User> updateProfile(String token, UpdateModel model) {
-
         return estimeetApi.updateProfile(buildToken(token), model);
     }
 

@@ -9,6 +9,7 @@ import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import rx.Observable;
 
 /**
  * Created by AmyDuan on 12/03/16.
@@ -35,7 +36,8 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
         if (user == null) {
             user = sharedPreference.getUserFromSp();
         }
-        makeRequest(user, serviceHelper.getFriendsList(user.token, user.id, user.userId), subscriber, true);
+
+        makeRequest(user, subscriber, true);
     }
 
     public void unSubscribe() {
@@ -44,6 +46,11 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
         }
     }
     //endregion
+
+    @Override
+    protected Observable<ListItem<Friend>> getObservable(User user) {
+        return serviceHelper.getFriendsList(user.token, user.id, user.userId);
+    }
 
     private class FriendListSubscriber extends DefaultSubscriber<ListItem<Friend>> {
         @Override

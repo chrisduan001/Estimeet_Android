@@ -54,10 +54,10 @@ public interface EstimeetApi {
             @Body UpdateModel userModel
     );
 
-    @GET("/User/getFriendsList/{id}?userId={userId}")
+    @GET("/User/getFriendsList")
     Observable<ListItem<Friend>> getFriendsList(
             @Header("Authorization") String token,
-            @Path("id") int id,
-            @Path("userId") long userId
+            @Query("id") int id,
+            @Query("userId") long userId
     );
 }

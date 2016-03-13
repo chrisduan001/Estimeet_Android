@@ -53,6 +53,10 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         }
     }
 
+    private void initialize() {
+        getComponent(MainComponent.class).inject(this);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -62,16 +66,12 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onDestroy() {
         super.onDestroy();
     }
-
     //endregion
 
+    //region presenter call
     @Override
     protected ProgressBar getProgressBar() {
         return null;
-    }
-
-    private void initialize() {
-        getComponent(MainComponent.class).inject(this);
     }
 
     @Override
@@ -80,17 +80,15 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    public void onServerError() {
-        showShortToastMessage(getString(R.string.error_500));
-    }
-
-    @Override
-    public void onNetWorkError() {
-        showShortToastMessage(getString(R.string.error_network));
-    }
-
-    @Override
     public void showProgressDialog() {
         showProgressDialog(getString(R.string.progress_loading));
     }
+    //endregion
+
+    //region button
+    @Click(R.id.fab)
+    protected void onFabClicked() {
+        presenter.logout();
+    }
+    //endregion
 }

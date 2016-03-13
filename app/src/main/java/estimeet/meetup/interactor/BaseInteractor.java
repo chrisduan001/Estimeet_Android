@@ -18,11 +18,13 @@ import rx.schedulers.Schedulers;
 /**
  * Created by AmyDuan on 6/02/16.
  */
-public class BaseInteractor<T> {
+public abstract class BaseInteractor<T> {
 
     protected ServiceHelper serviceHelper;
     protected DataHelper dataHelper;
     protected MeetUpSharedPreference sharedPreference;
+
+    protected User baseUser;
 
     public BaseInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
         serviceHelper = service;
@@ -36,26 +38,28 @@ public class BaseInteractor<T> {
                 .subscribe(subscriber);
     }
 
-    protected Observable<TokenResponse> getTokenObservable(User user) {
-        return serviceHelper.renewToken(user.id, user.password);
+    protected Observable<TokenResponse> getTokenObservable() {
+        return serviceHelper.renewToken(baseUser.id, baseUser.password);
     }
 
-    protected void makeRequest(User user, @NonNull final Observable<T> observable,
-                                          @NonNull DefaultSubscriber<T> subscriber,
-                                          boolean needsAuth) {
-        if (needsAuth && isTokenExpired(user.expiresTime)) {
+    protected abstract Observable<T> getObservable(User user);
+
+    protected void makeRequest(User u, @NonNull DefaultSubscriber<T> subscriber, boolean needsAuth) {
+        baseUser = u;
+        if (needsAuth && isTokenExpired(baseUser.expiresTime)) {
             //check token expire date first, if token is expired then needs to make request to renew token
-            execute(getTokenObservable(user)
+            execute(getTokenObservable()
                     .flatMap(new Func1<TokenResponse, Observable<T>>() {
                         @Override
                         public Observable<T> call(TokenResponse tokenResponse) {
                             sharedPreference.updateUserToken(tokenResponse.access_token,
                                     tokenResponse.expires_in);
-                            return observable;
+                            baseUser.token = tokenResponse.access_token;
+                            return getObservable(baseUser);
                         }
                     }), subscriber);
         } else {
-            execute(observable, subscriber);
+            execute(getObservable(baseUser), subscriber);
         }
     }
 

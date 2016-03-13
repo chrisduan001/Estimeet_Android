@@ -19,6 +19,7 @@ import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import rx.Observable;
 
 /**
  * Created by AmyDuan on 8/02/16.
@@ -35,15 +36,20 @@ public class SignInInteractor extends BaseInteractor<User> {
     private SignInListener listener;
     private SigninSubscriber signinSubscriber;
 
+    private AuthUser authUser;
+    private boolean isSignedIn;
+    private String contacts;
+
     @Inject
     public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sharedPreference) {
         super(serviceHelper, dataHelper, sharedPreference);
+
+        isSignedIn = false;
     }
 
     //region fragment call
     private void signInUser(AuthUser user, SignInListener listener) {
         this.listener = listener;
-        signinSubscriber = new SigninSubscriber();
         initSignIn(user);
     }
 
@@ -67,16 +73,28 @@ public class SignInInteractor extends BaseInteractor<User> {
     }
 
     public void sendContacts(String contacts) {
+        isSignedIn = true;
+        this.contacts = contacts;
         User user = sharedPreference.getUserFromSp();
-        SendContact contactModel = new SendContact(user.id, user.userId, contacts);
-        makeRequest(user, serviceHelper.sendContacts(user.token, contactModel),
-                new SendContactSubscriber(), true);
+        makeRequest(user, new SendContactSubscriber(), true);
     }
     //endregion
 
+    @Override
+    protected Observable<User> getObservable(User user) {
+        if (isSignedIn) {
+            SendContact contactModel = new SendContact(user.id, user.userId, contacts);
+            return serviceHelper.sendContacts(user.token, contactModel);
+        } else {
+            return serviceHelper.signInUser(authUser);
+        }
+    }
+
     //region network
-    private void initSignIn(AuthUser user) {
-        makeRequest(null, serviceHelper.signInUser(user), signinSubscriber, false);
+    private void initSignIn(AuthUser authUser) {
+        this.authUser = authUser;
+        signinSubscriber = new SigninSubscriber();
+        makeRequest(null, signinSubscriber, false);
     }
 
     private class SigninSubscriber extends DefaultSubscriber<User> {
