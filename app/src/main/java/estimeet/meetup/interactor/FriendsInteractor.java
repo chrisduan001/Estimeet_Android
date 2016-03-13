@@ -1,6 +1,9 @@
 package estimeet.meetup.interactor;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
 import javax.inject.Inject;
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.Friend;
@@ -57,12 +60,15 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
         public void onNext(ListItem<Friend> friendListItem) {
             super.onNext(friendListItem);
 
-            listener.onFriendListCompleted();
+            List<Friend> friendList = friendListItem.items;
+            dataHelper.insertFriendsData(friendList);
+
+            listener.onFriendListCompleted(friendList != null && friendList.size() > 0);
         }
 
         @Override
         public void onError(Throwable e) {
-            listener.onFriendListCompleted();
+            listener.onFriendListCompleted(false);
         }
 
         @Override
@@ -73,6 +79,6 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
     }
 
     public interface GetFreindsListener extends BaseListener {
-        void onFriendListCompleted();
+        void onFriendListCompleted(boolean isAnyFriends);
     }
 }

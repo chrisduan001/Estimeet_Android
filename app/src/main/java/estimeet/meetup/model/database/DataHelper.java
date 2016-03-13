@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Singleton;
+
+import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.User;
 
 /**
@@ -61,11 +63,21 @@ public class DataHelper {
         contentResolver.bulkInsert(SqliteContract.Users.CONTENT_URI, userValues);
     }
 
+    public void insertFriendsData(List<Friend> friends) {
+        ContentValues[] userValues = new ContentValues[friends.size()];
+        for (int i=0; i < friends.size(); i++) {
+            userValues[i] = friends.get(i).toContentValues();
+        }
+
+        contentResolver.bulkInsert(SqliteContract.Friends.CONTENT_URI, userValues);
+    }
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         Cursor cursor = contentResolver.query(SqliteContract.Users.CONTENT_URI, UserQuery.PROJECTION,
                 null, null, null);
 
+        if (cursor == null) throw new RuntimeException("Cursor can't be empty");
         while (cursor.moveToNext()) {
             User user = User.fromCursor(cursor);
             users.add(user);
@@ -74,6 +86,21 @@ public class DataHelper {
         cursor.close();
 
         return users;
+    }
+
+    public List<Friend> getAllFriends() {
+        List<Friend> friends = new ArrayList<>();
+        Cursor cursor = contentResolver.query(SqliteContract.Friends.CONTENT_URI, FriendQuery.PROJECTION,
+                null, null, null);
+
+        if (cursor == null) throw new RuntimeException("Cursor can't be empty");
+        while (cursor.moveToNext()) {
+            Friend friend = Friend.fromCursor(cursor);
+            friends.add(friend);
+        }
+
+        cursor.close();
+        return friends;
     }
 
     public void updateUser(User user, int userId) {
@@ -110,22 +137,26 @@ public class DataHelper {
                 BaseColumns._ID,
                 SqliteContract.FriendColumns.ID,
                 SqliteContract.FriendColumns.USER_ID,
-                SqliteContract.FriendColumns.USER_NAME
+                SqliteContract.FriendColumns.USER_NAME,
+                SqliteContract.FriendColumns.IMAGE_URI
         };
 
         int B_ID = 0;
         int ID = 1;
         int USER_ID = 2;
         int USER_NAME = 3;
+        int IMAGE_URI = 4;
     }
 
     public interface ImageQuery {
         String[] PROJECTION = {
+                BaseColumns._ID,
                 SqliteContract.DpImageColumns.ID,
                 SqliteContract.DpImageColumns.USER_IMAGE
         };
 
-        int ID = 0;
-        int IMAGE = 1;
+        int B_ID = 0;
+        int ID = 1;
+        int IMAGE = 2;
     }
 }

@@ -7,17 +7,26 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
  * Created by AmyDuan on 27/01/16.
  */
+@SuppressWarnings("NullableProblems")
 public class SqliteProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER = buildUriMatcher();
 
     private static final int USERS = 100;
     private static final int USER_ID = 101;
+
+    private static final int FRIENDS = 200;
+    private static final int FRIENDS_ID = 201;
+
+    private static final int IMAGES = 300;
+    private static final int IMAGES_ID = 301;
+
 
     private SqliteHelper sqliteHelper;
 
@@ -28,6 +37,11 @@ public class SqliteProvider extends ContentProvider {
         matcher.addURI(authority, "Users", USERS);
         matcher.addURI(authority, "Users/*", USER_ID);
 
+        matcher.addURI(authority, "Friends", FRIENDS);
+        matcher.addURI(authority, "Friends/*", FRIENDS_ID);
+
+        matcher.addURI(authority, "DpImages", IMAGES);
+        matcher.addURI(authority, "DpImages/*", IMAGES_ID);
         return matcher;
     }
 
@@ -49,6 +63,25 @@ public class SqliteProvider extends ContentProvider {
                 return builder.table(SqliteContract.Tables.USERS)
                         .where(SqliteContract.UserColumns.ID + "=?", userId);
             }
+
+            case FRIENDS: {
+                return builder.table(SqliteContract.Tables.FRIENDS);
+            }
+            case FRIENDS_ID: {
+                final String id = SqliteContract.Friends.getFriendId(uri);
+                return builder.table(SqliteContract.Tables.FRIENDS)
+                        .where(SqliteContract.UserColumns.ID + "=?", id);
+            }
+
+            case IMAGES: {
+                return builder.table(SqliteContract.Tables.DP_IMAGE);
+            }
+            case IMAGES_ID: {
+                final String id = SqliteContract.Images.getImageId(uri);
+                return builder.table(SqliteContract.Tables.DP_IMAGE)
+                        .where(SqliteContract.DpImageColumns.ID + "=?", id);
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -80,6 +113,7 @@ public class SqliteProvider extends ContentProvider {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -92,8 +126,21 @@ public class SqliteProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return SqliteContract.Users.buildUserUri(values.getAsInteger(SqliteContract.UserColumns.ID));
             }
+
+            case FRIENDS: {
+                db.replaceOrThrow(SqliteContract.Tables.FRIENDS, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return SqliteContract.Friends.buildFriendUri(values.getAsInteger(SqliteContract.FriendColumns.ID));
+            }
+
+            case IMAGES: {
+                db.replaceOrThrow(SqliteContract.Tables.DP_IMAGE, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return SqliteContract.Images.buildImageUri(values.getAsInteger(SqliteContract.DpImageColumns.ID));
+            }
+
             default: {
-                throw new UnsupportedOperationException("Unknown inser uri: " + uri);
+                throw new UnsupportedOperationException("Unknown insert uri: " + uri);
             }
         }
     }
@@ -108,6 +155,16 @@ public class SqliteProvider extends ContentProvider {
         switch (match) {
             case USERS: {
                 table = SqliteContract.Tables.USERS;
+                break;
+            }
+
+            case FRIENDS: {
+                table = SqliteContract.Tables.FRIENDS;
+                break;
+            }
+
+            case IMAGES: {
+                table = SqliteContract.Tables.DP_IMAGE;
                 break;
             }
 
@@ -129,6 +186,7 @@ public class SqliteProvider extends ContentProvider {
         return values.length;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = sqliteHelper.getWritableDatabase();
@@ -139,6 +197,7 @@ public class SqliteProvider extends ContentProvider {
         return retVal;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = sqliteHelper.getWritableDatabase();

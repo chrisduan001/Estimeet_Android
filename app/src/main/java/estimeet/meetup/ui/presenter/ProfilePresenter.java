@@ -17,6 +17,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,7 @@ import estimeet.meetup.MainApplication;
 import estimeet.meetup.R;
 import estimeet.meetup.interactor.FriendsInteractor;
 import estimeet.meetup.interactor.ProfileInteractor;
+import estimeet.meetup.model.Friend;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -130,9 +132,13 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     }
 
     @Override
-    public void onFriendListCompleted() {
-        view.onProfileCompleted();
+    public void onFriendListCompleted(boolean isAnyFriends) {
         dismissProgressDialog();
+        if (isAnyFriends) {
+            view.onNonEmptyFriendList();
+        } else {
+            view.onProfileCompleted();
+        }
     }
 
     //endregion
@@ -148,5 +154,6 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
         void onReceivedFbData(String name, String dpUri);
         void onProfileCompleted();
         void onInvalidName();
+        void onNonEmptyFriendList();
     }
 }

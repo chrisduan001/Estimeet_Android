@@ -7,12 +7,16 @@ import android.text.TextUtils;
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
+
+import java.util.List;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.MainApplication;
 import estimeet.meetup.R;
 import estimeet.meetup.interactor.FriendsInteractor;
 import estimeet.meetup.interactor.SignInInteractor;
+import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
 import estimeet.meetup.util.ContactList;
@@ -135,9 +139,14 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
 
     @Override
-    public void onFriendListCompleted() {
+    public void onFriendListCompleted(boolean isAnyFriends) {
         view.dismissProgressDialog();
-        view.onSignInSuccessful(true);
+        if (isAnyFriends) {
+            view.onNonEmptyFriendsList();
+        } else {
+            view.onSignInSuccessful(true);
+        }
+
     }
     //endregion
 
@@ -146,5 +155,6 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         void onSignInSuccessful(boolean isProfileCompleted);
         void onDigitsError();
         void onReadContactPermissionGranted();
+        void onNonEmptyFriendsList();
     }
 }

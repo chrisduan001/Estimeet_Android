@@ -100,5 +100,9 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
     public void onAuthFailed() {
         showSignInFragment();
     }
+
+    @Override
+    public void navToFriendList() {
+    }
     //endregion
 }
