@@ -16,14 +16,9 @@ import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
-import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by AmyDuan on 8/02/16.
@@ -74,7 +69,8 @@ public class SignInInteractor extends BaseInteractor<User> {
     public void sendContacts(String contacts) {
         User user = sharedPreference.getUserFromSp();
         SendContact contactModel = new SendContact(user.id, user.userId, contacts);
-        makeRequest(user, serviceHelper.sendContacts(user.token, contactModel), new DefaultSubscriber<User>(), true);
+        makeRequest(user, serviceHelper.sendContacts(user.token, contactModel),
+                new SendContactSubscriber(), true);
     }
     //endregion
 
@@ -84,6 +80,7 @@ public class SignInInteractor extends BaseInteractor<User> {
     }
 
     private class SigninSubscriber extends DefaultSubscriber<User> {
+
         @Override
         public void onNext(User user) {
             super.onNext(user);
@@ -97,12 +94,29 @@ public class SignInInteractor extends BaseInteractor<User> {
 
         @Override
         public void onError(Throwable e) {
-            if (e.getLocalizedMessage().equals("404")) {
-                listener.onAuthFailed();
-                return;
-            }
-            listener.onError(e.getLocalizedMessage());
+            super.onError(e);
         }
+
+        @Override
+        protected void onAuthError() {
+            listener.onAuthFailed();
+        }
+
+        @Override
+        protected void onError(String err) {
+            listener.onError(err);
+        }
+    }
+
+    private class SendContactSubscriber extends DefaultSubscriber<User> {
+        @Override
+        public void onError(Throwable e) {}
+
+        @Override
+        protected void onError(String err) {}
+
+        @Override
+        protected void onAuthError() {}
     }
 
     //endregion

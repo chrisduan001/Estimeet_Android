@@ -1,5 +1,7 @@
 package estimeet.meetup.network;
 
+import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.UpdateModel;
@@ -12,6 +14,7 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -49,5 +52,12 @@ public interface EstimeetApi {
     Observable<User> updateProfile(
             @Header("Authorization") String token,
             @Body UpdateModel userModel
+    );
+
+    @GET("/User/getFriendsList/{id}?userId={userId}")
+    Observable<ListItem<Friend>> getFriendsList(
+            @Header("Authorization") String token,
+            @Path("id") int id,
+            @Path("userId") long userId
     );
 }

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import estimeet.meetup.MainApplication;
 import estimeet.meetup.R;
+import estimeet.meetup.interactor.FriendsInteractor;
 import estimeet.meetup.interactor.SignInInteractor;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.BaseView;
@@ -26,7 +27,8 @@ import estimeet.meetup.util.ContactList;
  *      3.1 if user registered before: get user password, dpuri and navigate to main activity
  *      3.2 first time user: get user password (will be used for update profile dp, name etc)
  */
-public class SignInPresenter extends BasePresenter implements SignInInteractor.SignInListener {
+public class SignInPresenter extends BasePresenter implements SignInInteractor.SignInListener,
+        FriendsInteractor.GetFreindsListener{
 
     private SignInView view;
     private final SignInInteractor.SignInListener listener;
@@ -37,11 +39,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     private AuthCallback authCallback;
 
     @Inject SignInInteractor signInInteractor;
+    @Inject FriendsInteractor friendsInteractor;
 
     //region lifecycle
     @Inject
-    public SignInPresenter(SignInInteractor interactor) {
+    public SignInPresenter(SignInInteractor interactor, FriendsInteractor friendsInteractor) {
         this.signInInteractor = interactor;
+        this.friendsInteractor = friendsInteractor;
         this.listener = this;
     }
 
@@ -114,12 +118,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     //region interactor callback
     @Override
     public void onSignInSuccessful(User user) {
-        view.dismissProgressDialog();
         //request user friend list if they logged in for the first time
         if (!user.isProfileCompleted()) {
+            view.dismissProgressDialog();
             view.checkPermission(Manifest.permission.READ_CONTACTS);
         } else {
-            view.onSignInSuccessful(true);
+            friendsInteractor.call(this);
+            friendsInteractor.getFriendsList(user);
         }
     }
 
@@ -128,6 +133,11 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         //todo..set error message based on errorcode
         view.dismissProgressDialog();
         processErrorCode(errorMessage, view);
+    }
+
+    @Override
+    public void onFriendListCompleted() {
+        view.onSignInSuccessful(true);
     }
     //endregion
 

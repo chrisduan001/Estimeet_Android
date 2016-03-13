@@ -2,13 +2,14 @@ package estimeet.meetup;
 
 import android.util.Log;
 
+import estimeet.meetup.interactor.BaseListener;
 import estimeet.meetup.model.BaseModel;
 import rx.Subscriber;
 
 /**
  * Created by AmyDuan on 7/02/16.
  */
-public class DefaultSubscriber<T> extends Subscriber<T> {
+public abstract class DefaultSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onCompleted() {
@@ -18,6 +19,16 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         Log.d(getClass().getSimpleName(), "Error occurred");
+        try {
+            int errCode = Integer.parseInt(e.getLocalizedMessage());
+            if (errCode >= 400 && errCode < 500) {
+                onAuthError();
+            } else {
+                onError(errCode + "");
+            }
+        } catch (Exception e1) { //not digits
+            onError("1000");
+        }
     }
 
     @Override
@@ -29,4 +40,7 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
             }
         }
     }
+
+    protected abstract void onAuthError();
+    protected abstract void onError(String err);
 }

@@ -90,13 +90,18 @@ public class ProfileInteractor extends BaseInteractor<User> {
 
         @Override
         public void onError(Throwable e) {
-            if (e.getLocalizedMessage().equals("401")) {
-                listener.onAuthFailed();
-                sharedPreference.removeSharedPreference();
-                return;
-            }
+            super.onError(e);
+        }
 
-            listener.onError(e.getLocalizedMessage());
+        @Override
+        protected void onAuthError() {
+            sharedPreference.removeSharedPreference();
+            listener.onAuthFailed();
+        }
+
+        @Override
+        protected void onError(String err) {
+            listener.onError(err);
         }
     }
 

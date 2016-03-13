@@ -104,4 +104,28 @@ public class DataHelper {
         int FIRST_NAME = 2;
         int LAST_NAME = 3;
     }
+
+    public interface FriendQuery {
+        String[] PROJECTION = {
+                BaseColumns._ID,
+                SqliteContract.FriendColumns.ID,
+                SqliteContract.FriendColumns.USER_ID,
+                SqliteContract.FriendColumns.USER_NAME
+        };
+
+        int B_ID = 0;
+        int ID = 1;
+        int USER_ID = 2;
+        int USER_NAME = 3;
+    }
+
+    public interface ImageQuery {
+        String[] PROJECTION = {
+                SqliteContract.DpImageColumns.ID,
+                SqliteContract.DpImageColumns.USER_IMAGE
+        };
+
+        int ID = 0;
+        int IMAGE = 1;
+    }
 }

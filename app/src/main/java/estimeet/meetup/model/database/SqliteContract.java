@@ -12,12 +12,25 @@ public class SqliteContract {
 
     public interface Tables {
         String USERS = "Users";
+        String FRIENDS = "Friend";
+        String DP_IMAGE = "DpImages";
     }
 
     public interface UserColumns {
         String ID = "ID";
         String FIRST_NAME = "FirstName";
         String LAST_NAME = "LastName";
+    }
+
+    public interface FriendColumns {
+        String ID = "ID";
+        String USER_ID = "UserID";
+        String USER_NAME = "UserName";
+    }
+
+    public interface DpImageColumns {
+        String ID = "ID";
+        String USER_IMAGE = "UserDP";
     }
 
     public static class Users implements UserColumns {
