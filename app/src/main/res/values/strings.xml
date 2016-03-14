@@ -24,4 +24,7 @@
     <string name="error_digits">An error occurred while process your phone number please try again</string>
     <string name="error_network">Request failed, please check your internet and try again</string>
     <string name="error_generic">An error occurred, please try again</string>
+    
+    <string name="title_manage_friend">Manage Friends</string>
+    <string name="title_profile_and_setting">Profile and settings</string>
 </resources>

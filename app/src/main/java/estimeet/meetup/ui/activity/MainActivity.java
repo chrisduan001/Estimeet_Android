@@ -1,10 +1,13 @@
 package estimeet.meetup.ui.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,6 +29,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
     private MainComponent mainComponent;
 
+    @ViewById(R.id.tool_bar) Toolbar toolbar;
+
     @Inject @Named("currentUser") User user;
 
     @Override
@@ -40,6 +45,13 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         } else {
             replaceFragment(R.id.container, new MainFragment_());
         }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @AfterViews
+    protected void setupToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
     }
 
     private void initializeInjector() {
@@ -63,4 +75,13 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
             this.finish();
         }
     }
+
+    //region from fragment
+
+    @Override
+    public void navToFriendList() {
+        ManageFriendActivity_.intent(this).start();
+    }
+
+    //endregion
 }

@@ -6,13 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import estimeet.meetup.MainApplication;
 import estimeet.meetup.di.components.ApplicationComponent;
-import estimeet.meetup.model.User;
-import estimeet.meetup.util.Navigator;
 
 public class BaseActivity extends AppCompatActivity{
 

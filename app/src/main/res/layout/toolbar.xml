@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tool_bar"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:theme="@style/ToolbarTheme"
+    android:minHeight="60dp">
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:text="@string/title_profile_and_setting"/>
+
+    <ImageView
+        android:id="@+id/toolbar_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_menu_more"/>
+
+    <ImageButton
+        android:id="@+id/toolbar_search"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|end"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:contentDescription="@null"
+        android:visibility="visible"
+        android:background="@color/white"
+        android:src="@android:drawable/ic_menu_search"/>
+    
+</android.support.v7.widget.Toolbar>

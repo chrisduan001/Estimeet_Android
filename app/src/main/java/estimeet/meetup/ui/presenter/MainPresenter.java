@@ -33,10 +33,6 @@ public class MainPresenter extends BasePresenter {
         this.view = view;
     }
 
-    public void logout() {
-        interactor.logout();
-    }
-
     public interface MainView extends BaseView {
 
     }

@@ -103,6 +103,8 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
 
     @Override
     public void navToFriendList() {
+        startMainActivity();
+        ManageFriendActivity_.intent(this).start();
     }
     //endregion
 }

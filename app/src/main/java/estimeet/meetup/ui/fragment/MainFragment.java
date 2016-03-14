@@ -22,6 +22,7 @@ import estimeet.meetup.ui.presenter.MainPresenter;
 public class MainFragment extends BaseFragment implements MainPresenter.MainView {
 
     public interface MainCallback {
+        void navToFriendList();
     }
 
     @Inject MainPresenter presenter;
@@ -88,7 +89,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     //region button
     @Click(R.id.fab)
     protected void onFabClicked() {
-        presenter.logout();
+        mainCallback.navToFriendList();
     }
     //endregion
 }

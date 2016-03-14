@@ -25,8 +25,4 @@ public class MainInteractor extends BaseInteractor<User> {
     protected Observable<User> getObservable(User user) {
         return null;
     }
-
-    public void logout() {
-        sharedPreference.removeSharedPreference();
-    }
 }
