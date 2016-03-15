@@ -54,7 +54,7 @@ public abstract class BaseInteractor<T> {
                         public Observable<T> call(TokenResponse tokenResponse) {
                             sharedPreference.updateUserToken(tokenResponse.access_token,
                                     tokenResponse.expires_in);
-                            baseUser.token = tokenResponse.access_token;
+                            baseUser = sharedPreference.getUserFromSp();
                             return getObservable(baseUser);
                         }
                     }), subscriber);

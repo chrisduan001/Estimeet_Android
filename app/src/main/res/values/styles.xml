@@ -24,10 +24,15 @@
         <item name="colorControlHighlight">@color/colorMain</item>
     </style>
 
-
     <style name = "AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SingleLineText">
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
 </resources>

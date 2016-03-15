@@ -1,8 +1,11 @@
 package estimeet.meetup.ui.presenter;
 
+import android.database.Cursor;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.interactor.AddFriendInteractor;
+import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -27,6 +30,6 @@ public class ManageFriendPresenter extends BasePresenter {
     }
 
     public interface ManageFriendView extends BaseView {
-
+        void onSetFriendCursor(Cursor cursor);
     }
 }
