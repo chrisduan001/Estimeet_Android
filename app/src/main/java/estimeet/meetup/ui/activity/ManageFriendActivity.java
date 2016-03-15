@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,21 +17,36 @@ import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
+import estimeet.meetup.di.components.DaggerMainComponent;
+import estimeet.meetup.di.components.DaggerManageFriendComponent;
+import estimeet.meetup.di.components.MainComponent;
+import estimeet.meetup.di.components.ManageFriendComponent;
+import estimeet.meetup.ui.fragment.ManageFriendFragment_;
 
 /**
  * Created by AmyDuan on 13/03/16.
  */
 @EActivity(R.layout.activity_manage_friend)
-public class ManageFriendActivity extends BaseActivity {
+public class ManageFriendActivity extends BaseActivity implements HasComponent<ManageFriendComponent> {
+
+    private ManageFriendComponent manageFriendComponent;
 
     @ViewById(R.id.tool_bar) Toolbar toolbar;
     @ViewById(R.id.toolbar_icon) ImageView estimeetIcon;
-    @ViewById(R.id.toolbar_search) ImageView toolbarSearch;
     @ViewById(R.id.toolbar_title) TextView toolbarTitle;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeInjector();
+
+        replaceFragment(R.id.container, new ManageFriendFragment_());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -39,15 +55,9 @@ public class ManageFriendActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         estimeetIcon.setVisibility(View.GONE);
-        toolbarSearch.setVisibility(View.VISIBLE);
         toolbarTitle.setVisibility(View.VISIBLE);
         toolbarTitle.setText(getString(R.string.title_manage_friend));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Click(R.id.toolbar_search)
-    protected void onSearchClicked() {
-        Log.d(this.getClass().getSimpleName(), "Search in toolbar clicked");
     }
 
     @Override
@@ -56,8 +66,25 @@ public class ManageFriendActivity extends BaseActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.toolbar_search:
+                Log.d(this.getClass().getSimpleName(), "search clicked");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    //region dagger
+    private void initializeInjector() {
+        manageFriendComponent = DaggerManageFriendComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .build();
+    }
+
+    @Override
+    public ManageFriendComponent getComponent() {
+        return manageFriendComponent;
+    }
+
+    //endregion
 }

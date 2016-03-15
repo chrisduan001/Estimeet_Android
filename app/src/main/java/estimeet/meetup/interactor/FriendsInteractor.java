@@ -21,12 +21,10 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
 
     private GetFreindsListener listener;
     private FriendListSubscriber subscriber;
-    private Picasso picasso;
 
     @Inject
-    public FriendsInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp, Picasso picasso) {
+    public FriendsInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
         super(service, data, sp);
-        this.picasso = picasso;
     }
 
     //region presenter call
