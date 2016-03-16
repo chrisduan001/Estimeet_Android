@@ -7,16 +7,19 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.ProgressBar;
 
-import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.ManageFriendComponent;
+import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
 import estimeet.meetup.ui.adapter.FriendListAdapter;
@@ -31,6 +34,8 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
 
     @Inject ManageFriendPresenter presenter;
 
+    @Inject FriendListAdapter friendListAdapter;
+
     @ViewById(R.id.recyclerView) RecyclerView recyclerView;
 
     //region lifecycle
@@ -40,23 +45,27 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
         initialize();
 
         presenter.setView(this);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        initRecyclerView();
+        initFriendCursor();
     }
 
     private void initialize() {
         getComponent(ManageFriendComponent.class).inject(this);
     }
+
+    private void initRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        friendListAdapter.setCursor(null);
+        recyclerView.setAdapter(friendListAdapter);
+    }
+
+    private void initFriendCursor() {
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+    }
     //endregion
 
     //region presenter callback
-
-    @Override
-    public void onSetFriendCursor(Cursor cursor) {
-
-    }
 
     //endregion
 
@@ -77,17 +86,17 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), SqliteContract.Friends.CONTENT_URI, DataHelper.FriendQuery.PROJECTION,null,null,null);
+        return new CursorLoader(getContext(), SqliteContract.Friends.CONTENT_URI,
+                DataHelper.FriendQuery.PROJECTION,null,null,null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        FriendListAdapter adapter = new FriendListAdapter(data);
-        recyclerView.setAdapter(adapter);
+        friendListAdapter.changeCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        friendListAdapter.swapCursor(null);
     }
 }

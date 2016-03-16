@@ -1,5 +1,7 @@
 package estimeet.meetup.di.components;
 
+import android.content.Context;
+
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Named;
@@ -26,4 +28,5 @@ public interface ApplicationComponent {
     ServiceHelper serviceHelper();
     Picasso picasso();
     MeetUpSharedPreference meetUpSharedPreference();
+    Context context();
 }

@@ -30,6 +30,5 @@ public class ManageFriendPresenter extends BasePresenter {
     }
 
     public interface ManageFriendView extends BaseView {
-        void onSetFriendCursor(Cursor cursor);
     }
 }

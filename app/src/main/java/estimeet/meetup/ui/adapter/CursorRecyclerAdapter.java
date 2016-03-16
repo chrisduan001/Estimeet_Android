@@ -1,18 +1,22 @@
 package estimeet.meetup.ui.adapter;
 
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 /**
  * Created by AmyDuan on 15/03/16.
  */
-public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
 
     protected boolean mDataValid;
     protected Cursor mCursor;
     protected int mRowIdColumn;
 
-    public CursorRecyclerAdapter(Cursor c) {
+    private NotifyingDataSetObserver dataSetObserver;
+
+    public void setCursor(Cursor c) {
         init(c);
     }
 
@@ -22,10 +26,15 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
         mDataValid = cursorPresent;
         mRowIdColumn = cursorPresent ? c.getColumnIndexOrThrow("_id") : -1;
         setHasStableIds(true);
+
+        dataSetObserver = new NotifyingDataSetObserver();
+        if (c != null) {
+            c.registerDataSetObserver(dataSetObserver);
+        }
     }
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(ViewWrapper<V> holder, int position) {
         if (!mDataValid) {
             throw new IllegalStateException("This should only be called when cursor is valid");
         }
@@ -35,7 +44,7 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
         onBindViewHolder(holder, mCursor);
     }
 
-    public abstract void onBindViewHolder(VH holder, Cursor cursor);
+    public abstract void onBindViewHolder(ViewWrapper<V> holder, Cursor cursor);
 
     public Cursor getCursor() {
         return mCursor;
@@ -66,6 +75,7 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
     public void changeCursor(Cursor cursor) {
         Cursor old = swapCursor(cursor);
         if (old != null) {
+            old.unregisterDataSetObserver(dataSetObserver);
             old.close();
         }
     }
@@ -79,6 +89,7 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
         if (newCursor != null) {
             mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
             mDataValid = true;
+            newCursor.registerDataSetObserver(dataSetObserver);
             notifyDataSetChanged();
         } else {
             mRowIdColumn = -1;
@@ -100,5 +111,21 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
      */
     public CharSequence convertToString(Cursor cursor) {
         return cursor == null ? "" : cursor.toString();
+    }
+
+    private class NotifyingDataSetObserver extends DataSetObserver {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            mDataValid = true;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onInvalidated() {
+            super.onInvalidated();
+            mDataValid = false;
+            notifyDataSetChanged();
+        }
     }
 }

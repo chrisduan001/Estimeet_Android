@@ -19,7 +19,7 @@ public class Friend extends BaseModel {
     private long userId;
 
     @SerializedName("userName")
-    private String userName;
+    public String userName;
 
     @SerializedName("dpUri")
     private String dpUri;
@@ -45,7 +45,7 @@ public class Friend extends BaseModel {
         friend.id = cursor.getInt(DataHelper.FriendQuery.ID);
         friend.userId = cursor.getLong(DataHelper.FriendQuery.USER_ID);
         friend.userName = cursor.getString(DataHelper.FriendQuery.USER_NAME);
-
+        friend.dpUri = cursor.getString(DataHelper.FriendQuery.IMAGE_URI);
         return friend;
     }
 }
