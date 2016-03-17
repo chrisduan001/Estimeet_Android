@@ -8,7 +8,6 @@ import android.util.Log;
 
 import static estimeet.meetup.model.database.SqliteContract.UserColumns;
 import static estimeet.meetup.model.database.SqliteContract.FriendColumns;
-import static estimeet.meetup.model.database.SqliteContract.DpImageColumns;
 
 /**
  * Created by AmyDuan on 27/01/16.
@@ -16,7 +15,7 @@ import static estimeet.meetup.model.database.SqliteContract.DpImageColumns;
 public class SqliteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "meetup.db";
-    private static final int DATABASE_VERSION = 103;
+    private static final int DATABASE_VERSION = 105;
 
     public SqliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,29 +34,23 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + FriendColumns.USER_ID + " INTEGER NOT NULL,"
             + FriendColumns.USER_NAME + " TEXT NOT NULL,"
             + FriendColumns.IMAGE_URI + " TEXT NOT NULL,"
+            + FriendColumns.IMAGE + " BLOB,"
+            + FriendColumns.FAVOURITE + " INTEGER NOT NULL,"
             + "UNIQUE (" + FriendColumns.ID + "))";
-
-    private static final String IMAGE_TABLE = "CREATE TABLE " + SqliteContract.Tables.DP_IMAGE + "("
-            + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + DpImageColumns.ID + " INTEGER NOT NULL,"
-            + DpImageColumns.USER_IMAGE + " BLOB NOT NULL,"
-            + "UNIQUE (" + DpImageColumns.ID + "))";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(USER_TABLE);
         db.execSQL(FRIENDS_TABLE);
-        db.execSQL(IMAGE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(this.getClass().getSimpleName(), "Upgrading database from version " + oldVersion + " to "
-        + newVersion);
+                + newVersion);
 
         db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.USERS);
         db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.FRIENDS);
-        db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.DP_IMAGE);
 
         onCreate(db);
     }

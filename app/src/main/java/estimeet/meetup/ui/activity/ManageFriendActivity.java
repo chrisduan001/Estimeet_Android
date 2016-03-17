@@ -17,6 +17,7 @@ import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
+import estimeet.meetup.di.Modules.ManageFriendModule;
 import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.DaggerManageFriendComponent;
 import estimeet.meetup.di.components.MainComponent;
@@ -78,6 +79,7 @@ public class ManageFriendActivity extends BaseActivity implements HasComponent<M
     private void initializeInjector() {
         manageFriendComponent = DaggerManageFriendComponent.builder()
                 .applicationComponent(getApplicationComponent())
+                .manageFriendModule(new ManageFriendModule())
                 .build();
     }
 

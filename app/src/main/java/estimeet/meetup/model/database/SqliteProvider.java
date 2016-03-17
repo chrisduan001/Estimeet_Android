@@ -24,10 +24,6 @@ public class SqliteProvider extends ContentProvider {
     private static final int FRIENDS = 200;
     private static final int FRIENDS_ID = 201;
 
-    private static final int IMAGES = 300;
-    private static final int IMAGES_ID = 301;
-
-
     private SqliteHelper sqliteHelper;
 
     private static UriMatcher buildUriMatcher() {
@@ -40,8 +36,6 @@ public class SqliteProvider extends ContentProvider {
         matcher.addURI(authority, "Friends", FRIENDS);
         matcher.addURI(authority, "Friends/*", FRIENDS_ID);
 
-        matcher.addURI(authority, "DpImages", IMAGES);
-        matcher.addURI(authority, "DpImages/*", IMAGES_ID);
         return matcher;
     }
 
@@ -71,15 +65,6 @@ public class SqliteProvider extends ContentProvider {
                 final String id = SqliteContract.Friends.getFriendId(uri);
                 return builder.table(SqliteContract.Tables.FRIENDS)
                         .where(SqliteContract.UserColumns.ID + "=?", id);
-            }
-
-            case IMAGES: {
-                return builder.table(SqliteContract.Tables.DP_IMAGE);
-            }
-            case IMAGES_ID: {
-                final String id = SqliteContract.Images.getImageId(uri);
-                return builder.table(SqliteContract.Tables.DP_IMAGE)
-                        .where(SqliteContract.DpImageColumns.ID + "=?", id);
             }
 
             default:
@@ -133,12 +118,6 @@ public class SqliteProvider extends ContentProvider {
                 return SqliteContract.Friends.buildFriendUri(values.getAsInteger(SqliteContract.FriendColumns.ID));
             }
 
-            case IMAGES: {
-                db.replaceOrThrow(SqliteContract.Tables.DP_IMAGE, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
-                return SqliteContract.Images.buildImageUri(values.getAsInteger(SqliteContract.DpImageColumns.ID));
-            }
-
             default: {
                 throw new UnsupportedOperationException("Unknown insert uri: " + uri);
             }
@@ -160,11 +139,6 @@ public class SqliteProvider extends ContentProvider {
 
             case FRIENDS: {
                 table = SqliteContract.Tables.FRIENDS;
-                break;
-            }
-
-            case IMAGES: {
-                table = SqliteContract.Tables.DP_IMAGE;
                 break;
             }
 

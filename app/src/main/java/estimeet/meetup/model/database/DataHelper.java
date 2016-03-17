@@ -72,6 +72,11 @@ public class DataHelper {
         contentResolver.bulkInsert(SqliteContract.Friends.CONTENT_URI, userValues);
     }
 
+    public void updateFriendData(Friend friend) {
+        ContentValues value = friend.toContentValues();
+        contentResolver.update(SqliteContract.Friends.buildFriendUri(friend.id), value, null, null);
+    }
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         Cursor cursor = contentResolver.query(SqliteContract.Users.CONTENT_URI, UserQuery.PROJECTION,
@@ -138,7 +143,9 @@ public class DataHelper {
                 SqliteContract.FriendColumns.ID,
                 SqliteContract.FriendColumns.USER_ID,
                 SqliteContract.FriendColumns.USER_NAME,
-                SqliteContract.FriendColumns.IMAGE_URI
+                SqliteContract.FriendColumns.IMAGE_URI,
+                SqliteContract.FriendColumns.IMAGE,
+                SqliteContract.FriendColumns.FAVOURITE
         };
 
         int B_ID = 0;
@@ -146,17 +153,7 @@ public class DataHelper {
         int USER_ID = 2;
         int USER_NAME = 3;
         int IMAGE_URI = 4;
-    }
-
-    public interface ImageQuery {
-        String[] PROJECTION = {
-                BaseColumns._ID,
-                SqliteContract.DpImageColumns.ID,
-                SqliteContract.DpImageColumns.USER_IMAGE
-        };
-
-        int B_ID = 0;
-        int ID = 1;
-        int IMAGE = 2;
+        int IMAGE = 5;
+        int FAVOURITE = 6;
     }
 }

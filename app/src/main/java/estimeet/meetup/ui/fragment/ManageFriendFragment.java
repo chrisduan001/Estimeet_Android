@@ -7,16 +7,10 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ProgressBar;
-
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
-
 import javax.inject.Inject;
-
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.ManageFriendComponent;
 import estimeet.meetup.model.Friend;
@@ -30,13 +24,15 @@ import estimeet.meetup.ui.presenter.ManageFriendPresenter;
  * Created by AmyDuan on 15/03/16.
  */
 @EFragment(R.layout.fragment_manage_friend)
-public class ManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView, LoaderManager.LoaderCallbacks<Cursor> {
+public class ManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView,
+        LoaderManager.LoaderCallbacks<Cursor>, FriendListAdapter.FriendAdapterCallback {
 
     @Inject ManageFriendPresenter presenter;
 
     @Inject FriendListAdapter friendListAdapter;
 
     @ViewById(R.id.recyclerView) RecyclerView recyclerView;
+    @ViewById(R.id.progress_bar) ProgressBar progressBar;
 
     //region lifecycle
     @Override
@@ -45,6 +41,8 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
         initialize();
 
         presenter.setView(this);
+        friendListAdapter.setCallback(this);
+
         initRecyclerView();
         initFriendCursor();
     }
@@ -59,13 +57,13 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
         friendListAdapter.setCursor(null);
         recyclerView.setAdapter(friendListAdapter);
     }
-
-    private void initFriendCursor() {
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
-    }
     //endregion
 
     //region presenter callback
+    @Override
+    public void onGetFriendsList() {
+        restartFriendCursor();
+    }
 
     //endregion
 
@@ -77,12 +75,23 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
 
     @Override
     protected ProgressBar getProgressBar() {
-        return null;
+        return progressBar;
     }
 
     @Override
-    public void showProgressDialog() {}
+    public void showProgressDialog() {
+        showProgressDialog(getString(R.string.progress_loading));
+    }
     //endregion
+
+    //region cursor loader
+    private void initFriendCursor() {
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+    }
+
+    private void restartFriendCursor() {
+        getActivity().getSupportLoaderManager().restartLoader(0, null, this);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -92,11 +101,28 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        friendListAdapter.changeCursor(data);
+        if (data.getCount() <= 0) {
+            showProgressDialog();
+            presenter.requestFriendList();
+        } else {
+            friendListAdapter.changeCursor(data);
+            dismissProgressDialog();
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         friendListAdapter.swapCursor(null);
     }
+    //endregion
+
+    //region adapter action
+
+    @Override
+    public void onUpdateFriend(Friend friend) {
+        presenter.onUpdateFriend(friend);
+    }
+
+
+    //endregion
 }

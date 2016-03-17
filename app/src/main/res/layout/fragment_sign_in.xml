@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLargeInverse"
                 android:text="@string/app_name"
-                android:textSize="40dp"
+                android:textSize="40sp"
                 android:layout_marginTop="20dp"
                 />
 
@@ -59,10 +59,5 @@
             android:textSize="16sp" />
     </LinearLayout>
     </LinearLayout>
-
-
     <include layout="@layout/merge_progress_bar" />
-
-
-
 </FrameLayout>

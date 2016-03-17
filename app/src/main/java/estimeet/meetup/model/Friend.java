@@ -13,7 +13,7 @@ import estimeet.meetup.model.database.SqliteContract;
  */
 public class Friend extends BaseModel {
     @SerializedName("id")
-    private int id;
+    public int id;
 
     @SerializedName("userId")
     private long userId;
@@ -22,7 +22,11 @@ public class Friend extends BaseModel {
     public String userName;
 
     @SerializedName("dpUri")
-    private String dpUri;
+    public String dpUri;
+
+    public byte[] image;
+
+    public boolean isFavourite;
 
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(4);
@@ -30,14 +34,9 @@ public class Friend extends BaseModel {
         contentValues.put(SqliteContract.FriendColumns.USER_ID, userId);
         contentValues.put(SqliteContract.FriendColumns.USER_NAME, userName);
         contentValues.put(SqliteContract.FriendColumns.IMAGE_URI, dpUri);
+        contentValues.put(SqliteContract.FriendColumns.IMAGE, image);
+        contentValues.put(SqliteContract.FriendColumns.FAVOURITE, isFavourite ? 1 : 0);
         return contentValues;
-    }
-
-    public ContentValues toImageContentValue(byte[] imageByte) {
-        ContentValues cv = new ContentValues(2);
-        cv.put(SqliteContract.DpImageColumns.ID, id);
-        cv.put(SqliteContract.DpImageColumns.USER_IMAGE, imageByte);
-        return cv;
     }
 
     public static Friend fromCursor(Cursor cursor) {
@@ -46,6 +45,8 @@ public class Friend extends BaseModel {
         friend.userId = cursor.getLong(DataHelper.FriendQuery.USER_ID);
         friend.userName = cursor.getString(DataHelper.FriendQuery.USER_NAME);
         friend.dpUri = cursor.getString(DataHelper.FriendQuery.IMAGE_URI);
+        friend.image = cursor.getBlob(DataHelper.FriendQuery.IMAGE);
+        friend.isFavourite = cursor.getInt(DataHelper.FriendQuery.FAVOURITE) != 0;
         return friend;
     }
 }
