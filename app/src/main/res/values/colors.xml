@@ -8,4 +8,5 @@
     <color name="colorLite">#c6d79a</color>
     <color name="white">#FFF</color>
     <color name="grey">#9e9e9e</color>
+    <color name="greyDarker">#565656</color>
 </resources>
