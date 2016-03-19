@@ -3,6 +3,10 @@ package estimeet.meetup.ui.activity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -30,6 +34,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     private MainComponent mainComponent;
 
     @ViewById(R.id.tool_bar) Toolbar toolbar;
+    @ViewById(R.id.toolbar_icon) ImageView estimeetIcon;
+    @ViewById(R.id.toolbar_title) TextView toolbarTitle;
 
     @Inject @Named("currentUser") User user;
 
@@ -51,6 +57,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     @AfterViews
     protected void setupToolbar() {
         setSupportActionBar(toolbar);
+        estimeetIcon.setVisibility(View.VISIBLE);
+        toolbarTitle.setVisibility(View.GONE);
         getSupportActionBar().setTitle("");
     }
 

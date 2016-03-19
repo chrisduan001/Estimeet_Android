@@ -2,9 +2,19 @@
 <RelativeLayout android:id="@+id/main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/grey"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/friend_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/white"
+        tools:text="@string/friend_recommend_friend"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/friend_dp"
@@ -13,18 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:layout_below="@id/friend_header"
         android:contentDescription="@null"
         android:src="@drawable/placeholder_icon"/>
-
-    <TextView
-        android:id="@+id/friend_header"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_above="@id/friend_dp"
-        tools:text="@string/friend_recommend_friend"
-        android:visibility="gone"/>
 
     <ImageButton
         android:id="@+id/friend_action"
@@ -33,6 +34,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_below="@id/friend_header"
         android:contentDescription="@null"
         android:src="@android:drawable/ic_input_add"
         android:background="@color/tw__transparent"/>
@@ -46,6 +48,7 @@
         android:layout_toLeftOf="@id/friend_action"
         android:layout_toStartOf="@id/friend_action"
         android:layout_centerVertical="true"
+        android:layout_below="@id/friend_header"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="center_vertical"
@@ -58,7 +61,7 @@
         android:layout_height="1dp"
         android:layout_toRightOf="@id/friend_dp"
         android:layout_toEndOf="@id/friend_dp"
-        android:layout_below="@id/friend_action"
+        android:layout_below="@id/friend_name"
         android:background="@color/white"/>
 
 </RelativeLayout>

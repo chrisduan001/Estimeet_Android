@@ -29,4 +29,5 @@
     <string name="title_profile_and_setting">Profile and settings</string>
     <string name="toolbar_search">search</string>
     <string name="friend_recommend_friend">Recommended Friends</string>
+    <string name="friend_header">Friends</string>
 </resources>

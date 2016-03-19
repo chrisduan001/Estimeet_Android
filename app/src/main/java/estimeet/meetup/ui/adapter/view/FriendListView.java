@@ -17,8 +17,10 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.StringRes;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.ref.WeakReference;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
@@ -32,25 +34,55 @@ public class FriendListView extends RelativeLayout {
     @ViewById(R.id.friend_name) TextView friendName;
     @ViewById(R.id.friend_dp) ImageView friendDp;
     @ViewById(R.id.friend_action) ImageButton actionButton;
+    @ViewById(R.id.friend_header) TextView friendHeader;
 
-    private FriendListViewCallback callback;
+    private WeakReference<FriendListViewCallback> callback;
     private Friend friend;
 
     public FriendListView(Context context) {
-        super(context);
+        super(context);  
     }
 
     public void bind(Friend friend, Picasso picasso, FriendListViewCallback callback) {
-        friendName.setText(friend.userName);
-        this.callback = callback;
+        this.callback = new WeakReference<>(callback);
         this.friend = friend;
 
+        setView();
+        setManageFriendAction();
+        loadUserDpImage(picasso);
+    }
+
+    //called by main page
+    public void bindFriend(Friend friend) {
+        this.friend = friend;
+        setView();
+        if (friend.image != null) {
+            loadImageAsync(friend.image);
+        }
+
+        actionButton.setVisibility(GONE);
+    }
+
+    public void showSectionHeader(String header) {
+        friendHeader.setVisibility(VISIBLE);
+        friendHeader.setText(header);
+    }
+
+    private void setView() {
+        friendName.setText(friend.userName);
+        friendHeader.setVisibility(GONE);
+    }
+
+    private void setManageFriendAction() {
         if (friend.isFavourite) {
             actionButton.setImageResource(android.R.drawable.ic_input_delete);
         } else {
             actionButton.setImageResource(android.R.drawable.ic_input_add);
         }
+    }
 
+    private void loadUserDpImage(Picasso picasso) {
+        //load image from imageuri and save to local db if it is not done yet
         if (friend.image == null || friend.image.length <= 0) {
             picasso.load(friend.dpUri).into(friendDp, new Callback() {
                 @Override
@@ -80,7 +112,7 @@ public class FriendListView extends RelativeLayout {
         Bitmap bm = ((BitmapDrawable)friendDp.getDrawable()).getBitmap();
         bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
         friend.image = stream.toByteArray();
-        callback.onUpdateFriend(friend);
+        callback.get().onUpdateFriend(friend);
     }
 
     @UiThread
@@ -91,7 +123,7 @@ public class FriendListView extends RelativeLayout {
     @Click(R.id.friend_action)
     protected void friendActionClicked() {
         friend.isFavourite = !friend.isFavourite;
-        callback.onUpdateFriend(friend);
+        callback.get().onUpdateFriend(friend);
     }
 
     public interface FriendListViewCallback {

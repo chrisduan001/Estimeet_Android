@@ -41,10 +41,10 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
-        onBindViewHolder(holder, mCursor);
+        onBindViewHolder(holder, mCursor, position);
     }
 
-    public abstract void onBindViewHolder(ViewWrapper<V> holder, Cursor cursor);
+    public abstract void onBindViewHolder(ViewWrapper<V> holder, Cursor cursor, int position);
 
     public Cursor getCursor() {
         return mCursor;

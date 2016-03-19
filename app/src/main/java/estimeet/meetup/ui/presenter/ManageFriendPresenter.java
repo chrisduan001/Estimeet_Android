@@ -1,5 +1,7 @@
 package estimeet.meetup.ui.presenter;
 
+import java.lang.ref.WeakReference;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,7 +20,7 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
     private FriendsInteractor friendsInteractor;
     private User user;
 
-    private ManageFriendView view;
+    private WeakReference<ManageFriendView> view;
 
     @Inject
     public ManageFriendPresenter(ManageFriendInteractor manageFriendInteractor,
@@ -30,7 +32,7 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
 
     //region fragment call
     public void setView(ManageFriendView view) {
-        this.view = view;
+        this.view = new WeakReference<>(view);
     }
 
     public void requestFriendList() {
@@ -46,19 +48,19 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
     //region interactor callback
     @Override
     public void onAuthFailed() {
-        view.onAuthFailed();
+        view.get().onAuthFailed();
     }
 
     @Override
     public void onFriendListCompleted(boolean isAnyFriends) {
         if (isAnyFriends) {
-            view.onGetFriendsList();
+            view.get().onGetFriendsList();
         }
     }
 
     @Override
     public void onError(String errorMessage) {
-        view.onError(errorMessage);
+        view.get().onError(errorMessage);
     }
     //endregion
 

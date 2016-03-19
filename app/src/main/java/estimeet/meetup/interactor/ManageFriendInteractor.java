@@ -1,7 +1,5 @@
 package estimeet.meetup.interactor;
 
-import android.support.annotation.UiThread;
-
 import javax.inject.Inject;
 
 import estimeet.meetup.model.Friend;
