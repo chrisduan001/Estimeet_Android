@@ -14,8 +14,6 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
     protected Cursor mCursor;
     protected int mRowIdColumn;
 
-    private NotifyingDataSetObserver dataSetObserver;
-
     public void setCursor(Cursor c) {
         init(c);
     }
@@ -26,11 +24,6 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
         mDataValid = cursorPresent;
         mRowIdColumn = cursorPresent ? c.getColumnIndexOrThrow("_id") : -1;
         setHasStableIds(true);
-
-        dataSetObserver = new NotifyingDataSetObserver();
-        if (c != null) {
-            c.registerDataSetObserver(dataSetObserver);
-        }
     }
 
     @Override
@@ -75,7 +68,6 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
     public void changeCursor(Cursor cursor) {
         Cursor old = swapCursor(cursor);
         if (old != null) {
-            old.unregisterDataSetObserver(dataSetObserver);
             old.close();
         }
     }
@@ -89,7 +81,6 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
         if (newCursor != null) {
             mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
             mDataValid = true;
-            newCursor.registerDataSetObserver(dataSetObserver);
             notifyDataSetChanged();
         } else {
             mRowIdColumn = -1;
@@ -111,21 +102,5 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
      */
     public CharSequence convertToString(Cursor cursor) {
         return cursor == null ? "" : cursor.toString();
-    }
-
-    private class NotifyingDataSetObserver extends DataSetObserver {
-        @Override
-        public void onChanged() {
-            super.onChanged();
-            mDataValid = true;
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public void onInvalidated() {
-            super.onInvalidated();
-            mDataValid = false;
-            notifyDataSetChanged();
-        }
     }
 }
