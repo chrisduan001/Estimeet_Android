@@ -14,7 +14,6 @@ import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.ui.adapter.view.FriendListView;
 import estimeet.meetup.ui.adapter.view.FriendListView_;
-import estimeet.meetup.util.CircleTransform;
 
 /**
  * Created by AmyDuan on 15/03/16.

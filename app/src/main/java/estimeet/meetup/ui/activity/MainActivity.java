@@ -91,5 +91,10 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         ManageFriendActivity_.intent(this).start();
     }
 
+    @Override
+    public void navToManageProfile() {
+        ManageProfileActivity_.intent(this).start();
+    }
+
     //endregion
 }

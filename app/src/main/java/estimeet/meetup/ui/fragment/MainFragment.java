@@ -35,6 +35,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     public interface MainCallback {
         void navToFriendList();
+        void navToManageProfile();
     }
 
     private static final int MAINCURSORLOADER = 1;
@@ -91,6 +92,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onDestroy() {
         super.onDestroy();
     }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return presenter;
+    }
     //endregion
 
     //region cursor loader
@@ -126,11 +132,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    protected BasePresenter getPresenter() {
-        return presenter;
-    }
-
-    @Override
     public void showProgressDialog() {
         showProgressDialog(getString(R.string.progress_loading));
     }
@@ -139,7 +140,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     //region button
     @Click(R.id.fab)
     protected void onFabClicked() {
-        mainCallback.navToFriendList();
+//        mainCallback.navToFriendList();
+        mainCallback.navToManageProfile();
     }
     //endregion
 
