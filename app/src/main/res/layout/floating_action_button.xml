@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/fab_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
     android:layout_gravity="bottom|end"
     android:orientation="vertical">
 
@@ -11,11 +11,11 @@
         android:id="@+id/fab_action1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="3dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginEnd="19dp"
         android:layout_gravity="end"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,10 +40,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginRight="3dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginEnd="19dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,9 +67,12 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="end"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:src="@android:drawable/ic_lock_idle_alarm"/>
 
 </LinearLayout>
