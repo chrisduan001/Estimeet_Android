@@ -61,10 +61,10 @@ public class AnimationUtil {
     }
 
     private static Animator createExpandAnimator(View view, float offset) {
-        return ObjectAnimator.ofFloat(view, "translationY", offset, 0).setDuration(300);
+        return ObjectAnimator.ofFloat(view, "translationY", offset, 0).setDuration(150);
     }
 
     private static Animator createCollapseAnimator(View view, float offset) {
-        return ObjectAnimator.ofFloat(view, "translationY", 0, offset).setDuration(300);
+        return ObjectAnimator.ofFloat(view, "translationY", 0, offset).setDuration(150);
     }
 }

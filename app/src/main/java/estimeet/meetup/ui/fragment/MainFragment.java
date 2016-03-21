@@ -1,8 +1,5 @@
 package estimeet.meetup.ui.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,9 +9,9 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 
 import org.androidannotations.annotations.Click;
@@ -60,7 +57,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @ViewById(R.id.fab)             FloatingActionButton fab;
     @ViewById(R.id.fab_action1)     ViewGroup fabAction1;
     @ViewById(R.id.fab_action2)     ViewGroup fabAction2;
-    @ViewById(R.id.fab_container)   ViewGroup fabContainer;
 
     private MainCallback mainCallback;
 
@@ -98,6 +94,21 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.setCursor(null);
         recyclerView.setAdapter(adapter);
+        //show/hide fab when scroll
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 50) {
+                    if (!isFabExpanded && fab.isShown()) {
+                        fab.hide();
+                    }
+                } else if (dy < 0) {
+                    if (!fab.isShown()) {
+                        fab.show();
+                    }
+                }
+            }
+        });
     }
 
     @Override
