@@ -4,36 +4,42 @@ import android.content.Context;
 import android.database.Cursor;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
+import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.FriendListView;
 import estimeet.meetup.ui.adapter.view.FriendListView_;
 
 /**
- * Created by AmyDuan on 19/03/16.
+ * Created by AmyDuan on 15/03/16.
  */
-public class ManageFriendListAdapter extends CursorRecyclerAdapter<FriendListView> {
+public class ManageFriendListAdapter extends CursorRecyclerAdapter<FriendListView>
+        implements FriendListView.FriendListViewCallback {
 
     private Context context;
+    private Picasso picasso;
 
-    private WeakReference<ManageFriendAdapterCallback> callback;
-
+    private WeakReference<FriendAdapterCallback> callback;
     @Inject
-    public ManageFriendListAdapter(Context context) {
+    public ManageFriendListAdapter(Context context, Picasso picasso) {
         this.context = context;
+        this.picasso = picasso;
     }
 
     @Override
     public void onBindViewHolder(ViewWrapper<FriendListView> holder, Cursor cursor, int position) {
         FriendListView view = holder.getView();
         Friend friend = Friend.fromCursor(cursor);
-        view.bindFriend(friend);
+        view.bind(friend, picasso, this);
         if (position == 0) {
-            view.showSectionHeader(context.getString(R.string.friend_header));
+            view.showSectionHeader(context.getString(R.string.friend_recommend_friend));
         }
     }
 
@@ -42,11 +48,16 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter<FriendListVie
         return new ViewWrapper<>(FriendListView_.build(context));
     }
 
-    public void setCallback(ManageFriendAdapterCallback callback) {
+    public void setCallback(FriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }
 
-    public interface ManageFriendAdapterCallback {
-        void onRequest();
+    @Override
+    public void onUpdateFriend(Friend friend) {
+        callback.get().onUpdateFriend(friend);
+    }
+
+    public interface FriendAdapterCallback {
+        void onUpdateFriend(Friend friend);
     }
 }

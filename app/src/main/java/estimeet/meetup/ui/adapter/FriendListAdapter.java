@@ -2,9 +2,9 @@ package estimeet.meetup.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.ViewGroup;
-
-import com.squareup.picasso.Picasso;
+import android.widget.Adapter;
 
 import java.lang.ref.WeakReference;
 
@@ -12,32 +12,40 @@ import javax.inject.Inject;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
+import estimeet.meetup.ui.adapter.util.ItemTouchListener;
+import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.FriendListView;
 import estimeet.meetup.ui.adapter.view.FriendListView_;
 
 /**
- * Created by AmyDuan on 15/03/16.
+ * Created by AmyDuan on 19/03/16.
  */
-public class FriendListAdapter extends CursorRecyclerAdapter<FriendListView>
-        implements FriendListView.FriendListViewCallback {
+public class FriendListAdapter extends CursorRecyclerAdapter<FriendListView> implements ItemTouchListener {
 
     private Context context;
-    private Picasso picasso;
 
-    private WeakReference<FriendAdapterCallback> callback;
+    private WeakReference<ManageFriendAdapterCallback> callback;
+
+    private int itemSelected = Adapter.NO_SELECTION;
+
     @Inject
-    public FriendListAdapter(Context context, Picasso picasso) {
+    public FriendListAdapter(Context context) {
         this.context = context;
-        this.picasso = picasso;
     }
 
     @Override
     public void onBindViewHolder(ViewWrapper<FriendListView> holder, Cursor cursor, int position) {
         FriendListView view = holder.getView();
         Friend friend = Friend.fromCursor(cursor);
-        view.bind(friend, picasso, this);
+        view.bindFriend(friend);
         if (position == 0) {
-            view.showSectionHeader(context.getString(R.string.friend_recommend_friend));
+            view.showSectionHeader(context.getString(R.string.friend_header));
+        }
+
+        if (position == itemSelected) {
+            view.setBackground();
+            itemSelected = Adapter.NO_SELECTION;
         }
     }
 
@@ -46,16 +54,17 @@ public class FriendListAdapter extends CursorRecyclerAdapter<FriendListView>
         return new ViewWrapper<>(FriendListView_.build(context));
     }
 
-    public void setCallback(FriendAdapterCallback callback) {
+    @Override
+    public void onItemMove(int position) {
+        itemSelected = position;
+        notifyItemChanged(position);
+    }
+
+    public void setCallback(ManageFriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }
 
-    @Override
-    public void onUpdateFriend(Friend friend) {
-        callback.get().onUpdateFriend(friend);
-    }
-
-    public interface FriendAdapterCallback {
-        void onUpdateFriend(Friend friend);
+    public interface ManageFriendAdapterCallback {
+        void onRequest();
     }
 }

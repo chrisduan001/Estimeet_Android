@@ -1,7 +1,6 @@
-package estimeet.meetup.ui.adapter;
+package estimeet.meetup.ui.adapter.util;
 
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 

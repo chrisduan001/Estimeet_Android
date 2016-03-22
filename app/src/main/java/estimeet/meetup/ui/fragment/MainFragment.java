@@ -9,8 +9,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
@@ -26,7 +26,8 @@ import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
-import estimeet.meetup.ui.adapter.ManageFriendListAdapter;
+import estimeet.meetup.ui.adapter.FriendListAdapter;
+import estimeet.meetup.ui.adapter.util.ItemTouchHelperCallback;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.MainPresenter;
 import estimeet.meetup.util.AnimationUtil;
@@ -36,7 +37,7 @@ import estimeet.meetup.util.AnimationUtil;
  */
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView, LoaderManager.LoaderCallbacks<Cursor>,
-        ManageFriendListAdapter.ManageFriendAdapterCallback{
+        FriendListAdapter.ManageFriendAdapterCallback{
 
     public interface MainCallback {
         void navToFriendList();
@@ -51,7 +52,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     @Inject MainPresenter presenter;
     @Inject @Named("currentUser") User user;
-    @Inject ManageFriendListAdapter adapter;
+    @Inject FriendListAdapter adapter;
 
     @ViewById(R.id.recycler)        RecyclerView recyclerView;
     @ViewById(R.id.fab)             FloatingActionButton fab;
@@ -94,6 +95,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.setCursor(null);
         recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.Callback callBack = new ItemTouchHelperCallback(adapter, getContext());
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callBack);
+        touchHelper.attachToRecyclerView(recyclerView);
+
         //show/hide fab when scroll
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

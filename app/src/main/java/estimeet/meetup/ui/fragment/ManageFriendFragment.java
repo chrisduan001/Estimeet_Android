@@ -16,7 +16,7 @@ import estimeet.meetup.di.components.ManageFriendComponent;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
-import estimeet.meetup.ui.adapter.FriendListAdapter;
+import estimeet.meetup.ui.adapter.ManageFriendListAdapter;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.ManageFriendPresenter;
 
@@ -25,11 +25,11 @@ import estimeet.meetup.ui.presenter.ManageFriendPresenter;
  */
 @EFragment(R.layout.fragment_manage_friend)
 public class ManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView,
-        LoaderManager.LoaderCallbacks<Cursor>, FriendListAdapter.FriendAdapterCallback {
+        LoaderManager.LoaderCallbacks<Cursor>, ManageFriendListAdapter.FriendAdapterCallback {
 
     @Inject ManageFriendPresenter presenter;
 
-    @Inject FriendListAdapter friendListAdapter;
+    @Inject ManageFriendListAdapter manageFriendListAdapter;
 
     @ViewById(R.id.recyclerView) RecyclerView recyclerView;
     @ViewById(R.id.progress_bar) ProgressBar progressBar;
@@ -41,7 +41,7 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
         initialize();
 
         presenter.setView(this);
-        friendListAdapter.setCallback(this);
+        manageFriendListAdapter.setCallback(this);
 
         initRecyclerView();
         initFriendCursor();
@@ -54,8 +54,8 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
     private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        friendListAdapter.setCursor(null);
-        recyclerView.setAdapter(friendListAdapter);
+        manageFriendListAdapter.setCursor(null);
+        recyclerView.setAdapter(manageFriendListAdapter);
     }
     //endregion
 
@@ -105,14 +105,14 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
             showProgressDialog();
             presenter.requestFriendList();
         } else {
-            friendListAdapter.changeCursor(data);
+            manageFriendListAdapter.changeCursor(data);
             dismissProgressDialog();
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        friendListAdapter.swapCursor(null);
+        manageFriendListAdapter.swapCursor(null);
     }
     //endregion
 

@@ -3,7 +3,9 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,6 +37,7 @@ public class FriendListView extends RelativeLayout {
     @ViewById(R.id.friend_dp) ImageView friendDp;
     @ViewById(R.id.friend_action) ImageButton actionButton;
     @ViewById(R.id.friend_header) TextView friendHeader;
+    @ViewById(R.id.main) ViewGroup mainView;
 
     private WeakReference<FriendListViewCallback> callback;
     private Friend friend;
@@ -61,6 +64,11 @@ public class FriendListView extends RelativeLayout {
         }
 
         actionButton.setVisibility(GONE);
+    }
+
+    public void setBackground() {
+        mainView.setBackgroundColor(Color.parseColor("#77a500"));
+        friendDp.setVisibility(GONE);
     }
 
     public void showSectionHeader(String header) {
