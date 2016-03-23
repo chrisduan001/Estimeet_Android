@@ -1,17 +1,28 @@
 package estimeet.meetup.ui.adapter.util;
 
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by AmyDuan on 15/03/16.
  */
-public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
+public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWrapper> {
 
     protected boolean mDataValid;
     protected Cursor mCursor;
     protected int mRowIdColumn;
+
+    protected HashMap<Integer, Integer> sectionHash;
+    protected List<Integer> sectionPos;
+
+    protected int sectionCount = 0;
+    protected int currentSection = 0;
 
     public void setCursor(Cursor c) {
         init(c);
@@ -26,26 +37,31 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(ViewWrapper<V> holder, int position) {
+    public void onBindViewHolder(ViewWrapper holder, int position) {
         if (!mDataValid) {
             throw new IllegalStateException("This should only be called when cursor is valid");
         }
+        
+        position = getCursorPosition(position);
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
+
         onBindViewHolder(holder, mCursor, position);
     }
 
-    public abstract void onBindViewHolder(ViewWrapper<V> holder, Cursor cursor, int position);
+    public abstract void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position);
+    public abstract void buildSectionHash(Cursor cursor);
 
-    public Cursor getCursor() {
-        return mCursor;
+    //ignore the section when moving the cursor
+    private int getCursorPosition(int position) {
+        return sectionHash == null ? position : position - sectionHash.get(position);
     }
 
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor!= null) {
-            return mCursor.getCount();
+            return mCursor.getCount() + sectionCount;
         } else {
             return 0;
         }
@@ -54,6 +70,7 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
     @Override
     public long getItemId(int position) {
         if (hasStableIds() && mDataValid && mCursor != null) {
+            position = getCursorPosition(position);
             if (mCursor.moveToPosition(position)) {
                 return mCursor.getLong(mRowIdColumn);
             } else {
@@ -64,7 +81,14 @@ public abstract class CursorRecyclerAdapter<V extends View> extends RecyclerView
         }
     }
 
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     public void changeCursor(Cursor cursor) {
+        if (cursor != null) {
+            buildSectionHash(cursor);
+        }
         Cursor old = swapCursor(cursor);
         if (old != null) {
             old.close();

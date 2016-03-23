@@ -2,11 +2,13 @@ package estimeet.meetup.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -17,11 +19,15 @@ import estimeet.meetup.ui.adapter.util.ItemTouchListener;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.FriendListView;
 import estimeet.meetup.ui.adapter.view.FriendListView_;
+import estimeet.meetup.ui.adapter.view.SimpleHeaderView;
+import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
 
 /**
  * Created by AmyDuan on 19/03/16.
  */
-public class FriendListAdapter extends CursorRecyclerAdapter<FriendListView> implements ItemTouchListener {
+public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener {
+    private static final int VIEWTYPE_SECTION = 0;
+    private static final int VIEWTYPE_ITEM = 1;
 
     private Context context;
 
@@ -35,29 +41,79 @@ public class FriendListAdapter extends CursorRecyclerAdapter<FriendListView> imp
     }
 
     @Override
-    public void onBindViewHolder(ViewWrapper<FriendListView> holder, Cursor cursor, int position) {
-        FriendListView view = holder.getView();
-        Friend friend = Friend.fromCursor(cursor);
-        view.bindFriend(friend);
-        if (position == 0) {
-            view.showSectionHeader(context.getString(R.string.friend_header));
-        }
+    public void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position) {
+        View view = holder.getView();
 
-        if (position == itemSelected) {
-            view.setBackground();
-            itemSelected = Adapter.NO_SELECTION;
+        if (view instanceof SimpleHeaderView) {
+            SimpleHeaderView headerView = (SimpleHeaderView) view;
+            headerView.bindHeader(context.getString(R.string.friend_header));
+            currentSection++;
+        } else {
+            FriendListView friendView = (FriendListView)view;
+            Friend friend = Friend.fromCursor(cursor);
+            friendView.bindFriend(friend);
+
+            if (position == itemSelected) {
+                friendView.setBackground();
+                itemSelected = Adapter.NO_SELECTION;
+            }
+        }
+    }
+
+    /**
+     this method will find when should start a new section and at which position
+     also find the how many sections in total, will be used for the total number of list
+     */
+    @Override
+    public void buildSectionHash(Cursor cursor) {
+        int position = 0;
+        if (cursor.moveToFirst()) {
+            //position + section
+            sectionHash = new HashMap<>();
+            sectionPos = new ArrayList<>();
+            //first header section
+            sectionHash.put(0, 0);
+            sectionCount = 1;
+            sectionPos.add(position);
+            position++;
+            sectionHash.put(position, sectionCount);
+        } else return;
+
+        while (cursor.moveToNext()) {
+            position ++;
+            if (Friend.isNewSection(cursor)) {
+                sectionPos.add(position);
+                sectionCount++;
+                sectionHash.put(position, sectionCount);
+                position++;
+            }
+            sectionHash.put(position, sectionCount);
         }
     }
 
     @Override
-    public ViewWrapper<FriendListView> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewWrapper<>(FriendListView_.build(context));
+    public int getItemViewType(int position) {
+        if (isSection(position)) {
+            return VIEWTYPE_SECTION;
+        } else {
+            return VIEWTYPE_ITEM;
+        }
+    }
+
+    @Override
+    public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
+        return viewType == VIEWTYPE_SECTION ? new ViewWrapper(SimpleHeaderView_.build(context))
+                                            : new ViewWrapper(FriendListView_.build(context));
     }
 
     @Override
     public void onItemMove(int position) {
         itemSelected = position;
         notifyItemChanged(position);
+    }
+
+    private boolean isSection(int position) {
+        return sectionPos.contains(position);
     }
 
     public void setCallback(ManageFriendAdapterCallback callback) {

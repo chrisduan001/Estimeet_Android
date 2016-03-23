@@ -8,7 +8,7 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_friends_list"/>
+        tools:listitem="@layout/item_manage_friends_list"/>
 
     <include layout="@layout/floating_action_button" />
 

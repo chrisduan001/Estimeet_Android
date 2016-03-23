@@ -6,15 +6,17 @@ import android.view.View;
 /**
  * Created by AmyDuan on 16/03/16.
  */
-public class ViewWrapper <V extends View> extends RecyclerView.ViewHolder  {
-    private V view;
+public class ViewWrapper extends RecyclerView.ViewHolder  {
 
-    public ViewWrapper(V itemView) {
+    private View view;
+
+    public ViewWrapper(View itemView) {
         super(itemView);
-        view = itemView;
+
+        this.view = itemView;
     }
 
-    public V getView() {
+    public View getView() {
         return view;
     }
 }

@@ -14,14 +14,14 @@ import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
-import estimeet.meetup.ui.adapter.view.FriendListView;
-import estimeet.meetup.ui.adapter.view.FriendListView_;
+import estimeet.meetup.ui.adapter.view.ManageFriendListView;
+import estimeet.meetup.ui.adapter.view.ManageFriendListView_;
 
 /**
  * Created by AmyDuan on 15/03/16.
  */
-public class ManageFriendListAdapter extends CursorRecyclerAdapter<FriendListView>
-        implements FriendListView.FriendListViewCallback {
+public class ManageFriendListAdapter extends CursorRecyclerAdapter
+        implements ManageFriendListView.FriendListViewCallback {
 
     private Context context;
     private Picasso picasso;
@@ -34,8 +34,8 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter<FriendListVie
     }
 
     @Override
-    public void onBindViewHolder(ViewWrapper<FriendListView> holder, Cursor cursor, int position) {
-        FriendListView view = holder.getView();
+    public void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position) {
+        ManageFriendListView view = (ManageFriendListView)holder.getView();
         Friend friend = Friend.fromCursor(cursor);
         view.bind(friend, picasso, this);
         if (position == 0) {
@@ -44,8 +44,13 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter<FriendListVie
     }
 
     @Override
-    public ViewWrapper<FriendListView> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewWrapper<>(FriendListView_.build(context));
+    public void buildSectionHash(Cursor cursor) {
+        sectionHash = null;
+    }
+
+    @Override
+    public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewWrapper(ManageFriendListView_.build(context));
     }
 
     public void setCallback(FriendAdapterCallback callback) {

@@ -49,4 +49,8 @@ public class Friend extends BaseModel {
         friend.isFavourite = cursor.getInt(DataHelper.FriendQuery.FAVOURITE) != 0;
         return friend;
     }
+
+    public static boolean isNewSection(Cursor cursor) {
+        return false;
+    }
 }
