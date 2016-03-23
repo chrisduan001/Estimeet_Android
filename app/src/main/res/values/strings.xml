@@ -34,4 +34,6 @@
     <string name="fab_manage_friends">Manage Friends</string>
     <string name="fab_profile">Profile</string>
     <string name="title_manage_profile">Profile and Settings</string>
+    <string name="send_request_title">Send Estimeet</string>
+    <string name="send_request_sub_title">Release to request</string>
 </resources>

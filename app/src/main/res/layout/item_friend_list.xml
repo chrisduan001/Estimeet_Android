@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/viewgroup_view"
+<RelativeLayout
+    android:id="@+id/viewgroup_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,6 +29,37 @@
         android:gravity="center_vertical"
         style="@style/SingleLineText"
         tools:text="John Key"/>
+
+    <LinearLayout
+        android:id="@+id/request_view"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_toRightOf="@id/friend_dp"
+        android:layout_toEndOf="@id/friend_dp"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            style="@style/SingleLineText"
+            android:text="@string/send_request_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            style="@style/SingleLineText"
+            android:text="@string/send_request_sub_title"/>
+
+    </LinearLayout>
 
     <View
         android:id="@+id/separator_view"

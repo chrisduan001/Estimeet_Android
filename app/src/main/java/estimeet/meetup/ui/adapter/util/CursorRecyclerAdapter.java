@@ -22,7 +22,6 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
     protected List<Integer> sectionPos;
 
     protected int sectionCount = 0;
-    protected int currentSection = 0;
 
     public void setCursor(Cursor c) {
         init(c);
@@ -41,13 +40,14 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
         if (!mDataValid) {
             throw new IllegalStateException("This should only be called when cursor is valid");
         }
-        
+
+        int originPos = position;
         position = getCursorPosition(position);
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
 
-        onBindViewHolder(holder, mCursor, position);
+        onBindViewHolder(holder, mCursor, originPos);
     }
 
     public abstract void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position);

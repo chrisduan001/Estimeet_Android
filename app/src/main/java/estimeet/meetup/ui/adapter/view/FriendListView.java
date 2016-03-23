@@ -26,21 +26,26 @@ public class FriendListView extends RelativeLayout {
     @ViewById(R.id.friend_name)             TextView friendName;
     @ViewById(R.id.friend_dp)               ImageView friendDp;
     @ViewById(R.id.viewgroup_view)          ViewGroup viewGroupView;
+    @ViewById(R.id.request_view)            ViewGroup requestView;
 
     public FriendListView(Context context) {
         super(context);
     }
 
     public void bindFriend(Friend friend) {
+        friendName.setVisibility(VISIBLE);
+        viewGroupView.setBackgroundColor(Color.parseColor("#9e9e9e"));
+        requestView.setVisibility(GONE);
         friendName.setText(friend.userName);
         if (friend.image != null) {
             loadImageAsync(friend.image);
         }
     }
 
-    public void setBackground() {
+    public void setSwipeView() {
         viewGroupView.setBackgroundColor(Color.parseColor("#77a500"));
-        friendDp.setVisibility(GONE);
+        requestView.setVisibility(VISIBLE);
+        friendName.setVisibility(GONE);
     }
 
     @Background

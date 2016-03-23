@@ -40,6 +40,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         this.context = context;
     }
 
+    //region override from cursorrecycleradapter
     @Override
     public void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position) {
         View view = holder.getView();
@@ -47,15 +48,13 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         if (view instanceof SimpleHeaderView) {
             SimpleHeaderView headerView = (SimpleHeaderView) view;
             headerView.bindHeader(context.getString(R.string.friend_header));
-            currentSection++;
         } else {
             FriendListView friendView = (FriendListView)view;
             Friend friend = Friend.fromCursor(cursor);
             friendView.bindFriend(friend);
 
             if (position == itemSelected) {
-                friendView.setBackground();
-                itemSelected = Adapter.NO_SELECTION;
+                friendView.setSwipeView();
             }
         }
     }
@@ -90,7 +89,9 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             sectionHash.put(position, sectionCount);
         }
     }
+    //endregion
 
+    //region recyclerview action
     @Override
     public int getItemViewType(int position) {
         if (isSection(position)) {
@@ -106,11 +107,36 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
                                             : new ViewWrapper(FriendListView_.build(context));
     }
 
+    //endregion
+
+    //region item touch listener
     @Override
     public void onItemMove(int position) {
-        itemSelected = position;
+        if (position != Adapter.NO_SELECTION) {
+            resetSelection(position);
+        }
+    }
+
+    @Override
+    public void onStopSwipe() {
+        if (itemSelected != Adapter.NO_SELECTION) {
+            resetSelection(itemSelected);
+        }
+    }
+
+    private void resetSelection(int position) {
+        itemSelected = Adapter.NO_SELECTION;
         notifyItemChanged(position);
     }
+
+    @Override
+    public void onStartSwipe(View view, int position) {
+        itemSelected = position;
+        if (view instanceof FriendListView) {
+            ((FriendListView) view).setSwipeView();
+        }
+    }
+    //endregion
 
     private boolean isSection(int position) {
         return sectionPos.contains(position);
