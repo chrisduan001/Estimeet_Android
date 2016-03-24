@@ -67,7 +67,7 @@
         android:layout_height="1dp"
         android:layout_toRightOf="@id/friend_dp"
         android:layout_toEndOf="@id/friend_dp"
-        android:layout_below="@id/friend_name"
+        android:layout_alignParentBottom="true"
         android:background="@color/white"/>
 
 </RelativeLayout>

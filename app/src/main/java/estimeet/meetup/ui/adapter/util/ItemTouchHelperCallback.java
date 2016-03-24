@@ -47,6 +47,7 @@ public class ItemTouchHelperCallback extends android.support.v7.widget.helper.It
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             //SWIPE
             listener.onStartSwipe(viewHolder.itemView, viewHolder.getAdapterPosition());
+
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
             //RELEASE
             listener.onStopSwipe();
@@ -72,6 +73,8 @@ public class ItemTouchHelperCallback extends android.support.v7.widget.helper.It
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        if (viewHolder.getItemId() == RecyclerView.NO_ID) return;
+
         View itemView = viewHolder.itemView;
 
         if (dX > 0) {

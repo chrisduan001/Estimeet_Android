@@ -138,10 +138,6 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     }
     //endregion
 
-    private boolean isSection(int position) {
-        return sectionPos.contains(position);
-    }
-
     public void setCallback(ManageFriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }

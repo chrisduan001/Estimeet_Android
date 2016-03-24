@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -34,8 +35,8 @@ public class FriendListView extends RelativeLayout {
 
     public void bindFriend(Friend friend) {
         friendName.setVisibility(VISIBLE);
-        viewGroupView.setBackgroundColor(Color.parseColor("#9e9e9e"));
         requestView.setVisibility(GONE);
+        viewGroupView.setBackgroundColor(Color.parseColor("#9e9e9e"));
         friendName.setText(friend.userName);
         if (friend.image != null) {
             loadImageAsync(friend.image);

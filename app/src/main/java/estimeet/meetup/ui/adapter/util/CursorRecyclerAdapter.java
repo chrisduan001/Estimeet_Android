@@ -58,6 +58,10 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
         return sectionHash == null ? position : position - sectionHash.get(position);
     }
 
+    protected boolean isSection(int position) {
+        return sectionPos != null && sectionPos.contains(position);
+    }
+
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor!= null) {
@@ -70,8 +74,8 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
     @Override
     public long getItemId(int position) {
         if (hasStableIds() && mDataValid && mCursor != null) {
-            position = getCursorPosition(position);
-            if (mCursor.moveToPosition(position)) {
+            int cursorPos = getCursorPosition(position);
+            if (mCursor.moveToPosition(cursorPos) && !isSection(position)) {
                 return mCursor.getLong(mRowIdColumn);
             } else {
                 return RecyclerView.NO_ID;
