@@ -13,17 +13,18 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class MeetUpSharedPreference {
-    private static final String ID = "ID";
-    private static final String USER_ID = "USER_ID";
-    private static final String NAME = "USER_NAME";
-    private static final String DP = "USER_DP";
-    private static final String PHONE = "PHONE_NUMBER";
-    private static final String PASSWORD = "PASSWORD";
-    private static final String TOKEN = "AUTH_TOKEN";
-    private static final String EXPIRES = "TOKEN_EXPIRE_TIME";
+    private static final String ID              = "ID";
+    private static final String USER_ID         = "USER_ID";
+    private static final String NAME            = "USER_NAME";
+    private static final String DP              = "USER_DP";
+    private static final String PHONE           = "PHONE_NUMBER";
+    private static final String PASSWORD        = "PASSWORD";
+    private static final String TOKEN           = "AUTH_TOKEN";
+    private static final String EXPIRES         = "TOKEN_EXPIRE_TIME";
 
-    private static final String VERSION_CODE = "VERSION_CODE";
-    private static final String GCM_REG_ID = "GCM_REG_ID";
+    private static final String VERSION_CODE    = "VERSION_CODE";
+    private static final String GCM_REG_ID      = "GCM_REG_ID";
+    private static final String NOTIFICATIONID  = "NOTIFICATION_ID";
 
     private final SharedPreferences sharedPreferences;
 
@@ -91,6 +92,17 @@ public class MeetUpSharedPreference {
     public void setGcmRegId(String regId) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(GCM_REG_ID, regId);
+
+        editor.apply();
+    }
+
+    public long getNotificationid() {
+        return sharedPreferences.getLong(NOTIFICATIONID, 0);
+    }
+
+    public void setNotificationid(long id) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(NOTIFICATIONID, id);
 
         editor.apply();
     }

@@ -37,8 +37,12 @@ public class MainPresenter extends BasePresenter {
     public void registerPushChannel() {
         interactor.registerPushChannel();
     }
+
+    public void requestData() {
+        view.showToastMessage("requested data");
+    }
     //endregion
     public interface MainView extends BaseView {
-
+        void showToastMessage(String message);
     }
 }

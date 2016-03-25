@@ -1,8 +1,7 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,13 +14,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.microsoft.windowsazure.messaging.NotificationHub;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.Receiver;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -37,7 +35,7 @@ import estimeet.meetup.ui.adapter.util.ItemTouchHelperCallback;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.MainPresenter;
 import estimeet.meetup.util.AnimationUtil;
-import estimeet.meetup.util.NotificationHandler;
+import estimeet.meetup.util.push.NotificationHandler;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -78,6 +76,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
             throw new UnsupportedOperationException("Activity must implement " +
                     MainCallback.class.getSimpleName());
         }
+    }
+
+    @Receiver(actions = "android.intent.action.GENERAL_BROADCAST")
+    protected void onReceiveBoradcast() {
+        presenter.requestData();
     }
 
     @Override
@@ -184,6 +187,12 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void showProgressDialog() {
         showProgressDialog(getString(R.string.progress_loading));
     }
+
+    @Override
+    public void showToastMessage(String message) {
+        showShortToastMessage(message);
+    }
+
     //endregion
 
     //region button

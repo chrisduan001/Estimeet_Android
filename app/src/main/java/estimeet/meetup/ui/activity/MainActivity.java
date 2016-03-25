@@ -1,20 +1,14 @@
 package estimeet.meetup.ui.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -28,12 +22,6 @@ import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.fragment.MainFragment;
 import estimeet.meetup.ui.fragment.MainFragment_;
-import estimeet.meetup.util.NotificationHandler;
-
-import com.microsoft.windowsazure.messaging.*;
-import com.microsoft.windowsazure.notifications.NotificationsManager;
-
-import java.io.IOException;
 
 /**
  * Created by AmyDuan on 6/02/16.
