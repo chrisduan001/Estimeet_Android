@@ -1,7 +1,6 @@
 package estimeet.meetup;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.digits.sdk.android.Digits;
 import com.facebook.stetho.Stetho;

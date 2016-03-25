@@ -3,6 +3,7 @@ package estimeet.meetup.model;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import java.security.PublicKey;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,6 +21,9 @@ public class MeetUpSharedPreference {
     private static final String PASSWORD = "PASSWORD";
     private static final String TOKEN = "AUTH_TOKEN";
     private static final String EXPIRES = "TOKEN_EXPIRE_TIME";
+
+    private static final String VERSION_CODE = "VERSION_CODE";
+    private static final String GCM_REG_ID = "GCM_REG_ID";
 
     private final SharedPreferences sharedPreferences;
 
@@ -66,6 +70,28 @@ public class MeetUpSharedPreference {
         long time = Calendar.getInstance().getTimeInMillis()/1000 + expireInSeconds;
         //shoudl renew at least 10 min before expires
         editor.putLong(EXPIRES, time - 600);
+        editor.apply();
+    }
+
+    public int getVersionCode() {
+        return sharedPreferences.getInt(VERSION_CODE, 0);
+    }
+
+    public void setVersionCode(int code) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(VERSION_CODE, code);
+
+        editor.apply();
+    }
+
+    public String getGcmRegId() {
+        return sharedPreferences.getString(GCM_REG_ID, "");
+    }
+
+    public void setGcmRegId(String regId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(GCM_REG_ID, regId);
+
         editor.apply();
     }
 

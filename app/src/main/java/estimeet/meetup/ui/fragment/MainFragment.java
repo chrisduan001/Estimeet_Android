@@ -1,6 +1,8 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +15,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.microsoft.windowsazure.messaging.NotificationHub;
+import com.microsoft.windowsazure.notifications.NotificationsManager;
+
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -30,6 +37,7 @@ import estimeet.meetup.ui.adapter.util.ItemTouchHelperCallback;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.MainPresenter;
 import estimeet.meetup.util.AnimationUtil;
+import estimeet.meetup.util.NotificationHandler;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -83,6 +91,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         initRecycler();
         initFriendCursor();
 
+        registerPushChannel();
     }
 
     private void initialize() {
@@ -114,6 +123,13 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
                 }
             }
         });
+    }
+
+    @Background
+    void registerPushChannel() {
+        NotificationsManager.handleNotifications(getContext(), getString(R.string.push_SENDER_ID),
+                NotificationHandler.class);
+        presenter.registerPushChannel();
     }
 
     @Override
@@ -158,7 +174,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
     //endregion
 
-    //region presenter call
+    //region presenter callback
     @Override
     protected ProgressBar getProgressBar() {
         return null;

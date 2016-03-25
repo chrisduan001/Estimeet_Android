@@ -29,10 +29,15 @@ public class MainPresenter extends BasePresenter {
 
     }
 
+    //region fragment call
     public void setView(MainView view) {
         this.view = view;
     }
 
+    public void registerPushChannel() {
+        interactor.registerPushChannel();
+    }
+    //endregion
     public interface MainView extends BaseView {
 
     }
