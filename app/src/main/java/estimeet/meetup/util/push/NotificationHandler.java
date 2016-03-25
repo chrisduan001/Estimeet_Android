@@ -9,10 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.widget.Toast;
-
 import com.microsoft.windowsazure.notifications.NotificationsHandler;
-
 import estimeet.meetup.R;
 import estimeet.meetup.ui.activity.MainActivity_;
 

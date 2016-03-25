@@ -3,6 +3,7 @@ package estimeet.meetup.ui.presenter;
 import javax.inject.Inject;
 
 import estimeet.meetup.interactor.MainInteractor;
+import estimeet.meetup.interactor.PushInteractor;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -13,10 +14,12 @@ public class MainPresenter extends BasePresenter {
     private MainView view;
 
     @Inject MainInteractor interactor;
+    @Inject PushInteractor pushInteractor;
 
     @Inject
-    public MainPresenter(MainInteractor interactor) {
+    public MainPresenter(MainInteractor interactor, PushInteractor pushInteractor) {
         this.interactor = interactor;
+        this.pushInteractor = pushInteractor;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class MainPresenter extends BasePresenter {
     }
 
     public void registerPushChannel() {
-        interactor.registerPushChannel();
+        pushInteractor.registerPushChannel();
     }
 
     public void requestData() {
