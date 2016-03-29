@@ -1,5 +1,6 @@
 package estimeet.meetup.network;
 
+import estimeet.meetup.model.BaseModel;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.PostModel.AuthUser;
@@ -59,5 +60,13 @@ public interface EstimeetApi {
             @Header("Authorization") String token,
             @Query("id") int id,
             @Query("userId") long userId
+    );
+
+    @GET("/user/registerchannel")
+    Observable<BaseModel> registerChannel(
+            @Header("Authorization") String token,
+            @Query("channeltype") String type,
+            @Query("id") int id,
+            @Query("userid") long userId
     );
 }

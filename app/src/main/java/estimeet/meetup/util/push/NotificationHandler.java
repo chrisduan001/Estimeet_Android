@@ -25,12 +25,20 @@ public class NotificationHandler extends NotificationsHandler {
             String[] msgArray = message.split(",");
             int code = Integer.parseInt(msgArray[0]);
 
+            //100 general notification, need to pull data from server
             switch (code) {
-                case 0:
+                //new friend join
+                case 100:
                     sendGeneralPush(context);
                     break;
-                case 1:
-                    displayOnMainScreen(0, context, "Meet up", "meet up notification");
+                //new session request
+                case 101:
+                    sendGeneralPush(context);
+                    displayOnMainScreen(0, context, context.getString(R.string.app_name),
+                            context.getString(R.string.push_session_request));
+                    break;
+                case 102:
+                    sendGeneralPush(context);
                     break;
                 default:
                     break;

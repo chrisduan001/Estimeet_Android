@@ -74,6 +74,7 @@ public class MeetUpSharedPreference {
         editor.apply();
     }
 
+    //if the version code changes, need to re-register the push channel
     public int getVersionCode() {
         return sharedPreferences.getInt(VERSION_CODE, 0);
     }
@@ -85,6 +86,7 @@ public class MeetUpSharedPreference {
         editor.apply();
     }
 
+    //push notification
     public String getGcmRegId() {
         return sharedPreferences.getString(GCM_REG_ID, "");
     }
@@ -96,6 +98,7 @@ public class MeetUpSharedPreference {
         editor.apply();
     }
 
+    //for retrieve or delete notifications from server
     public long getNotificationid() {
         return sharedPreferences.getLong(NOTIFICATIONID, 0);
     }

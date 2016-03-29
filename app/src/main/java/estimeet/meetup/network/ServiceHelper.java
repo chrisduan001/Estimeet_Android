@@ -3,6 +3,7 @@ package estimeet.meetup.network;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import estimeet.meetup.model.BaseModel;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.PostModel.AuthUser;
@@ -43,6 +44,10 @@ public class ServiceHelper {
 
     public Observable<ListItem<Friend>> getFriendsList(String token, int id, long userId) {
         return estimeetApi.getFriendsList(buildToken(token), id, userId);
+    }
+
+    public Observable<BaseModel> registerChannel(String token, int id, long userId) {
+        return estimeetApi.registerChannel(buildToken(token), "gcm", id, userId);
     }
 
     private String buildToken(String token) {

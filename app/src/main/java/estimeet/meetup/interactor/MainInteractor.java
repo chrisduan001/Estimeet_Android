@@ -12,13 +12,25 @@ import rx.Observable;
 
 public class MainInteractor extends BaseInteractor<User> {
 
+    private MainListener listener;
+
     @Inject
     public MainInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sp) {
         super(serviceHelper, dataHelper, sp);
     }
 
+    //region fragment call
+    public void call(MainListener listener) {
+        this.listener = listener;
+    }
+    //endregion
+
     @Override
     protected Observable<User> getObservable(User user) {
         return null;
+    }
+
+    public interface MainListener extends BaseListener {
+
     }
 }

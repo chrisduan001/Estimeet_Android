@@ -1,9 +1,6 @@
 package estimeet.meetup.interactor;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
-
 import javax.inject.Inject;
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.Friend;
