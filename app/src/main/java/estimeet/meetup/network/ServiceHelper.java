@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import estimeet.meetup.model.BaseModel;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
+import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.UpdateModel;
@@ -48,6 +49,10 @@ public class ServiceHelper {
 
     public Observable<BaseModel> registerChannel(String token, int id, long userId) {
         return estimeetApi.registerChannel(buildToken(token), "gcm", id, userId);
+    }
+
+    public Observable<ListItem<NotificationEntity>> getAllNotifications(String token, int id, long userId) {
+        return estimeetApi.getAllNotifications(buildToken(token), id, userId);
     }
 
     private String buildToken(String token) {

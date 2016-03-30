@@ -72,6 +72,12 @@ public class DataHelper {
         contentResolver.bulkInsert(SqliteContract.Friends.CONTENT_URI, userValues);
     }
 
+    public void insertFriend(Friend friend) {
+        if (getFriend(friend.id) == null) {
+            contentResolver.insert(SqliteContract.Friends.CONTENT_URI, friend.toContentValues());
+        }
+    }
+
     public void updateFriendData(Friend friend) {
         ContentValues value = friend.toContentValues();
         contentResolver.update(SqliteContract.Friends.buildFriendUri(friend.id), value, null, null);
@@ -82,7 +88,7 @@ public class DataHelper {
         Cursor cursor = contentResolver.query(SqliteContract.Users.CONTENT_URI, UserQuery.PROJECTION,
                 null, null, null);
 
-        if (cursor == null) throw new RuntimeException("Cursor can't be empty");
+        if (cursor == null) throw new RuntimeException("Cursor can't be null");
         while (cursor.moveToNext()) {
             User user = User.fromCursor(cursor);
             users.add(user);
@@ -97,8 +103,7 @@ public class DataHelper {
         List<Friend> friends = new ArrayList<>();
         Cursor cursor = contentResolver.query(SqliteContract.Friends.CONTENT_URI, FriendQuery.PROJECTION,
                 null, null, null);
-
-        if (cursor == null) throw new RuntimeException("Cursor can't be empty");
+        if (cursor == null) throw new RuntimeException("Cursor can't be null");
         while (cursor.moveToNext()) {
             Friend friend = Friend.fromCursor(cursor);
             friends.add(friend);
@@ -106,6 +111,13 @@ public class DataHelper {
 
         cursor.close();
         return friends;
+    }
+
+    public Friend getFriend(int id) {
+        Cursor cursor = contentResolver.query(SqliteContract.Friends.CONTENT_URI, FriendQuery.PROJECTION,
+                SqliteContract.FriendColumns.ID + " = " + id, null, null);
+        if (cursor == null) throw new RuntimeException("Cursor can't be null");
+        return cursor.moveToFirst() ? Friend.fromCursor(cursor) : null;
     }
 
     public void updateUser(User user, int userId) {

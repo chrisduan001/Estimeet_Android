@@ -3,6 +3,7 @@ package estimeet.meetup.network;
 import estimeet.meetup.model.BaseModel;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
+import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.UpdateModel;
@@ -66,6 +67,13 @@ public interface EstimeetApi {
     Observable<BaseModel> registerChannel(
             @Header("Authorization") String token,
             @Query("channeltype") String type,
+            @Query("id") int id,
+            @Query("userid") long userId
+    );
+
+    @GET("/user/getallnotifications")
+    Observable<ListItem<NotificationEntity>> getAllNotifications(
+            @Header("Authorization") String token,
             @Query("id") int id,
             @Query("userid") long userId
     );

@@ -16,7 +16,7 @@ public class Friend extends BaseModel {
     public int id;
 
     @SerializedName("userId")
-    private long userId;
+    public long userId;
 
     @SerializedName("userName")
     public String userName;
