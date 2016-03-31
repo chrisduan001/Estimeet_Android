@@ -41,4 +41,7 @@
     <string name="push_HUB_NAME">meetup</string>
     <string name="push_HUB_LISTENER_STRING">Endpoint=sb://meetup.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=3XEU5LpvQH7DsLfWIj4t+6csDar4B0PE83rxlm1qJDE="</string>
     <string name="push_session_request">You have a session request</string>
+    <string name="send_estimeet_message">Estimeet request sent</string>
+    <string name="accept">Accept</string>
+    <string name="ignore">Ignore</string>
 </resources>

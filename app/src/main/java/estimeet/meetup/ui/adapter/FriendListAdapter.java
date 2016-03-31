@@ -35,6 +35,8 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
 
     private int itemSelected = Adapter.NO_SELECTION;
 
+    private FriendListView viewSwiped = null;
+
     @Inject
     public FriendListAdapter(Context context) {
         this.context = context;
@@ -116,24 +118,26 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             resetSelection(position);
         }
     }
-
+    //swipe not complete(eg: user swiped half way and cancelled)
     @Override
     public void onStopSwipe() {
         if (itemSelected != Adapter.NO_SELECTION) {
-            resetSelection(itemSelected);
+            getCursor().moveToPosition(getCursorPosition(itemSelected));
+            viewSwiped.bindFriend(Friend.fromCursor(getCursor()));
         }
     }
 
     private void resetSelection(int position) {
         itemSelected = Adapter.NO_SELECTION;
-        notifyItemChanged(position);
+        notifyItemRemoved(position);
     }
 
     @Override
     public void onStartSwipe(View view, int position) {
         itemSelected = position;
         if (view instanceof FriendListView) {
-            ((FriendListView) view).setSwipeView();
+            viewSwiped = ((FriendListView) view);
+            viewSwiped.setSwipeView();
         }
     }
     //endregion

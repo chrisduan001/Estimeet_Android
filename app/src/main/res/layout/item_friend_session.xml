@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/grey">
+
+    <ImageView
+        android:id="@+id/friend_dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@null"
+        android:src="@drawable/placeholder_icon"/>
+
+    <ImageView
+        android:id="@+id/btn_cancel_session"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+
+    <LinearLayout
+        android:id="@+id/pending_session_sent"
+        style="@style/SessionLayoutStyle">
+
+        <TextView
+            android:id="@+id/friend_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="bottom"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Friend name"/>
+
+        <TextView
+            android:id="@+id/estimeet_sent_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/send_estimeet_message"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_bg"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:text="@string/accept"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/ignore"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/session_active"
+        android:visibility="visible"
+        style="@style/SessionLayoutStyle">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="23dp"
+            android:gravity="center_vertical"
+            style="@style/SingleLineText"
+            tools:text="Distance: 2.5Km"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="23dp"
+            android:gravity="center_vertical"
+            style="@style/SingleLineText"
+            tools:text="Time: 5 Minutes(Walk)"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="23dp"
+            android:gravity="center_vertical"
+            style="@style/SingleLineText"
+            tools:text="Location: Auckland CBD"/>
+
+    </LinearLayout>
+</RelativeLayout>

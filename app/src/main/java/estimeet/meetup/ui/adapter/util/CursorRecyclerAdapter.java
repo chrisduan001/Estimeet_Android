@@ -54,7 +54,7 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
     public abstract void buildSectionHash(Cursor cursor);
 
     //ignore the section when moving the cursor
-    private int getCursorPosition(int position) {
+    protected int getCursorPosition(int position) {
         return sectionHash == null ? position : position - sectionHash.get(position);
     }
 

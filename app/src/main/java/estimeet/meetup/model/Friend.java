@@ -28,6 +28,8 @@ public class Friend extends BaseModel {
 
     public boolean isFavourite;
 
+    public static boolean isSession;
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(4);
         contentValues.put(SqliteContract.FriendColumns.ID, id);
@@ -51,6 +53,6 @@ public class Friend extends BaseModel {
     }
 
     public static boolean isNewSection(Cursor cursor) {
-        return false;
+        return isSession;
     }
 }
