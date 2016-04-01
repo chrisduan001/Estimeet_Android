@@ -17,7 +17,10 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
     protected boolean mDataValid;
     protected Cursor mCursor;
     protected int mRowIdColumn;
-
+    /**
+     position and section name value pair, section includes header
+     eg: (0,0) == header section (1,1) first section
+     */
     protected HashMap<Integer, Integer> sectionHash;
     protected List<Integer> sectionPos;
 

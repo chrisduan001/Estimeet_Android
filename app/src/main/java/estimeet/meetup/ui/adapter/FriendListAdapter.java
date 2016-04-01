@@ -19,6 +19,7 @@ import estimeet.meetup.ui.adapter.util.ItemTouchListener;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.FriendListView;
 import estimeet.meetup.ui.adapter.view.FriendListView_;
+import estimeet.meetup.ui.adapter.view.FriendSessionView_;
 import estimeet.meetup.ui.adapter.view.SimpleHeaderView;
 import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
 
@@ -28,6 +29,7 @@ import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
 public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener {
     private static final int VIEWTYPE_SECTION = 0;
     private static final int VIEWTYPE_ITEM = 1;
+    private static final int VIEWTYPE_SESSION = 2;
 
     private Context context;
 
@@ -98,17 +100,32 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     public int getItemViewType(int position) {
         if (isSection(position)) {
             return VIEWTYPE_SECTION;
+        } else if (isFirstSection(position)) {
+            return VIEWTYPE_SESSION;
         } else {
             return VIEWTYPE_ITEM;
         }
     }
 
-    @Override
-    public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
-        return viewType == VIEWTYPE_SECTION ? new ViewWrapper(SimpleHeaderView_.build(context))
-                                            : new ViewWrapper(FriendListView_.build(context));
+    //first section ---> sectionpos > 1 (multiple sections) &&
+    //get section pos from sectionhash name value pair
+    private boolean isFirstSection(int position) {
+        return sectionPos.size() > 1 && sectionHash.get(position) == 1;
     }
 
+    @Override
+    public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case VIEWTYPE_SECTION:
+                return new ViewWrapper(SimpleHeaderView_.build(context));
+            case VIEWTYPE_ITEM:
+                return new ViewWrapper(FriendListView_.build(context));
+            case VIEWTYPE_SESSION:
+                return new ViewWrapper(FriendSessionView_.build(context));
+            default:
+                throw new RuntimeException("invalid view type exception");
+        }
+    }
     //endregion
 
     //region item touch listener
