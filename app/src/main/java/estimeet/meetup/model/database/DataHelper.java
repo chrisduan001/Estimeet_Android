@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.User;
 
 /**
@@ -39,28 +40,10 @@ public class DataHelper {
         return userId;
     }
 
-    public void deleteUserData(int userId) {
-        contentResolver.delete(SqliteContract.Users.CONTENT_URI, null, null);
-    }
-
-    /**
-     * single user
-     * @param user
-     */
-    public void insertUserData(User user) {
-        contentResolver.insert(SqliteContract.Users.CONTENT_URI, user.toContentValues());
-    }
-    /**
-     * multiple users
-     */
-
-    public void insertUsersData(List<User> users) {
-        ContentValues[] userValues = new ContentValues[users.size()];
-        for (int i=0; i < users.size(); i++) {
-            userValues[i] = users.get(i).toContentValues();
+    public void insertFriend(Friend friend) {
+        if (getFriend(friend.id) == null) {
+            contentResolver.insert(SqliteContract.Friends.CONTENT_URI, friend.toContentValues());
         }
-
-        contentResolver.bulkInsert(SqliteContract.Users.CONTENT_URI, userValues);
     }
 
     public void insertFriendsData(List<Friend> friends) {
@@ -72,31 +55,20 @@ public class DataHelper {
         contentResolver.bulkInsert(SqliteContract.Friends.CONTENT_URI, userValues);
     }
 
-    public void insertFriend(Friend friend) {
-        if (getFriend(friend.id) == null) {
-            contentResolver.insert(SqliteContract.Friends.CONTENT_URI, friend.toContentValues());
-        }
-    }
-
     public void updateFriendData(Friend friend) {
         ContentValues value = friend.toContentValues();
         contentResolver.update(SqliteContract.Friends.buildFriendUri(friend.id), value, null, null);
     }
 
-    public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        Cursor cursor = contentResolver.query(SqliteContract.Users.CONTENT_URI, UserQuery.PROJECTION,
-                null, null, null);
-
+    public Friend getFriend(int id) {
+        Cursor cursor = contentResolver.query(SqliteContract.Friends.CONTENT_URI, FriendQuery.PROJECTION,
+                SqliteContract.FriendColumns.ID + " = " + id, null, null);
         if (cursor == null) throw new RuntimeException("Cursor can't be null");
-        while (cursor.moveToNext()) {
-            User user = User.fromCursor(cursor);
-            users.add(user);
-        }
+
+        Friend friend = cursor.moveToFirst() ? Friend.fromCursor(cursor) : null;
 
         cursor.close();
-
-        return users;
+        return friend;
     }
 
     public List<Friend> getAllFriends() {
@@ -113,11 +85,28 @@ public class DataHelper {
         return friends;
     }
 
-    public Friend getFriend(int id) {
-        Cursor cursor = contentResolver.query(SqliteContract.Friends.CONTENT_URI, FriendQuery.PROJECTION,
-                SqliteContract.FriendColumns.ID + " = " + id, null, null);
+    public void insertSession(FriendSession friendSession) {
+        if (getFriendSession(friendSession.getFriendId()) != null) {
+            updateSession(friendSession);
+            return;
+        }
+        contentResolver.insert(SqliteContract.Sessions.CONTENT_URI, friendSession.toContentValues());
+    }
+
+    public void updateSession(FriendSession friendSession) {
+        ContentValues contentValues = friendSession.toContentValues();
+        contentResolver.update(SqliteContract.Sessions.buildSessionUri(friendSession.getFriendId()), contentValues, null, null);
+    }
+
+    public FriendSession getFriendSession(int friendId) {
+        Cursor cursor = contentResolver.query(SqliteContract.Sessions.CONTENT_URI, SessionQuery.PROJECTION,
+                SqliteContract.SessionColumns.FRIEND_ID + " = " + friendId, null, null);
         if (cursor == null) throw new RuntimeException("Cursor can't be null");
-        return cursor.moveToFirst() ? Friend.fromCursor(cursor) : null;
+
+        FriendSession friendSession = cursor.moveToFirst() ? FriendSession.fromCursor(cursor) : null;
+        cursor.close();
+
+        return friendSession;
     }
 
     public void updateUser(User user, int userId) {
@@ -167,5 +156,31 @@ public class DataHelper {
         int IMAGE_URI = 4;
         int IMAGE = 5;
         int FAVOURITE = 6;
+    }
+
+    public interface SessionQuery {
+        String[] PROJECTION = {
+                BaseColumns._ID,
+                SqliteContract.SessionColumns.SESSION_ID,
+                SqliteContract.SessionColumns.SESSION_LID,
+                SqliteContract.SessionColumns.FRIEND_ID,
+                SqliteContract.SessionColumns.DATE_CREATED,
+                SqliteContract.SessionColumns.EXPIRE_MINUTES,
+                SqliteContract.SessionColumns.SESSION_DISTANCE,
+                SqliteContract.SessionColumns.SESSION_ETA,
+                SqliteContract.SessionColumns.SESSION_LOCATION,
+                SqliteContract.SessionColumns.SESSION_TYPE
+        };
+
+        int B_ID = 0;
+        int SESSION_ID = 1;
+        int SESSION_LID = 2;
+        int FRIEND_ID = 3;
+        int DATE_CREATED = 4;
+        int EXPIRE_MINUTES = 5;
+        int SESSION_DISTANCE = 6;
+        int SESSION_ETA = 7;
+        int SESSION_LOCATION = 8;
+        int SESSION_TYPE = 9;
     }
 }

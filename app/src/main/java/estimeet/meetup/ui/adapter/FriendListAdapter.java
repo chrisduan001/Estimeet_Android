@@ -19,6 +19,7 @@ import estimeet.meetup.ui.adapter.util.ItemTouchListener;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.FriendListView;
 import estimeet.meetup.ui.adapter.view.FriendListView_;
+import estimeet.meetup.ui.adapter.view.FriendSessionView;
 import estimeet.meetup.ui.adapter.view.FriendSessionView_;
 import estimeet.meetup.ui.adapter.view.SimpleHeaderView;
 import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
@@ -52,6 +53,9 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         if (view instanceof SimpleHeaderView) {
             SimpleHeaderView headerView = (SimpleHeaderView) view;
             headerView.bindHeader(context.getString(R.string.friend_header));
+        } else if (view instanceof FriendSessionView) {
+            FriendSessionView sessionView = (FriendSessionView) view;
+
         } else {
             FriendListView friendView = (FriendListView)view;
             Friend friend = Friend.fromCursor(cursor);

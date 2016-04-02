@@ -24,6 +24,9 @@ public class SqliteProvider extends ContentProvider {
     private static final int FRIENDS = 200;
     private static final int FRIENDS_ID = 201;
 
+    private static final int SESSIONS = 300;
+    private static final int SESSIONS_FRIEND_ID = 301;
+
     private SqliteHelper sqliteHelper;
 
     private static UriMatcher buildUriMatcher() {
@@ -35,6 +38,9 @@ public class SqliteProvider extends ContentProvider {
 
         matcher.addURI(authority, "Friends", FRIENDS);
         matcher.addURI(authority, "Friends/*", FRIENDS_ID);
+
+        matcher.addURI(authority, "Sessions", SESSIONS);
+        matcher.addURI(authority, "Sessions/*", SESSIONS_FRIEND_ID);
 
         return matcher;
     }
@@ -65,6 +71,15 @@ public class SqliteProvider extends ContentProvider {
                 final String id = SqliteContract.Friends.getFriendId(uri);
                 return builder.table(SqliteContract.Tables.FRIENDS)
                         .where(SqliteContract.UserColumns.ID + "=?", id);
+            }
+
+            case SESSIONS: {
+                return builder.table(SqliteContract.Tables.SESSIONS);
+            }
+            case SESSIONS_FRIEND_ID: {
+                final String id = SqliteContract.Sessions.getFriendId(uri);
+                return builder.table(SqliteContract.Tables.SESSIONS)
+                        .where(SqliteContract.SessionColumns.FRIEND_ID + "=?", id);
             }
 
             default:
@@ -118,6 +133,12 @@ public class SqliteProvider extends ContentProvider {
                 return SqliteContract.Friends.buildFriendUri(values.getAsInteger(SqliteContract.FriendColumns.ID));
             }
 
+            case SESSIONS: {
+                db.replaceOrThrow(SqliteContract.Tables.SESSIONS, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return SqliteContract.Sessions.buildSessionUri(values.getAsInteger(SqliteContract.SessionColumns.FRIEND_ID));
+            }
+
             default: {
                 throw new UnsupportedOperationException("Unknown insert uri: " + uri);
             }
@@ -139,6 +160,11 @@ public class SqliteProvider extends ContentProvider {
 
             case FRIENDS: {
                 table = SqliteContract.Tables.FRIENDS;
+                break;
+            }
+
+            case SESSIONS: {
+                table = SqliteContract.Tables.SESSIONS;
                 break;
             }
 

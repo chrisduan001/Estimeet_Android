@@ -13,6 +13,7 @@ public class SqliteContract {
     public interface Tables {
         String USERS = "Users";
         String FRIENDS = "Friends";
+        String SESSIONS = "Sessions";
     }
 
     public interface UserColumns {
@@ -28,6 +29,18 @@ public class SqliteContract {
         String IMAGE_URI = "ImageUri";
         String IMAGE = "Image";
         String FAVOURITE = "Favourite";
+    }
+
+    public interface SessionColumns {
+        String SESSION_ID = "ID";
+        String FRIEND_ID = "FriendId";
+        String SESSION_LID = "SessionLId";
+        String DATE_CREATED = "DateCreated";
+        String EXPIRE_MINUTES = "TimeToExpire";
+        String SESSION_DISTANCE = "Distance";
+        String SESSION_ETA = "ETA";
+        String SESSION_LOCATION = "Location";
+        String SESSION_TYPE = "Type";
     }
 
     public static class Users implements UserColumns {
@@ -50,6 +63,20 @@ public class SqliteContract {
         public static final String DEFAULT_SORT = FriendColumns.USER_NAME;
 
         public static Uri buildFriendUri(int id) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        public static String getFriendId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+    public static class Sessions implements SessionColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(Tables.SESSIONS).build();
+
+        public static final String DEFAULT_SORT = SessionColumns.DATE_CREATED;
+
+        public static Uri buildSessionUri(int id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
         }
 
