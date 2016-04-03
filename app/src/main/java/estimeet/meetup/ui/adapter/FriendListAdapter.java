@@ -58,10 +58,12 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     public void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position) {
         View view = holder.getView();
 
-        if (view instanceof SimpleHeaderView) {
+        if (isSection(position)) {
             SimpleHeaderView headerView = (SimpleHeaderView) view;
-            headerView.bindHeader(context.getString(R.string.friend_header));
-        } else if (view instanceof FriendSessionView) {
+            headerView.bindHeader(sectionHash.get(position) == FRIEND_HEADER ?
+                    context.getString(R.string.friend_header) :
+                    context.getString(R.string.session_header));
+        } else if (isSession(position)) {
             FriendSessionView sessionView = (FriendSessionView) view;
             sessionView.bindView(FriendSession.fromCursor(cursor));
         } else {
@@ -84,6 +86,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         sectionHash = new HashMap<>();
         sectionPos = new ArrayList<>();
 
+        cursor.moveToPosition(-1);
         int position = 0;
         while (cursor.moveToNext()) {
             int section = FriendSession.getSection(cursor);
@@ -97,6 +100,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             sectionHash.put(position, section);
             position++;
         }
+        currentSection = Integer.MIN_VALUE;
     }
 
     private boolean isNewSectionStarts(int section) {

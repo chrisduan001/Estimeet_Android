@@ -46,6 +46,10 @@ public class MainPresenter extends BasePresenter {
         interactor.onSessionRequest(friendSession);
     }
 
+    public void checkSessionExpiration() {
+        interactor.checkSessionExpiration();
+    }
+
     public void requestData() {
         view.showToastMessage("requested data");
     }

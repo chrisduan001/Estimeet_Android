@@ -1,5 +1,8 @@
 package estimeet.meetup.interactor;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.model.FriendSession;
@@ -29,10 +32,25 @@ public class MainInteractor extends BaseInteractor<User> {
 
     public void onSessionRequest(FriendSession session) {
         session.setType(FriendListAdapter.SENT_SESSION);
-        session.setTimeToExpire(5);
+        session.setTimeToExpire(1);
         session.setDateCreated(System.currentTimeMillis());
         session.setSessionFriendId(session.getFriendId());
         dataHelper.insertSession(session);
+    }
+
+    public void checkSessionExpiration() {
+        List<FriendSession> sessions = dataHelper.getAllActiveSession();
+
+        for (FriendSession session: sessions) {
+            if (System.currentTimeMillis() > session.getDateCreated()
+                    + TimeUnit.MINUTES.toMillis(session.getTimeToExpire())) {
+                onSessionFinished(session.getFriendId());
+            }
+        }
+    }
+
+    public void onSessionFinished(int friendId) {
+        dataHelper.deleteSession(friendId);
     }
     //endregion
 

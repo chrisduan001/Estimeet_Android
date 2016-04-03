@@ -27,6 +27,7 @@ public class SqliteProvider extends ContentProvider {
 
     private static final int SESSIONS = 300;
     private static final int SESSIONS_FRIEND_ID = 301;
+    private static final int SESSIONS_ACTIVE = 302;
 
     private SqliteHelper sqliteHelper;
 

@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import android.support.v4.app.NavUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,25 @@ public class DataHelper {
         cursor.close();
 
         return friendSession;
+    }
+
+    public List<FriendSession> getAllActiveSession() {
+        List<FriendSession> sessions = new ArrayList<>();
+        Cursor cursor = contentResolver.query(SqliteContract.Sessions.CONTENT_URI,
+                FriendSessionQuery.PROJECTION, SqliteContract.Sessions.FRIEND_ID + "!=?",
+                new String[]{"0"}, null);
+
+        if (cursor == null) throw new RuntimeException("Cursor can't be null");
+        while (cursor.moveToNext()) {
+            sessions.add(FriendSession.fromCursor(cursor));
+        }
+
+        cursor.close();
+        return sessions;
+    }
+
+    public void deleteSession(int friendId) {
+        contentResolver.delete(SqliteContract.Sessions.buildSessionUri(friendId), null, null);
     }
 
     public void updateUser(User user, int userId) {

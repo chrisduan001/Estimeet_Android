@@ -6,7 +6,7 @@ import dagger.Component;
 import estimeet.meetup.di.Modules.ManageFriendModule;
 import estimeet.meetup.di.PerActivity;
 import estimeet.meetup.model.User;
-import estimeet.meetup.ui.fragment.ManageManageFriendFragment;
+import estimeet.meetup.ui.fragment.ManageFriendFragment;
 
 /**
  * Created by AmyDuan on 15/03/16.
@@ -14,7 +14,7 @@ import estimeet.meetup.ui.fragment.ManageManageFriendFragment;
 @PerActivity
 @Component(dependencies = ApplicationComponent.class, modules = ManageFriendModule.class)
 public interface ManageFriendComponent {
-    void inject(ManageManageFriendFragment fragment);
+    void inject(ManageFriendFragment fragment);
 
     @Named("currentUser") User user();
 }

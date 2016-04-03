@@ -1,5 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -24,8 +25,11 @@ import estimeet.meetup.ui.presenter.ManageFriendPresenter;
  * Created by AmyDuan on 15/03/16.
  */
 @EFragment(R.layout.fragment_manage_friend)
-public class ManageManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView,
+public class ManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView,
         LoaderManager.LoaderCallbacks<Cursor>, ManageFriendListAdapter.ManageFriendAdapterCallback {
+
+    public static final int ACTIVITY_RESULT = 1000;
+    public static final String RESULT_MESSAGE = "DATA";
 
     @Inject ManageFriendPresenter presenter;
 
@@ -45,6 +49,8 @@ public class ManageManageFriendFragment extends BaseFragment implements ManageFr
 
         initRecyclerView();
         initFriendCursor();
+
+        getActivity().setResult(ACTIVITY_RESULT, getActivity().getIntent().putExtra(RESULT_MESSAGE, false));
     }
 
     private void initialize() {
@@ -57,6 +63,7 @@ public class ManageManageFriendFragment extends BaseFragment implements ManageFr
         manageFriendListAdapter.setCursor(null);
         recyclerView.setAdapter(manageFriendListAdapter);
     }
+
     //endregion
 
     //region presenter callback
@@ -121,8 +128,7 @@ public class ManageManageFriendFragment extends BaseFragment implements ManageFr
     @Override
     public void onUpdateFriend(Friend friend) {
         presenter.onUpdateFriend(friend);
+        getActivity().setResult(ACTIVITY_RESULT, getActivity().getIntent().putExtra(RESULT_MESSAGE, true));
     }
-
-
     //endregion
 }

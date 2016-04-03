@@ -30,6 +30,7 @@
     <string name="toolbar_search">search</string>
     <string name="friend_recommend_friend">Recommended Friends</string>
     <string name="friend_header">Friends</string>
+    <string name="session_header">Active</string>
     <string name="profile_title_mobile_number">Mobile Number:</string>
     <string name="fab_manage_friends">Manage Friends</string>
     <string name="fab_profile">Profile</string>

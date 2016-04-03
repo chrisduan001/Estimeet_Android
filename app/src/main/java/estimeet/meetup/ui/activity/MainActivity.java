@@ -1,5 +1,6 @@
 package estimeet.meetup.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.fragment.MainFragment;
 import estimeet.meetup.ui.fragment.MainFragment_;
+import estimeet.meetup.ui.fragment.ManageFriendFragment;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -48,6 +50,16 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
             this.finish();
         } else {
             replaceFragment(R.id.container, new MainFragment_());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ManageFriendFragment.ACTIVITY_RESULT) {
+            if (data.getBooleanExtra(ManageFriendFragment.RESULT_MESSAGE, false)) {
+                ((MainFragment)getSupportFragmentManager().getFragments().get(0)).restartFriendCursor();
+            }
         }
     }
 
@@ -86,7 +98,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
     @Override
     public void navToFriendList() {
-        ManageFriendActivity_.intent(this).start();
+        ManageFriendActivity_.intent(this).startForResult(ManageFriendFragment.ACTIVITY_RESULT);
     }
 
     @Override

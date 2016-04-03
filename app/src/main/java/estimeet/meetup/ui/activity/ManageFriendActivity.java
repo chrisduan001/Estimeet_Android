@@ -18,7 +18,7 @@ import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.Modules.ManageFriendModule;
 import estimeet.meetup.di.components.DaggerManageFriendComponent;
 import estimeet.meetup.di.components.ManageFriendComponent;
-import estimeet.meetup.ui.fragment.ManageManageFriendFragment_;
+import estimeet.meetup.ui.fragment.ManageFriendFragment_;
 
 /**
  * Created by AmyDuan on 13/03/16.
@@ -37,7 +37,7 @@ public class ManageFriendActivity extends BaseActivity implements HasComponent<M
         super.onCreate(savedInstanceState);
         initializeInjector();
 
-        replaceFragment(R.id.container, new ManageManageFriendFragment_());
+        replaceFragment(R.id.container, new ManageFriendFragment_());
     }
 
     @Override

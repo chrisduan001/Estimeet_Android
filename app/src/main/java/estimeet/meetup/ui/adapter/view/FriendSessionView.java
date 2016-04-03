@@ -1,14 +1,18 @@
 package estimeet.meetup.ui.adapter.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
@@ -47,6 +51,8 @@ public class FriendSessionView extends RelativeLayout {
             default:
                 throw new RuntimeException("invalid session type");
         }
+
+        loadImageAsync(friendSession.getFriendDp());
     }
 
     private void setupPendingSessionView(FriendSession friendSession) {
@@ -63,15 +69,14 @@ public class FriendSessionView extends RelativeLayout {
     }
 
     private void setViewVisibility(int type) {
-        dpImage.setImageBitmap(null);
         switch (type) {
             case FriendListAdapter.SENT_SESSION:
                 setVisibility(GONE, activeSessionView, actionGroup);
-                setVisibility(VISIBLE, friendName, sentMessage);
+                setVisibility(VISIBLE, pendingSession, friendName, sentMessage);
                 break;
             case FriendListAdapter.RECEIVED_SESSION:
                 setVisibility(GONE, activeSessionView, sentMessage);
-                setVisibility(VISIBLE, friendName, actionGroup);
+                setVisibility(VISIBLE, pendingSession, friendName, actionGroup);
                 break;
             case FriendListAdapter.ACTIVE_SESSION:
                 setVisibility(GONE, pendingSession);
@@ -99,5 +104,16 @@ public class FriendSessionView extends RelativeLayout {
     @Click(R.id.action_ignore_request)
     protected void onIgnoreRequest() {
 
+    }
+
+    @Background
+    void loadImageAsync(byte[] image) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        displayImage(bitmap);
+    }
+
+    @UiThread
+    void displayImage(Bitmap bitmap) {
+        dpImage.setImageBitmap(bitmap);
     }
 }

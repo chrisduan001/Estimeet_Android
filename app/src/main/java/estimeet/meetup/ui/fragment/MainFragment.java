@@ -1,6 +1,7 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -138,6 +139,12 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public void onResume() {
         super.onResume();
+        checkSession();
+    }
+
+    @Background
+    void checkSession() {
+        presenter.checkSessionExpiration();
     }
 
     @Override
@@ -154,6 +161,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     //region cursor loader
     private void initFriendCursor() {
         getActivity().getSupportLoaderManager().initLoader(MAINCURSORLOADER, null, this);
+    }
+
+    //in case that user add friend or delete friend from managefriendfragment
+    public void restartFriendCursor() {
+        getActivity().getSupportLoaderManager().restartLoader(MAINCURSORLOADER, null, this);
     }
 
     @Override
