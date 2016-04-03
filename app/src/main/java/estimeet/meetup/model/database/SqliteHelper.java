@@ -16,7 +16,7 @@ import static estimeet.meetup.model.database.SqliteContract.SessionColumns;
 public class SqliteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "meetup.db";
-    private static final int DATABASE_VERSION = 108;
+    private static final int DATABASE_VERSION = 109;
 
     public SqliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,6 +46,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + SessionColumns.SESSION_LID + " INTEGER,"
             + SessionColumns.DATE_CREATED + " INTEGER NOT NULL,"
             + SessionColumns.EXPIRE_MINUTES + " INTEGER NOT NULL,"
+            + SessionColumns.SESSION_REQUESTED_TIME + " TEXT,"
             + SessionColumns.SESSION_DISTANCE + " TEXT,"
             + SessionColumns.SESSION_ETA + " TEXT,"
             + SessionColumns.SESSION_LOCATION + " TEXT,"

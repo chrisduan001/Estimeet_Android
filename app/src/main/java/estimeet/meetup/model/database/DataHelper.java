@@ -217,9 +217,10 @@ public class DataHelper {
                 SqliteContract.SessionColumns.SESSION_ETA,
                 SqliteContract.SessionColumns.SESSION_LOCATION,
                 SqliteContract.SessionColumns.SESSION_TYPE,
+                SqliteContract.SessionColumns.SESSION_REQUESTED_TIME,
                 SqliteContract.FriendColumns.IMAGE,
                 SqliteContract.FriendColumns.USER_NAME,
-                SqliteContract.FriendColumns.ID
+                SqliteContract.FriendColumns.ID,
         };
 
         int B_ID = 0;
@@ -232,8 +233,9 @@ public class DataHelper {
         int SESSION_ETA = 7;
         int SESSION_LOCATION = 8;
         int SESSION_TYPE = 9;
-        int FRIEND_IMAGE = 10;
-        int FRIEND_NAME = 11;
-        int FRIEND_ID = 12;
+        int SESSION_REQUESTED_TIME = 10;
+        int FRIEND_IMAGE = 11;
+        int FRIEND_NAME = 12;
+        int FRIEND_ID = 13;
     }
 }

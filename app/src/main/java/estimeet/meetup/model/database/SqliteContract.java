@@ -37,6 +37,7 @@ public class SqliteContract {
         String SESSION_LID = "SessionLId";
         String DATE_CREATED = "DateCreated";
         String EXPIRE_MINUTES = "TimeToExpire";
+        String SESSION_REQUESTED_TIME = "RequestedTime";
         String SESSION_DISTANCE = "Distance";
         String SESSION_ETA = "ETA";
         String SESSION_LOCATION = "Location";

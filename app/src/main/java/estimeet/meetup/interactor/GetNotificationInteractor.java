@@ -86,11 +86,12 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
         private void processSessionRequest(String appendix) {
             String[] appendixArray = appendix.split(",");
             int friendId = Integer.parseInt(appendixArray[0]);
+            //// TODO: 3/04/16 server need to give a string with following format "15 minutes"
             //request length to share
-            int length = Integer.parseInt(appendixArray[1]);
+            String length = appendixArray[1];
 
             if (dataHelper.getFriend(friendId) != null) {
-                dataHelper.insertSession(SessionFactory.createPendingSession(friendId));
+                dataHelper.insertSession(SessionFactory.createPendingSession(friendId, length));
             }
         }
 
@@ -99,7 +100,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
             int friendId = Integer.parseInt(appendixArray[0]);
             int sessionId = Integer.parseInt(appendixArray[1]);
             long sessionLId = Long.parseLong(appendixArray[2]);
-
+            //// TODO: 3/04/16 server need to provide expire time in milliseconds (time to expire in millis = time to expire in millis - (time notification received - time session created)
             if (dataHelper.getFriend(friendId) != null) {
                 dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId, sessionLId));
             }

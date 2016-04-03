@@ -22,6 +22,7 @@ public class FriendSession {
     private String friendName;
     private byte[] friendDp;
     private int friendId;
+    private String requestedTime;
 
     public int getSessionId() {
         return sessionId;
@@ -119,6 +120,14 @@ public class FriendSession {
         this.friendId = friendId;
     }
 
+    public String getRequestedTime() {
+        return requestedTime;
+    }
+
+    public void setRequestedTime(String requestedTime) {
+        this.requestedTime = requestedTime;
+    }
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(9);
         contentValues.put(SqliteContract.SessionColumns.SESSION_ID, getSessionId());
@@ -130,6 +139,7 @@ public class FriendSession {
         contentValues.put(SqliteContract.SessionColumns.SESSION_ETA, getEta());
         contentValues.put(SqliteContract.SessionColumns.SESSION_LOCATION, getLocation());
         contentValues.put(SqliteContract.SessionColumns.SESSION_TYPE, getType());
+        contentValues.put(SqliteContract.SessionColumns.SESSION_REQUESTED_TIME, getRequestedTime());
         return contentValues;
     }
 
@@ -148,6 +158,7 @@ public class FriendSession {
         friendSession.setFriendName(cursor.getString(DataHelper.FriendSessionQuery.FRIEND_NAME));
         friendSession.setFriendDp(cursor.getBlob(DataHelper.FriendSessionQuery.FRIEND_IMAGE));
         friendSession.setFriendId(cursor.getInt(DataHelper.FriendSessionQuery.FRIEND_ID));
+        friendSession.setRequestedTime(cursor.getString(DataHelper.FriendSessionQuery.SESSION_REQUESTED_TIME));
         return friendSession;
     }
 
