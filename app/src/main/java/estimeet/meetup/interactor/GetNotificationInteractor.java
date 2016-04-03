@@ -5,13 +5,16 @@ import javax.inject.Named;
 
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import estimeet.meetup.ui.adapter.FriendListAdapter;
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by AmyDuan on 29/03/16.
@@ -52,10 +55,10 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                         processFriendRequest(entity.appendix);
                         break;
                     case NOTIFICATION_SESSION_REQUEST:
-                        processSessionRequest();
+                        processSessionRequest(entity.appendix);
                         break;
                     case NOTIFICATION_SESSION_ACCEPTANCE:
-                        createNewSession();
+                        createNewSession(entity.appendix);
                         break;
                 }
             }
@@ -80,12 +83,26 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
             dataHelper.insertFriend(friend);
         }
 
-        private void processSessionRequest() {
+        private void processSessionRequest(String appendix) {
+            String[] appendixArray = appendix.split(",");
+            int friendId = Integer.parseInt(appendixArray[0]);
+            //request length to share
+            int length = Integer.parseInt(appendixArray[1]);
 
+            if (dataHelper.getFriend(friendId) != null) {
+                dataHelper.insertSession(SessionFactory.createPendingSession(friendId));
+            }
         }
 
-        private void createNewSession() {
+        private void createNewSession(String appendix) {
+            String[] appendixArray = appendix.split(",");
+            int friendId = Integer.parseInt(appendixArray[0]);
+            int sessionId = Integer.parseInt(appendixArray[1]);
+            long sessionLId = Long.parseLong(appendixArray[2]);
 
+            if (dataHelper.getFriend(friendId) != null) {
+                dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId, sessionLId));
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ public class FriendSession {
     private long sessionLId;
     private int sessionFriendId;
     private long dateCreated;
-    private int timeToExpire;
+    private long timeToExpire;
     private String distance;
     private String eta;
     private String location;
@@ -55,11 +55,11 @@ public class FriendSession {
         this.dateCreated = dateCreated;
     }
 
-    public int getTimeToExpire() {
+    public long getTimeToExpire() {
         return timeToExpire;
     }
 
-    public void setTimeToExpire(int timeToExpire) {
+    public void setTimeToExpire(long timeToExpire) {
         this.timeToExpire = timeToExpire;
     }
 
@@ -140,7 +140,7 @@ public class FriendSession {
         //this value is 0 when user start a friend request
         friendSession.setSessionFriendId(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_FRIEND_ID));
         friendSession.setDateCreated(cursor.getLong(DataHelper.FriendSessionQuery.DATE_CREATED));
-        friendSession.setTimeToExpire(cursor.getInt(DataHelper.FriendSessionQuery.EXPIRE_MINUTES));
+        friendSession.setTimeToExpire(cursor.getLong(DataHelper.FriendSessionQuery.EXPIRE_MINUTES));
         friendSession.setDistance(cursor.getString(DataHelper.FriendSessionQuery.SESSION_DISTANCE));
         friendSession.setEta(cursor.getString(DataHelper.FriendSessionQuery.SESSION_ETA));
         friendSession.setLocation(cursor.getString(DataHelper.FriendSessionQuery.SESSION_LOCATION));

@@ -2,6 +2,7 @@ package estimeet.meetup.ui.presenter;
 
 import javax.inject.Inject;
 
+import estimeet.meetup.interactor.GetNotificationInteractor;
 import estimeet.meetup.interactor.MainInteractor;
 import estimeet.meetup.interactor.PushInteractor;
 import estimeet.meetup.model.FriendSession;
@@ -16,16 +17,19 @@ public class MainPresenter extends BasePresenter {
 
     @Inject MainInteractor interactor;
     @Inject PushInteractor pushInteractor;
+    @Inject GetNotificationInteractor notificationInteractor;
 
     @Inject
-    public MainPresenter(MainInteractor interactor, PushInteractor pushInteractor) {
+    public MainPresenter(MainInteractor interactor, PushInteractor pushInteractor,
+                         GetNotificationInteractor notificationInteractor) {
         this.interactor = interactor;
         this.pushInteractor = pushInteractor;
+        this.notificationInteractor = notificationInteractor;
     }
 
     @Override
     public void onResume() {
-
+        notificationInteractor.getNotifications();
     }
 
     @Override

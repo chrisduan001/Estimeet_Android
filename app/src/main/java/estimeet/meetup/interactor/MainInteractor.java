@@ -31,10 +31,7 @@ public class MainInteractor extends BaseInteractor<User> {
     }
 
     public void onSessionRequest(FriendSession session) {
-        session.setType(FriendListAdapter.SENT_SESSION);
-        session.setTimeToExpire(1);
-        session.setDateCreated(System.currentTimeMillis());
-        session.setSessionFriendId(session.getFriendId());
+        SessionFactory.createRequestedSession(session);
         dataHelper.insertSession(session);
     }
 
@@ -42,8 +39,7 @@ public class MainInteractor extends BaseInteractor<User> {
         List<FriendSession> sessions = dataHelper.getAllActiveSession();
 
         for (FriendSession session: sessions) {
-            if (System.currentTimeMillis() > session.getDateCreated()
-                    + TimeUnit.MINUTES.toMillis(session.getTimeToExpire())) {
+            if (System.currentTimeMillis() > session.getDateCreated() + session.getTimeToExpire()) {
                 onSessionFinished(session.getFriendId());
             }
         }
