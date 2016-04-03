@@ -61,8 +61,8 @@ public class DataHelper {
     }
 
     public Friend getFriend(int id) {
-        Cursor cursor = contentResolver.query(SqliteContract.Friends.CONTENT_URI, FriendQuery.PROJECTION,
-                SqliteContract.FriendColumns.ID + " = " + id, null, null);
+        Cursor cursor = contentResolver.query(SqliteContract.Friends.buildFriendUri(id), FriendQuery.PROJECTION,
+                null, null, null);
         if (cursor == null) throw new RuntimeException("Cursor can't be null");
 
         Friend friend = cursor.moveToFirst() ? Friend.fromCursor(cursor) : null;
@@ -85,22 +85,23 @@ public class DataHelper {
         return friends;
     }
 
-    public void insertSession(FriendSession friendSession) {
-        if (getFriendSession(friendSession.getFriendId()) != null) {
-            updateSession(friendSession);
+    public void insertSession(FriendSession session) {
+        if (getSession(session.getSessionFriendId()) != null) {
+            updateSession(session);
             return;
         }
-        contentResolver.insert(SqliteContract.Sessions.CONTENT_URI, friendSession.toContentValues());
+        contentResolver.insert(SqliteContract.Sessions.CONTENT_URI, session.toContentValues());
     }
 
     public void updateSession(FriendSession friendSession) {
         ContentValues contentValues = friendSession.toContentValues();
-        contentResolver.update(SqliteContract.Sessions.buildSessionUri(friendSession.getFriendId()), contentValues, null, null);
+        contentResolver.update(SqliteContract.Sessions.buildSessionUri(friendSession.getSessionFriendId()), contentValues, null, null);
     }
 
-    public FriendSession getFriendSession(int friendId) {
-        Cursor cursor = contentResolver.query(SqliteContract.Sessions.CONTENT_URI, SessionQuery.PROJECTION,
-                SqliteContract.SessionColumns.FRIEND_ID + " = " + friendId, null, null);
+    public FriendSession getSession(int id) {
+        Cursor cursor = contentResolver.query(SqliteContract.Sessions.CONTENT_URI,
+                FriendSessionQuery.PROJECTION, SqliteContract.Sessions.FRIEND_ID + "=?",
+                new String[]{id + ""}, null);
         if (cursor == null) throw new RuntimeException("Cursor can't be null");
 
         FriendSession friendSession = cursor.moveToFirst() ? FriendSession.fromCursor(cursor) : null;
@@ -161,6 +162,32 @@ public class DataHelper {
     public interface SessionQuery {
         String[] PROJECTION = {
                 BaseColumns._ID,
+                SqliteContract.SessionColumns.FRIEND_ID,
+                SqliteContract.SessionColumns.SESSION_ID,
+                SqliteContract.SessionColumns.SESSION_LID,
+                SqliteContract.SessionColumns.DATE_CREATED,
+                SqliteContract.SessionColumns.EXPIRE_MINUTES,
+                SqliteContract.SessionColumns.SESSION_DISTANCE,
+                SqliteContract.SessionColumns.SESSION_ETA,
+                SqliteContract.SessionColumns.SESSION_LOCATION,
+                SqliteContract.SessionColumns.SESSION_TYPE,
+        };
+
+        int B_ID = 0;
+        int FRIEND_ID = 1;
+        int SESSION_ID = 2;
+        int SESSION_LID = 3;
+        int DATE_CREATED = 4;
+        int EXPIRE_MINUTES = 5;
+        int SESSION_DISTANCE = 6;
+        int SESSION_ETA = 7;
+        int SESSION_LOCATION = 8;
+        int SESSION_TYPE = 9;
+    }
+
+    public interface FriendSessionQuery {
+        String[] PROJECTION = {
+                "S." + BaseColumns._ID,
                 SqliteContract.SessionColumns.SESSION_ID,
                 SqliteContract.SessionColumns.SESSION_LID,
                 SqliteContract.SessionColumns.FRIEND_ID,
@@ -169,18 +196,24 @@ public class DataHelper {
                 SqliteContract.SessionColumns.SESSION_DISTANCE,
                 SqliteContract.SessionColumns.SESSION_ETA,
                 SqliteContract.SessionColumns.SESSION_LOCATION,
-                SqliteContract.SessionColumns.SESSION_TYPE
+                SqliteContract.SessionColumns.SESSION_TYPE,
+                SqliteContract.FriendColumns.IMAGE,
+                SqliteContract.FriendColumns.USER_NAME,
+                SqliteContract.FriendColumns.ID
         };
 
         int B_ID = 0;
         int SESSION_ID = 1;
         int SESSION_LID = 2;
-        int FRIEND_ID = 3;
+        int SESSION_FRIEND_ID = 3;
         int DATE_CREATED = 4;
         int EXPIRE_MINUTES = 5;
         int SESSION_DISTANCE = 6;
         int SESSION_ETA = 7;
         int SESSION_LOCATION = 8;
         int SESSION_TYPE = 9;
+        int FRIEND_IMAGE = 10;
+        int FRIEND_NAME = 11;
+        int FRIEND_ID = 12;
     }
 }

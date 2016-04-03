@@ -26,7 +26,7 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter
     private Context context;
     private Picasso picasso;
 
-    private WeakReference<FriendAdapterCallback> callback;
+    private WeakReference<ManageFriendAdapterCallback> callback;
     @Inject
     public ManageFriendListAdapter(Context context, Picasso picasso) {
         this.context = context;
@@ -53,7 +53,7 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter
         return new ViewWrapper(ManageFriendListView_.build(context));
     }
 
-    public void setCallback(FriendAdapterCallback callback) {
+    public void setCallback(ManageFriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }
 
@@ -62,7 +62,7 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter
         callback.get().onUpdateFriend(friend);
     }
 
-    public interface FriendAdapterCallback {
+    public interface ManageFriendAdapterCallback {
         void onUpdateFriend(Friend friend);
     }
 }

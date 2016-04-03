@@ -6,8 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import estimeet.meetup.ui.adapter.FriendListAdapter;
 
 /**
  * Created by AmyDuan on 15/03/16.
@@ -23,8 +26,6 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
      */
     protected HashMap<Integer, Integer> sectionHash;
     protected List<Integer> sectionPos;
-
-    protected int sectionCount = 0;
 
     public void setCursor(Cursor c) {
         init(c);
@@ -58,17 +59,27 @@ public abstract class CursorRecyclerAdapter extends RecyclerView.Adapter<ViewWra
 
     //ignore the section when moving the cursor
     protected int getCursorPosition(int position) {
-        return sectionHash == null ? position : position - sectionHash.get(position);
+        if (sectionPos != null) {
+            int i = 0;
+            for (int pos : sectionPos) {
+                //position is pointing to section or section item
+                if (position > pos) i++;
+            }
+
+            return position - i;
+        }
+        return position;
     }
 
     protected boolean isSection(int position) {
-        return sectionPos != null && sectionPos.contains(position);
+        return sectionHash != null && (sectionHash.get(position) == FriendListAdapter.FRIEND_HEADER
+                || sectionHash.get(position) == FriendListAdapter.SESSION_HEADER);
     }
 
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor!= null) {
-            return mCursor.getCount() + sectionCount;
+            return sectionPos == null ? mCursor.getCount() : mCursor.getCount() + sectionPos.size();
         } else {
             return 0;
         }

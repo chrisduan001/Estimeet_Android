@@ -24,8 +24,8 @@ import estimeet.meetup.ui.presenter.ManageFriendPresenter;
  * Created by AmyDuan on 15/03/16.
  */
 @EFragment(R.layout.fragment_manage_friend)
-public class ManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView,
-        LoaderManager.LoaderCallbacks<Cursor>, ManageFriendListAdapter.FriendAdapterCallback {
+public class ManageManageFriendFragment extends BaseFragment implements ManageFriendPresenter.ManageFriendView,
+        LoaderManager.LoaderCallbacks<Cursor>, ManageFriendListAdapter.ManageFriendAdapterCallback {
 
     @Inject ManageFriendPresenter presenter;
 

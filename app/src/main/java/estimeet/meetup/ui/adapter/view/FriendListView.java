@@ -17,6 +17,7 @@ import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.FriendSession;
 
 /**
  * Created by AmyDuan on 22/03/16.
@@ -29,17 +30,20 @@ public class FriendListView extends RelativeLayout {
     @ViewById(R.id.viewgroup_view)          ViewGroup viewGroupView;
     @ViewById(R.id.request_view)            ViewGroup requestView;
 
+    private FriendSession friendSession;
+
     public FriendListView(Context context) {
         super(context);
     }
 
-    public void bindFriend(Friend friend) {
+    public void bindFriend(FriendSession friend) {
+        friendSession = friend;
         friendName.setVisibility(VISIBLE);
         requestView.setVisibility(GONE);
         viewGroupView.setBackgroundColor(Color.parseColor("#9e9e9e"));
-        friendName.setText(friend.userName);
-        if (friend.image != null) {
-            loadImageAsync(friend.image);
+        friendName.setText(friend.getFriendName());
+        if (friend.getFriendDp() != null) {
+            loadImageAsync(friend.getFriendDp());
         }
     }
 
@@ -47,6 +51,10 @@ public class FriendListView extends RelativeLayout {
         viewGroupView.setBackgroundColor(Color.parseColor("#77a500"));
         requestView.setVisibility(VISIBLE);
         friendName.setVisibility(GONE);
+    }
+
+    public FriendSession getFriendSession() {
+        return friendSession;
     }
 
     @Background

@@ -32,7 +32,7 @@ public class SqliteContract {
     }
 
     public interface SessionColumns {
-        String SESSION_ID = "ID";
+        String SESSION_ID = "SessionID";
         String FRIEND_ID = "FriendId";
         String SESSION_LID = "SessionLId";
         String DATE_CREATED = "DateCreated";
@@ -74,7 +74,7 @@ public class SqliteContract {
     public static class Sessions implements SessionColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(Tables.SESSIONS).build();
 
-        public static final String DEFAULT_SORT = SessionColumns.DATE_CREATED;
+        public static final String DEFAULT_SORT = SessionColumns.DATE_CREATED + " DESC";
 
         public static Uri buildSessionUri(int id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();

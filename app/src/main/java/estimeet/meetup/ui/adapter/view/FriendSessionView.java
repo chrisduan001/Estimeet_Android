@@ -12,16 +12,14 @@ import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
+import estimeet.meetup.model.FriendSession;
+import estimeet.meetup.ui.adapter.FriendListAdapter;
 
 /**
  * Created by AmyDuan on 2/04/16.
  */
 @EViewGroup(R.layout.item_friend_session)
 public class FriendSessionView extends RelativeLayout {
-
-    private static final int SENT_SESSION = 0;
-    private static final int RECEIVED_SESSION = 1;
-    private static final int ACTIVE_SESSION = 2;
 
     @ViewById(R.id.friend_dp)                       ImageView dpImage;
     @ViewById(R.id.pending_session)                 ViewGroup pendingSession;
@@ -37,32 +35,47 @@ public class FriendSessionView extends RelativeLayout {
         super(context);
     }
 
-    public void setupRequestSentView() {
-        setViewVisibility(SENT_SESSION);
+    public void bindView(FriendSession friendSession) {
+        switch (friendSession.getType()) {
+            case FriendListAdapter.SENT_SESSION:
+            case FriendListAdapter.RECEIVED_SESSION:
+                setupPendingSessionView(friendSession);
+                break;
+            case FriendListAdapter.ACTIVE_SESSION:
+                setupSessionInfoView(friendSession);
+                break;
+            default:
+                throw new RuntimeException("invalid session type");
+        }
     }
 
-    public void setupRequestReceivedView() {
-        setViewVisibility(RECEIVED_SESSION);
+    private void setupPendingSessionView(FriendSession friendSession) {
+        friendName.setText(friendSession.getFriendName());
+        setViewVisibility(friendSession.getType() == FriendListAdapter.RECEIVED_SESSION ?
+                FriendListAdapter.RECEIVED_SESSION : FriendListAdapter.SENT_SESSION);
     }
 
-    public void setupSessionInfoView() {
-        setViewVisibility(ACTIVE_SESSION);
+    private void setupSessionInfoView(FriendSession friendSession) {
+        sessionDistance.setText(friendSession.getDistance());
+        sessionEta.setText(friendSession.getEta());
+        sessionLocation.setText(friendSession.getLocation());
+        setViewVisibility(FriendListAdapter.ACTIVE_SESSION);
     }
 
     private void setViewVisibility(int type) {
         dpImage.setImageBitmap(null);
         switch (type) {
-            case SENT_SESSION:
+            case FriendListAdapter.SENT_SESSION:
                 setVisibility(GONE, activeSessionView, actionGroup);
                 setVisibility(VISIBLE, friendName, sentMessage);
                 break;
-            case RECEIVED_SESSION:
+            case FriendListAdapter.RECEIVED_SESSION:
                 setVisibility(GONE, activeSessionView, sentMessage);
                 setVisibility(VISIBLE, friendName, actionGroup);
                 break;
-            case ACTIVE_SESSION:
+            case FriendListAdapter.ACTIVE_SESSION:
                 setVisibility(GONE, pendingSession);
-                setVisibility(VISIBLE, activeSessionView, sessionDistance, sessionEta, sessionLocation);
+                setVisibility(VISIBLE, activeSessionView);
                 break;
         }
     }

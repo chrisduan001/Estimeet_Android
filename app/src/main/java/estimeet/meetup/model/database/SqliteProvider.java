@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by AmyDuan on 27/01/16.
@@ -74,7 +75,9 @@ public class SqliteProvider extends ContentProvider {
             }
 
             case SESSIONS: {
-                return builder.table(SqliteContract.Tables.SESSIONS);
+                return builder.table(SqliteContract.Tables.FRIENDS + " F LEFT JOIN "
+                + SqliteContract.Tables.SESSIONS + " S ON F." + SqliteContract.FriendColumns.ID
+                + " = S." + SqliteContract.SessionColumns.FRIEND_ID);
             }
             case SESSIONS_FRIEND_ID: {
                 final String id = SqliteContract.Sessions.getFriendId(uri);
@@ -96,9 +99,9 @@ public class SqliteProvider extends ContentProvider {
         Context context = getContext();
 
         final SelectionBuilder builder = buildSelection(uri);
-
+        Log.d("Sql command", "query: " + builder.toString());
         Cursor cursor = builder.where(selection, selectionArgs)
-                .query(db, true, projection, sortOrder, null);
+                .query(db, false, projection, sortOrder, null);
 
         if (context != null) {
             cursor.setNotificationUri(context.getContentResolver(), uri);

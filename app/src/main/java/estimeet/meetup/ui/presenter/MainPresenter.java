@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import estimeet.meetup.interactor.MainInteractor;
 import estimeet.meetup.interactor.PushInteractor;
+import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -39,6 +40,10 @@ public class MainPresenter extends BasePresenter {
 
     public void registerPushChannel() {
         pushInteractor.registerPushChannel();
+    }
+
+    public void onSessionRequest(FriendSession friendSession) {
+        interactor.onSessionRequest(friendSession);
     }
 
     public void requestData() {

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import estimeet.meetup.R;
-import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
 import estimeet.meetup.ui.adapter.util.ItemTouchListener;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
@@ -28,17 +28,25 @@ import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
  * Created by AmyDuan on 19/03/16.
  */
 public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener {
+    public static final int SENT_SESSION = 100;
+    public static final int RECEIVED_SESSION = 101;
+    public static final int ACTIVE_SESSION = 102;
+
+    public static final int FRIEND_HEADER = 10;
+    public static final int FRIEND_SECTION = 11;
+    public static final int SESSION_HEADER = 20;
+    public static final int SESSION_SECTION = 21;
+
     private static final int VIEWTYPE_SECTION = 0;
     private static final int VIEWTYPE_ITEM = 1;
     private static final int VIEWTYPE_SESSION = 2;
 
     private Context context;
-
-    private WeakReference<ManageFriendAdapterCallback> callback;
+    private WeakReference<FriendAdapterCallback> callback;
+    private FriendListView viewSwiped = null;
 
     private int itemSelected = Adapter.NO_SELECTION;
-
-    private FriendListView viewSwiped = null;
+    private int currentSection = Integer.MIN_VALUE;
 
     @Inject
     public FriendListAdapter(Context context) {
@@ -55,10 +63,10 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             headerView.bindHeader(context.getString(R.string.friend_header));
         } else if (view instanceof FriendSessionView) {
             FriendSessionView sessionView = (FriendSessionView) view;
-
+            sessionView.bindView(FriendSession.fromCursor(cursor));
         } else {
             FriendListView friendView = (FriendListView)view;
-            Friend friend = Friend.fromCursor(cursor);
+            FriendSession friend = FriendSession.fromCursor(cursor);
             friendView.bindFriend(friend);
 
             if (position == itemSelected) {
@@ -73,29 +81,26 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
      */
     @Override
     public void buildSectionHash(Cursor cursor) {
-        int position = 0;
-        if (cursor.moveToFirst()) {
-            //position + section
-            sectionHash = new HashMap<>();
-            sectionPos = new ArrayList<>();
-            //first header section
-            sectionHash.put(0, 0);
-            sectionCount = 1;
-            sectionPos.add(position);
-            position++;
-            sectionHash.put(position, sectionCount);
-        } else return;
+        sectionHash = new HashMap<>();
+        sectionPos = new ArrayList<>();
 
+        int position = 0;
         while (cursor.moveToNext()) {
-            position ++;
-            if (Friend.isNewSection(cursor)) {
+            int section = FriendSession.getSection(cursor);
+            if (isNewSectionStarts(section)) {
+                //add a section header for new section
+                sectionHash.put(position, section == FRIEND_SECTION ? FRIEND_HEADER : SESSION_HEADER);
+                currentSection = section;
                 sectionPos.add(position);
-                sectionCount++;
-                sectionHash.put(position, sectionCount);
                 position++;
             }
-            sectionHash.put(position, sectionCount);
+            sectionHash.put(position, section);
+            position++;
         }
+    }
+
+    private boolean isNewSectionStarts(int section) {
+        return currentSection != section;
     }
     //endregion
 
@@ -104,17 +109,15 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     public int getItemViewType(int position) {
         if (isSection(position)) {
             return VIEWTYPE_SECTION;
-        } else if (isFirstSection(position)) {
+        } else if (isSession(position)) {
             return VIEWTYPE_SESSION;
         } else {
             return VIEWTYPE_ITEM;
         }
     }
 
-    //first section ---> sectionpos > 1 (multiple sections) &&
-    //get section pos from sectionhash name value pair
-    private boolean isFirstSection(int position) {
-        return sectionPos.size() > 1 && sectionHash.get(position) == 1;
+    private boolean isSession(int position) {
+        return sectionHash.get(position) == SESSION_SECTION;
     }
 
     @Override
@@ -143,13 +146,13 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     @Override
     public void onStopSwipe() {
         if (itemSelected != Adapter.NO_SELECTION) {
-            getCursor().moveToPosition(getCursorPosition(itemSelected));
-            viewSwiped.bindFriend(Friend.fromCursor(getCursor()));
+            viewSwiped.bindFriend(viewSwiped.getFriendSession());
         }
     }
 
     private void resetSelection(int position) {
         itemSelected = Adapter.NO_SELECTION;
+        callback.get().onSessionRequest(viewSwiped.getFriendSession());
         notifyItemRemoved(position);
     }
 
@@ -163,11 +166,11 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     }
     //endregion
 
-    public void setCallback(ManageFriendAdapterCallback callback) {
+    public void setCallback(FriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }
 
-    public interface ManageFriendAdapterCallback {
-        void onRequest();
+    public interface FriendAdapterCallback {
+        void onSessionRequest(FriendSession friendSession);
     }
 }

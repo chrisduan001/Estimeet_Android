@@ -1,7 +1,6 @@
 package estimeet.meetup.ui.activity;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -11,18 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.Modules.ManageFriendModule;
-import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.DaggerManageFriendComponent;
-import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.di.components.ManageFriendComponent;
-import estimeet.meetup.ui.fragment.ManageFriendFragment_;
+import estimeet.meetup.ui.fragment.ManageManageFriendFragment_;
 
 /**
  * Created by AmyDuan on 13/03/16.
@@ -41,7 +37,7 @@ public class ManageFriendActivity extends BaseActivity implements HasComponent<M
         super.onCreate(savedInstanceState);
         initializeInjector();
 
-        replaceFragment(R.id.container, new ManageFriendFragment_());
+        replaceFragment(R.id.container, new ManageManageFriendFragment_());
     }
 
     @Override

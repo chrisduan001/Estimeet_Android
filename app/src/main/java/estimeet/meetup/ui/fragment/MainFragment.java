@@ -1,7 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +26,7 @@ import javax.inject.Named;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
+import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
@@ -42,7 +42,7 @@ import estimeet.meetup.util.push.NotificationHandler;
  */
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView, LoaderManager.LoaderCallbacks<Cursor>,
-        FriendListAdapter.ManageFriendAdapterCallback{
+        FriendListAdapter.FriendAdapterCallback {
 
     public interface MainCallback {
         void navToFriendList();
@@ -158,8 +158,9 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), SqliteContract.Friends.CONTENT_URI,
-                DataHelper.FriendQuery.PROJECTION,getSelection(),null,null);
+        return new CursorLoader(getContext(), SqliteContract.Sessions.CONTENT_URI,
+                DataHelper.FriendSessionQuery.PROJECTION, getSelection(),null,
+                SqliteContract.Sessions.DEFAULT_SORT);
     }
 
     @Override
@@ -170,10 +171,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
-    }
-
-    private String getSelection() {
-        return SqliteContract.FriendColumns.FAVOURITE + " = 1";
     }
     //endregion
 
@@ -193,6 +190,9 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         showShortToastMessage(message);
     }
 
+    private String getSelection() {
+        return SqliteContract.FriendColumns.FAVOURITE + " = 1";
+    }
     //endregion
 
     //region button
@@ -237,8 +237,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     //region adapter callback
     @Override
-    public void onRequest() {
-
+    public void onSessionRequest(FriendSession friendSession) {
+        presenter.onSessionRequest(friendSession);
     }
     //endregion
 }
