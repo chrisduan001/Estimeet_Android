@@ -1,7 +1,6 @@
 package estimeet.meetup.interactor;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -13,7 +12,6 @@ import estimeet.meetup.model.PostModel.SessionRequest;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import estimeet.meetup.ui.adapter.FriendListAdapter;
 import rx.Observable;
 /**
  * Created by AmyDuan on 6/02/16.
@@ -62,7 +60,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
 
     @Override
     protected Observable<Boolean> getObservable(User user) {
-        return serviceHelper.sendSessionRequest(user.token, 0,
+        return serviceHelper.sendSessionRequest(user.token, session.getRequestedLength(),
                 new SessionRequest(user.id, session.getFriendId(),
                         dataHelper.getFriend(session.getFriendId()).userId));
     }

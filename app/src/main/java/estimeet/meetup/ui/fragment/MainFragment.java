@@ -138,17 +138,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        checkSession();
-    }
-
-    @Background
-    void checkSession() {
-        presenter.checkSessionExpiration();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
     }

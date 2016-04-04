@@ -119,7 +119,7 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     }
     //endregion
 
-    //region interactor callback
+    //region mainInteractor callback
     @Override
     public void onSignInSuccessful(User user) {
         //request user friend list if they logged in for the first time

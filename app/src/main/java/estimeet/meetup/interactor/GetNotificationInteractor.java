@@ -25,6 +25,8 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
     private static final int NOTIFICATION_SESSION_ACCEPTANCE = 2;
 
     private User user;
+    private GetNotificationListener listener;
+
     @Inject
     public GetNotificationInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp,
                                      @Named("currentUser") User user) {
@@ -33,6 +35,10 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
     }
 
     //region presenter call
+    public void call(GetNotificationListener listener) {
+        this.listener = listener;
+    }
+
     public void getNotifications() {
         makeRequest(user, new GetNotificationsSubscriber(), true);
     }
@@ -62,14 +68,16 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                         break;
                 }
             }
+
+            listener.getNotificationFinished();
         }
 
         @Override
-        protected void onAuthError() {
-        }
+        protected void onAuthError() {}
 
         @Override
         protected void onError(String err) {
+            listener.getNotificationFinished();
         }
 
         private void processFriendRequest(String appendix) {
@@ -86,8 +94,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
         private void processSessionRequest(String appendix) {
             String[] appendixArray = appendix.split(",");
             int friendId = Integer.parseInt(appendixArray[0]);
-            //// TODO: 3/04/16 server need to give a string with following format "0 or 1 or 2"
-            //request length to share
+            //request length to share (0, 1, 2)
             int length = Integer.parseInt(appendixArray[1]);
 
             if (dataHelper.getFriend(friendId) != null) {
@@ -105,5 +112,9 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                 dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId, sessionLId));
             }
         }
+    }
+
+    public interface GetNotificationListener extends BaseListener {
+        void getNotificationFinished();
     }
 }

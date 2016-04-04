@@ -45,7 +45,7 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
     }
     //endregion
 
-    //region interactor callback
+    //region mainInteractor callback
     @Override
     public void onAuthFailed() {
         view.get().onAuthFailed();

@@ -156,7 +156,10 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
 
     private void resetSelection(int position) {
         itemSelected = Adapter.NO_SELECTION;
-        callback.get().onSessionRequest(viewSwiped.getFriendSession());
+        FriendSession session = viewSwiped.getFriendSession();
+        //// TODO: 4/04/16 change to actual request time later
+        session.setRequestedLength(0);
+        callback.get().onSessionRequest(session);
         notifyItemRemoved(position);
     }
 

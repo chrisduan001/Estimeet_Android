@@ -22,6 +22,6 @@ public class NotificationEntity extends BaseModel {
     private int receiverId;
 
     @SerializedName("receiverUId")
-    private int receiverUId;
+    private long receiverUId;
 
 }

@@ -107,7 +107,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     }
     //endregion
 
-    //region interactor callback
+    //region mainInteractor callback
     @Override
     public void onError(String errorMessage) {
         dismissProgressDialog();

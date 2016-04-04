@@ -1,5 +1,7 @@
 package estimeet.meetup.ui.presenter;
 
+import android.os.AsyncTask;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.interactor.GetNotificationInteractor;
@@ -11,24 +13,26 @@ import estimeet.meetup.ui.BaseView;
 /**
  * Created by AmyDuan on 6/02/16.
  */
-public class MainPresenter extends BasePresenter {
+public class MainPresenter extends BasePresenter implements
+        GetNotificationInteractor.GetNotificationListener {
 
     private MainView view;
 
-    @Inject MainInteractor interactor;
+    @Inject MainInteractor mainInteractor;
     @Inject PushInteractor pushInteractor;
     @Inject GetNotificationInteractor notificationInteractor;
 
     @Inject
-    public MainPresenter(MainInteractor interactor, PushInteractor pushInteractor,
+    public MainPresenter(MainInteractor mainInteractor, PushInteractor pushInteractor,
                          GetNotificationInteractor notificationInteractor) {
-        this.interactor = interactor;
+        this.mainInteractor = mainInteractor;
         this.pushInteractor = pushInteractor;
         this.notificationInteractor = notificationInteractor;
     }
 
     @Override
     public void onResume() {
+        notificationInteractor.call(this);
         notificationInteractor.getNotifications();
     }
 
@@ -47,15 +51,28 @@ public class MainPresenter extends BasePresenter {
     }
 
     public void onSessionRequest(FriendSession friendSession) {
-        interactor.onSessionRequest(friendSession);
-    }
-
-    public void checkSessionExpiration() {
-        interactor.checkSessionExpiration();
+        mainInteractor.onSessionRequest(friendSession);
     }
 
     public void requestData() {
         view.showToastMessage("requested data");
+    }
+    //endregion
+
+    //region mainInteractor callback
+    @Override
+    public void getNotificationFinished() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                mainInteractor.checkSessionExpiration();
+            }
+        });
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        view.onError(errorMessage);
     }
     //endregion
 
