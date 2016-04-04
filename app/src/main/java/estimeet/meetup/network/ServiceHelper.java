@@ -9,6 +9,7 @@ import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
+import estimeet.meetup.model.PostModel.SessionRequest;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
@@ -53,6 +54,10 @@ public class ServiceHelper {
 
     public Observable<ListItem<NotificationEntity>> getAllNotifications(String token, int id, long userId) {
         return estimeetApi.getAllNotifications(buildToken(token), id, userId);
+    }
+
+    public Observable<Boolean> sendSessionRequest(String token, int length, SessionRequest request) {
+        return estimeetApi.sendRequestSession(buildToken(token), length, request);
     }
 
     private String buildToken(String token) {

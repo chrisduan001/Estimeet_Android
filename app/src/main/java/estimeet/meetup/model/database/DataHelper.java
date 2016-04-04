@@ -179,32 +179,6 @@ public class DataHelper {
         int FAVOURITE = 6;
     }
 
-    public interface SessionQuery {
-        String[] PROJECTION = {
-                BaseColumns._ID,
-                SqliteContract.SessionColumns.FRIEND_ID,
-                SqliteContract.SessionColumns.SESSION_ID,
-                SqliteContract.SessionColumns.SESSION_LID,
-                SqliteContract.SessionColumns.DATE_CREATED,
-                SqliteContract.SessionColumns.EXPIRE_MINUTES,
-                SqliteContract.SessionColumns.SESSION_DISTANCE,
-                SqliteContract.SessionColumns.SESSION_ETA,
-                SqliteContract.SessionColumns.SESSION_LOCATION,
-                SqliteContract.SessionColumns.SESSION_TYPE,
-        };
-
-        int B_ID = 0;
-        int FRIEND_ID = 1;
-        int SESSION_ID = 2;
-        int SESSION_LID = 3;
-        int DATE_CREATED = 4;
-        int EXPIRE_MINUTES = 5;
-        int SESSION_DISTANCE = 6;
-        int SESSION_ETA = 7;
-        int SESSION_LOCATION = 8;
-        int SESSION_TYPE = 9;
-    }
-
     public interface FriendSessionQuery {
         String[] PROJECTION = {
                 "S." + BaseColumns._ID,

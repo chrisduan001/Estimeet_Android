@@ -22,7 +22,7 @@ public class FriendSession {
     private String friendName;
     private byte[] friendDp;
     private int friendId;
-    private String requestedTime;
+    private int requestedTime;
 
     public int getSessionId() {
         return sessionId;
@@ -120,11 +120,11 @@ public class FriendSession {
         this.friendId = friendId;
     }
 
-    public String getRequestedTime() {
+    public int getRequestedTime() {
         return requestedTime;
     }
 
-    public void setRequestedTime(String requestedTime) {
+    public void setRequestedTime(int requestedTime) {
         this.requestedTime = requestedTime;
     }
 
@@ -158,7 +158,7 @@ public class FriendSession {
         friendSession.setFriendName(cursor.getString(DataHelper.FriendSessionQuery.FRIEND_NAME));
         friendSession.setFriendDp(cursor.getBlob(DataHelper.FriendSessionQuery.FRIEND_IMAGE));
         friendSession.setFriendId(cursor.getInt(DataHelper.FriendSessionQuery.FRIEND_ID));
-        friendSession.setRequestedTime(cursor.getString(DataHelper.FriendSessionQuery.SESSION_REQUESTED_TIME));
+        friendSession.setRequestedTime(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_REQUESTED_TIME));
         return friendSession;
     }
 

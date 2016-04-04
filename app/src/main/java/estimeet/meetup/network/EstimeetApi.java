@@ -6,6 +6,7 @@ import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
+import estimeet.meetup.model.PostModel.SessionRequest;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
@@ -76,5 +77,12 @@ public interface EstimeetApi {
             @Header("Authorization") String token,
             @Query("id") int id,
             @Query("userid") long userId
+    );
+
+    @POST("/user/sendRequestSessionNotification")
+    Observable<Boolean> sendRequestSession(
+            @Header("Authorization") String token,
+            @Query("length") int length,
+            @Body SessionRequest sessionRequest
     );
 }

@@ -34,7 +34,7 @@ public class MainPresenter extends BasePresenter {
 
     @Override
     public void onAuthFailed() {
-
+        view.onAuthFailed();
     }
 
     //region fragment call
@@ -58,6 +58,7 @@ public class MainPresenter extends BasePresenter {
         view.showToastMessage("requested data");
     }
     //endregion
+
     public interface MainView extends BaseView {
         void showToastMessage(String message);
     }

@@ -86,9 +86,9 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
         private void processSessionRequest(String appendix) {
             String[] appendixArray = appendix.split(",");
             int friendId = Integer.parseInt(appendixArray[0]);
-            //// TODO: 3/04/16 server need to give a string with following format "15 minutes"
+            //// TODO: 3/04/16 server need to give a string with following format "0 or 1 or 2"
             //request length to share
-            String length = appendixArray[1];
+            int length = Integer.parseInt(appendixArray[1]);
 
             if (dataHelper.getFriend(friendId) != null) {
                 dataHelper.insertSession(SessionFactory.createPendingSession(friendId, length));

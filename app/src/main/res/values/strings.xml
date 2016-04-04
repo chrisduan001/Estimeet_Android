@@ -45,4 +45,5 @@
     <string name="send_estimeet_message">Estimeet request sent</string>
     <string name="accept">Accept</string>
     <string name="ignore">Ignore</string>
+    <string name="push_session_starts">New session created</string>
 </resources>

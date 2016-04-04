@@ -48,6 +48,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public interface MainCallback {
         void navToFriendList();
         void navToManageProfile();
+        void onAuthFailed();
     }
 
     private static final int MAINCURSORLOADER = 1;
@@ -205,6 +206,13 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     private String getSelection() {
         return SqliteContract.FriendColumns.FAVOURITE + " = 1";
     }
+
+    @Override
+    public void onAuthFailed() {
+        super.onAuthFailed();
+        mainCallback.onAuthFailed();
+    }
+
     //endregion
 
     //region button

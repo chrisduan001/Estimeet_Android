@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
     @Inject @Named("currentUser") User user;
 
+    //region layout&lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +94,9 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
             this.finish();
         }
     }
+    //endregion
 
     //region from fragment
-
     @Override
     public void navToFriendList() {
         ManageFriendActivity_.intent(this).startForResult(ManageFriendFragment.ACTIVITY_RESULT);
@@ -106,5 +107,10 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         ManageProfileActivity_.intent(this).start();
     }
 
+    @Override
+    public void onAuthFailed() {
+        startNewActivity(SignInActivity.getCallingIntent(this, 0));
+        this.finish();
+    }
     //endregion
 }

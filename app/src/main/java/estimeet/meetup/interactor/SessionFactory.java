@@ -41,7 +41,7 @@ public class SessionFactory {
         return session;
     }
 
-    public static FriendSession createPendingSession(int friendId, String requestedTime) {
+    public static FriendSession createPendingSession(int friendId, int requestedTime) {
         FriendSession session = new FriendSession();
         session.setFriendId(friendId);
         session.setRequestedTime(requestedTime);

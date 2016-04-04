@@ -37,8 +37,11 @@ public class NotificationHandler extends NotificationsHandler {
                     displayOnMainScreen(0, context, context.getString(R.string.app_name),
                             context.getString(R.string.push_session_request));
                     break;
+                //friend accepted session
                 case 102:
                     sendGeneralPush(context);
+                    displayOnMainScreen(0, context, context.getString(R.string.app_name),
+                            context.getString(R.string.push_session_starts));
                     break;
                 default:
                     break;
