@@ -20,6 +20,7 @@ public class NotificationHandler extends NotificationsHandler {
 
     @Override
     public void onReceive(Context context, Bundle bundle) {
+
         String message = bundle.getString("message");
         if (!TextUtils.isEmpty(message)) {
             String[] msgArray = message.split(",");
@@ -42,6 +43,14 @@ public class NotificationHandler extends NotificationsHandler {
                     sendGeneralPush(context);
                     displayOnMainScreen(0, context, context.getString(R.string.app_name),
                             context.getString(R.string.push_session_starts));
+                    break;
+                //session cancelled
+                //delete item from db
+                case 103:
+                    int friendId = Integer.parseInt(msgArray[1]);
+                    break;
+                case 999:
+                    displayOnMainScreen(1, context, "test", "this is a test");
                     break;
                 default:
                     break;
