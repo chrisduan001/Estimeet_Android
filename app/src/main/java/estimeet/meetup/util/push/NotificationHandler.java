@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import com.microsoft.windowsazure.notifications.NotificationsHandler;
 import estimeet.meetup.R;
+import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.ui.activity.MainActivity_;
 
 /**
@@ -48,6 +49,8 @@ public class NotificationHandler extends NotificationsHandler {
                 //delete item from db
                 case 103:
                     int friendId = Integer.parseInt(msgArray[1]);
+                    DataHelper dataHelper = new DataHelper(context.getContentResolver());
+                    dataHelper.deleteSession(friendId);
                     break;
                 case 999:
                     displayOnMainScreen(1, context, "test", "this is a test");

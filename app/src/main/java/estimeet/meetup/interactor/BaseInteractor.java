@@ -30,6 +30,8 @@ public abstract class BaseInteractor<T> {
         serviceHelper = service;
         dataHelper = data;
         sharedPreference = sp;
+
+        baseUser = sp.getUserFromSp();
     }
 
     private void execute(@NonNull Observable<T> observable, @NonNull DefaultSubscriber<T> subscriber) {
@@ -42,10 +44,9 @@ public abstract class BaseInteractor<T> {
         return serviceHelper.renewToken(baseUser.id, baseUser.password);
     }
 
-    protected abstract Observable<T> getObservable(User user);
+    protected abstract Observable<T> getObservable();
 
-    protected void makeRequest(User u, @NonNull DefaultSubscriber<T> subscriber, boolean needsAuth) {
-        baseUser = u;
+    protected void makeRequest(@NonNull DefaultSubscriber<T> subscriber, boolean needsAuth) {
         if (needsAuth && isTokenExpired(baseUser.expiresTime)) {
             //check token expire date first, if token is expired then needs to make request to renew token
             execute(getTokenObservable()
@@ -55,11 +56,11 @@ public abstract class BaseInteractor<T> {
                             sharedPreference.updateUserToken(tokenResponse.access_token,
                                     tokenResponse.expires_in);
                             baseUser = sharedPreference.getUserFromSp();
-                            return getObservable(baseUser);
+                            return getObservable();
                         }
                     }), subscriber);
         } else {
-            execute(getObservable(baseUser), subscriber);
+            execute(getObservable(), subscriber);
         }
     }
 

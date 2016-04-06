@@ -42,9 +42,9 @@ public class ProfileInteractor extends BaseInteractor<User> {
     public void initUpdateProfile(String name, String imageString) {
         this.imageString = imageString;
         subscriber = new ProfileUpdateSubscriber();
-        User user = sharedPreference.getUserFromSp();
-        user.userName = name;
-        makeRequest(user, subscriber, true);
+        baseUser = sharedPreference.getUserFromSp();
+        baseUser.userName = name;
+        makeRequest(subscriber, true);
     }
 
     public void unSubscribe() {
@@ -55,9 +55,9 @@ public class ProfileInteractor extends BaseInteractor<User> {
     //endregion
 
     @Override
-    protected Observable<User> getObservable(User user) {
-        UpdateModel updateModel = new UpdateModel(user.id, user.userId, user.userName, imageString);
-        return serviceHelper.updateProfile(user.token, updateModel);
+    protected Observable<User> getObservable() {
+        UpdateModel updateModel = new UpdateModel(baseUser.id, baseUser.userId, baseUser.userName, imageString);
+        return serviceHelper.updateProfile(baseUser.token, updateModel);
     }
 
     //region networkcall

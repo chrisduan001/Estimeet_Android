@@ -26,7 +26,7 @@ public class ManageFriendInteractor extends BaseInteractor<String> {
     //endregion
 
     @Override
-    protected Observable<String> getObservable(User user) {
+    protected Observable<String> getObservable() {
         return null;
     }
 }

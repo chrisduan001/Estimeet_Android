@@ -24,14 +24,11 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
     private static final int NOTIFICATION_SESSION_REQUEST = 1;
     private static final int NOTIFICATION_SESSION_ACCEPTANCE = 2;
 
-    private User user;
     private GetNotificationListener listener;
 
     @Inject
-    public GetNotificationInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp,
-                                     @Named("currentUser") User user) {
+    public GetNotificationInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp) {
         super(service, data, sp);
-        this.user = user;
     }
 
     //region presenter call
@@ -40,13 +37,13 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
     }
 
     public void getNotifications() {
-        makeRequest(user, new GetNotificationsSubscriber(), true);
+        makeRequest(new GetNotificationsSubscriber(), true);
     }
     //endregion
 
     @Override
-    protected Observable<ListItem<NotificationEntity>> getObservable(User user) {
-        return serviceHelper.getAllNotifications(user.token, user.id, user.userId);
+    protected Observable<ListItem<NotificationEntity>> getObservable() {
+        return serviceHelper.getAllNotifications(baseUser.token, baseUser.id, baseUser.userId);
     }
 
     private class GetNotificationsSubscriber extends DefaultSubscriber<ListItem<NotificationEntity>> {
@@ -55,6 +52,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
         public void onNext(ListItem<NotificationEntity> notificationEntityListItem) {
             super.onNext(notificationEntityListItem);
 
+            long notificationId = 0;
             for (NotificationEntity entity : notificationEntityListItem.items) {
                 switch (entity.identifier) {
                     case NOTIFICATION_FRIEND_REQUEST:
@@ -67,8 +65,11 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                         createNewSession(entity.appendix);
                         break;
                 }
+                if (entity.notificationId > notificationId) {
+                    notificationId = entity.notificationId;
+                }
             }
-
+            sharedPreference.setNotificationid(notificationId);
             listener.getNotificationFinished();
         }
 

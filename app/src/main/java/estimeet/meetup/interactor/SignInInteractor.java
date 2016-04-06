@@ -75,16 +75,16 @@ public class SignInInteractor extends BaseInteractor<User> {
     public void sendContacts(String contacts) {
         isSignedIn = true;
         this.contacts = contacts;
-        User user = sharedPreference.getUserFromSp();
-        makeRequest(user, new SendContactSubscriber(), true);
+        baseUser = sharedPreference.getUserFromSp();
+        makeRequest(new SendContactSubscriber(), true);
     }
     //endregion
 
     @Override
-    protected Observable<User> getObservable(User user) {
+    protected Observable<User> getObservable() {
         if (isSignedIn) {
-            SendContact contactModel = new SendContact(user.id, user.userId, contacts);
-            return serviceHelper.sendContacts(user.token, contactModel);
+            SendContact contactModel = new SendContact(baseUser.id, baseUser.userId, contacts);
+            return serviceHelper.sendContacts(baseUser.token, contactModel);
         } else {
             return serviceHelper.signInUser(authUser);
         }
@@ -94,7 +94,7 @@ public class SignInInteractor extends BaseInteractor<User> {
     private void initSignIn(AuthUser authUser) {
         this.authUser = authUser;
         signinSubscriber = new SigninSubscriber();
-        makeRequest(null, signinSubscriber, false);
+        makeRequest(signinSubscriber, false);
     }
 
     private class SigninSubscriber extends DefaultSubscriber<User> {

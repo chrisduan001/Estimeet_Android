@@ -29,13 +29,9 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
         this.listener = listener;
     }
 
-    public void getFriendsList(User user) {
+    public void getFriendsList() {
         subscriber = new FriendListSubscriber();
-        if (user == null) {
-            user = sharedPreference.getUserFromSp();
-        }
-
-        makeRequest(user, subscriber, true);
+        makeRequest(subscriber, true);
     }
 
     public void unSubscribe() {
@@ -46,8 +42,8 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
     //endregion
 
     @Override
-    protected Observable<ListItem<Friend>> getObservable(User user) {
-        return serviceHelper.getFriendsList(user.token, user.id, user.userId);
+    protected Observable<ListItem<Friend>> getObservable() {
+        return serviceHelper.getFriendsList(baseUser.token, baseUser.id, baseUser.userId);
     }
 
     private class FriendListSubscriber extends DefaultSubscriber<ListItem<Friend>> {

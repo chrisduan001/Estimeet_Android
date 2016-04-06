@@ -21,16 +21,14 @@ public class PushInteractor extends BaseInteractor<BaseModel> {
 
     private PushModel pushModel;
 
-    private User user;
     private RegisterChannelSubscriber subscriber;
 
     @Inject
     public PushInteractor(ServiceHelper service, DataHelper data, MeetUpSharedPreference sp,
-                          PushModel pushModel, @Named("currentUser") User user) {
+                          PushModel pushModel) {
         super(service, data, sp);
 
         this.pushModel = pushModel;
-        this.user = user;
     }
 
     //region presenter call
@@ -55,7 +53,7 @@ public class PushInteractor extends BaseInteractor<BaseModel> {
             sharedPreference.setGcmRegId(regId);
 
             subscriber = new RegisterChannelSubscriber();
-            makeRequest(user, subscriber, true);
+            makeRequest(subscriber, true);
         } else {
             pushModel.getHub().register(sharedPreference.getGcmRegId(), pushModel.getUserId());
         }
@@ -69,8 +67,8 @@ public class PushInteractor extends BaseInteractor<BaseModel> {
     //endregion
 
     @Override
-    protected Observable<BaseModel> getObservable(User user) {
-        return serviceHelper.registerChannel(user.token, user.id, user.userId);
+    protected Observable<BaseModel> getObservable() {
+        return serviceHelper.registerChannel(baseUser.token, baseUser.id, baseUser.userId);
     }
 
     private class RegisterChannelSubscriber extends DefaultSubscriber<BaseModel> {

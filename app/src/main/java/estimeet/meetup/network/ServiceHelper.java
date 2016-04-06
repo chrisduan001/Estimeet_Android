@@ -60,6 +60,10 @@ public class ServiceHelper {
         return estimeetApi.sendRequestSession(buildToken(token), length, request);
     }
 
+    public Observable<Boolean> deleteNotifications(String token, int id, long userId, long notificationId) {
+        return estimeetApi.deleteNotifications(buildToken(token), id, userId, notificationId);
+    }
+
     private String buildToken(String token) {
         return "Bearer " + token;
     }

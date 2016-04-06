@@ -85,4 +85,12 @@ public interface EstimeetApi {
             @Query("length") int length,
             @Body SessionRequest sessionRequest
     );
+
+    @GET("/user/deleteNotifications")
+    Observable<Boolean> deleteNotifications(
+            @Header("Authorization") String token,
+            @Query("id") int id,
+            @Query("userId") long userId,
+            @Query("notificationId") long notificationId
+    );
 }

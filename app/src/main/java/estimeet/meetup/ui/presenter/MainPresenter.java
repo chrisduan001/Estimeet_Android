@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import javax.inject.Inject;
 
+import estimeet.meetup.interactor.DeleteNotificationInteractor;
 import estimeet.meetup.interactor.GetNotificationInteractor;
 import estimeet.meetup.interactor.MainInteractor;
 import estimeet.meetup.interactor.PushInteractor;
@@ -17,23 +18,28 @@ public class MainPresenter extends BasePresenter implements
         GetNotificationInteractor.GetNotificationListener {
 
     private MainView view;
+    private boolean isGetNotificationInProcess;
 
     @Inject MainInteractor mainInteractor;
     @Inject PushInteractor pushInteractor;
     @Inject GetNotificationInteractor notificationInteractor;
+    @Inject DeleteNotificationInteractor deleteNotificationInteractor;
 
     @Inject
     public MainPresenter(MainInteractor mainInteractor, PushInteractor pushInteractor,
-                         GetNotificationInteractor notificationInteractor) {
+                         GetNotificationInteractor notificationInteractor,
+                         DeleteNotificationInteractor deleteNotificationInteractor) {
         this.mainInteractor = mainInteractor;
         this.pushInteractor = pushInteractor;
         this.notificationInteractor = notificationInteractor;
+        this.deleteNotificationInteractor = deleteNotificationInteractor;
     }
 
     @Override
     public void onResume() {
         notificationInteractor.call(this);
         notificationInteractor.getNotifications();
+        isGetNotificationInProcess = true;
     }
 
     @Override
@@ -54,14 +60,18 @@ public class MainPresenter extends BasePresenter implements
         mainInteractor.onSessionRequest(friendSession);
     }
 
-    public void requestData() {
-        view.showToastMessage("requested data");
+    public void requestNotification() {
+        if (!isGetNotificationInProcess) {
+            notificationInteractor.getNotifications();
+        }
     }
     //endregion
 
     //region mainInteractor callback
     @Override
     public void getNotificationFinished() {
+        isGetNotificationInProcess = false;
+        deleteNotificationInteractor.call();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {

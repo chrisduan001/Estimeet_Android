@@ -128,7 +128,7 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onUpdateProfileSuccessful() {
         friendsInteractor.call(this);
-        friendsInteractor.getFriendsList(null);
+        friendsInteractor.getFriendsList();
     }
 
     @Override

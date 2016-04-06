@@ -1,7 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -82,7 +81,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     @Receiver(actions = "android.intent.action.GENERAL_BROADCAST")
     protected void onReceiveBoradcast() {
-        presenter.requestData();
+        presenter.requestNotification();
     }
 
     @Override

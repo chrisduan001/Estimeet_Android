@@ -128,7 +128,7 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
             view.checkPermission(Manifest.permission.READ_CONTACTS);
         } else {
             friendsInteractor.call(this);
-            friendsInteractor.getFriendsList(user);
+            friendsInteractor.getFriendsList();
         }
     }
 

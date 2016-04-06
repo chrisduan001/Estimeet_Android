@@ -23,13 +23,11 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     private SendSessionRequestSubscriber subscriber;
 
     private FriendSession session;
-    private User user;
 
     @Inject
     public MainInteractor(ServiceHelper serviceHelper, DataHelper dataHelper,
-                          MeetUpSharedPreference sp, @Named("currentUser") User user) {
+                          MeetUpSharedPreference sp) {
         super(serviceHelper, dataHelper, sp);
-        this.user = user;
     }
 
     //region fragment call
@@ -40,7 +38,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     public void onSessionRequest(FriendSession session) {
         this.session = session;
         subscriber = new SendSessionRequestSubscriber();
-        makeRequest(user, subscriber, true);
+        makeRequest(subscriber, true);
     }
 
     public void checkSessionExpiration() {
@@ -59,9 +57,9 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     //endregion
 
     @Override
-    protected Observable<Boolean> getObservable(User user) {
-        return serviceHelper.sendSessionRequest(user.token, session.getRequestedLength(),
-                new SessionRequest(user.id, session.getFriendId(),
+    protected Observable<Boolean> getObservable() {
+        return serviceHelper.sendSessionRequest(baseUser.token, session.getRequestedLength(),
+                new SessionRequest(baseUser.id, session.getFriendId(),
                         dataHelper.getFriend(session.getFriendId()).userId));
     }
 

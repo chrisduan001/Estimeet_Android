@@ -18,16 +18,14 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
 
     private ManageFriendInteractor manageFriendInteractor;
     private FriendsInteractor friendsInteractor;
-    private User user;
 
     private WeakReference<ManageFriendView> view;
 
     @Inject
     public ManageFriendPresenter(ManageFriendInteractor manageFriendInteractor,
-                                 FriendsInteractor friendsInteractor, @Named("currentUser") User user) {
+                                 FriendsInteractor friendsInteractor) {
         this.manageFriendInteractor = manageFriendInteractor;
         this.friendsInteractor = friendsInteractor;
-        this.user = user;
     }
 
     //region fragment call
@@ -37,7 +35,7 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
 
     public void requestFriendList() {
         friendsInteractor.call(this);
-        friendsInteractor.getFriendsList(user);
+        friendsInteractor.getFriendsList();
     }
 
     public void onUpdateFriend(Friend friend) {
