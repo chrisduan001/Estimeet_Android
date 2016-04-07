@@ -93,4 +93,10 @@ public interface EstimeetApi {
             @Query("userId") long userId,
             @Query("notificationId") long notificationId
     );
+
+    @POST("/session/cancelsession")
+    Observable<Boolean> cancelSession(
+        @Header("Authorization") String token,
+        @Body SessionRequest sessionRequest
+    );
 }

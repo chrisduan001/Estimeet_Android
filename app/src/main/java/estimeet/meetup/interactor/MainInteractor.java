@@ -3,15 +3,14 @@ package estimeet.meetup.interactor;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.SessionRequest;
-import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import estimeet.meetup.util.SessionFactory;
 import rx.Observable;
 /**
  * Created by AmyDuan on 6/02/16.
@@ -37,6 +36,11 @@ public class MainInteractor extends BaseInteractor<Boolean> {
 
     public void onSessionRequest(FriendSession session) {
         this.session = session;
+        //create session
+        //session will be deleted if request failed
+        SessionFactory.createRequestedSession(session);
+        dataHelper.insertSession(session);
+
         subscriber = new SendSessionRequestSubscriber();
         makeRequest(subscriber, true);
     }
@@ -45,7 +49,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
         List<FriendSession> sessions = dataHelper.getAllActiveSession();
 
         for (FriendSession session: sessions) {
-            if (System.currentTimeMillis() > session.getDateCreated() + session.getTimeToExpire()) {
+            if (System.currentTimeMillis() > session.getDateCreated() + session.getTimeToExpireInMilli()) {
                 onSessionFinished(session.getFriendId());
             }
         }
@@ -69,10 +73,10 @@ public class MainInteractor extends BaseInteractor<Boolean> {
         public void onNext(Boolean aBoolean) {
             super.onNext(aBoolean);
 
-            if (aBoolean) {
-                SessionFactory.createRequestedSession(session);
-                dataHelper.insertSession(session);
-            } else throw new RuntimeException("1000");
+            if (!aBoolean) {
+                dataHelper.deleteSession(session.getFriendId());
+                throw new RuntimeException("1000");
+            }
         }
 
         @Override
@@ -88,6 +92,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
 
         @Override
         protected void onError(String err) {
+            dataHelper.deleteSession(session.getFriendId());
             listener.onError(err);
         }
     }

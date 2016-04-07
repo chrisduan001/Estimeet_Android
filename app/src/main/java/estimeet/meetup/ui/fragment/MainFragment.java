@@ -248,5 +248,10 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onSessionRequest(FriendSession friendSession) {
         presenter.onSessionRequest(friendSession);
     }
+
+    @Override
+    public void onCancelSession(FriendSession friendSession) {
+        presenter.cancelSession(friendSession);
+    }
     //endregion
 }

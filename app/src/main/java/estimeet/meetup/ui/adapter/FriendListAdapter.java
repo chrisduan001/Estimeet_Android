@@ -27,7 +27,8 @@ import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
 /**
  * Created by AmyDuan on 19/03/16.
  */
-public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener {
+public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener,
+        FriendSessionView.SessionActionCallback {
     public static final int SENT_SESSION = 100;
     public static final int RECEIVED_SESSION = 101;
     public static final int ACTIVE_SESSION = 102;
@@ -37,9 +38,9 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     public static final int SESSION_HEADER = 20;
     public static final int SESSION_SECTION = 21;
 
+    public static final int VIEWTYPE_SESSION = 2;
     private static final int VIEWTYPE_SECTION = 0;
     private static final int VIEWTYPE_ITEM = 1;
-    private static final int VIEWTYPE_SESSION = 2;
 
     private Context context;
     private WeakReference<FriendAdapterCallback> callback;
@@ -65,7 +66,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
                     context.getString(R.string.session_header));
         } else if (isSession(position)) {
             FriendSessionView sessionView = (FriendSessionView) view;
-            sessionView.bindView(FriendSession.fromCursor(cursor));
+            sessionView.bindView(FriendSession.fromCursor(cursor), this);
         } else {
             FriendListView friendView = (FriendListView)view;
             FriendSession friend = FriendSession.fromCursor(cursor);
@@ -139,7 +140,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     }
     //endregion
 
-    //region item touch listener
+    //region item touch listener (recyclerview touch actions)
     @Override
     public void onItemMove(int position) {
         if (position != Adapter.NO_SELECTION) {
@@ -158,6 +159,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         itemSelected = Adapter.NO_SELECTION;
         FriendSession session = viewSwiped.getFriendSession();
         //// TODO: 4/04/16 change to actual request time later
+        // TODO: 7/04/16 0 == 15 minutes 1 == 30minutes etc
         session.setRequestedLength(0);
         callback.get().onSessionRequest(session);
         notifyItemRemoved(position);
@@ -173,11 +175,28 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     }
     //endregion
 
+    //region view callback
+    @Override
+    public void onCancelSession(FriendSession friendSession) {
+        callback.get().onCancelSession(friendSession);
+    }
+
+    @Override
+    public void onAcceptRequest(FriendSession friendSession) {
+
+    }
+
+    @Override
+    public void onIgnoreRequest(FriendSession friendSession) {
+
+    }
+    //endregion
     public void setCallback(FriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }
 
     public interface FriendAdapterCallback {
         void onSessionRequest(FriendSession friendSession);
+        void onCancelSession(FriendSession friendSession);
     }
 }

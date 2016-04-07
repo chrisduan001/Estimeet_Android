@@ -14,7 +14,7 @@ public class FriendSession {
     private long sessionLId;
     private int sessionFriendId;
     private long dateCreated;
-    private long timeToExpire;
+    private long timeToExpireInMilli;
     private String distance;
     private String eta;
     private String location;
@@ -56,12 +56,12 @@ public class FriendSession {
         this.dateCreated = dateCreated;
     }
 
-    public long getTimeToExpire() {
-        return timeToExpire;
+    public long getTimeToExpireInMilli() {
+        return timeToExpireInMilli;
     }
 
-    public void setTimeToExpire(long timeToExpire) {
-        this.timeToExpire = timeToExpire;
+    public void setTimeToExpireInMilli(long timeToExpireInMilli) {
+        this.timeToExpireInMilli = timeToExpireInMilli;
     }
 
     public String getDistance() {
@@ -132,9 +132,9 @@ public class FriendSession {
         ContentValues contentValues = new ContentValues(9);
         contentValues.put(SqliteContract.SessionColumns.SESSION_ID, getSessionId());
         contentValues.put(SqliteContract.SessionColumns.SESSION_LID, getSessionLId());
-        contentValues.put(SqliteContract.SessionColumns.FRIEND_ID, getSessionFriendId());
+        contentValues.put(SqliteContract.SessionColumns.FRIEND_ID, getFriendId());
         contentValues.put(SqliteContract.SessionColumns.DATE_CREATED, getDateCreated());
-        contentValues.put(SqliteContract.SessionColumns.EXPIRE_MINUTES, getTimeToExpire());
+        contentValues.put(SqliteContract.SessionColumns.EXPIRE_MINUTES, getTimeToExpireInMilli());
         contentValues.put(SqliteContract.SessionColumns.SESSION_DISTANCE, getDistance());
         contentValues.put(SqliteContract.SessionColumns.SESSION_ETA, getEta());
         contentValues.put(SqliteContract.SessionColumns.SESSION_LOCATION, getLocation());
@@ -147,10 +147,10 @@ public class FriendSession {
         FriendSession friendSession = new FriendSession();
         friendSession.setSessionId(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_ID));
         friendSession.setSessionLId(cursor.getLong(DataHelper.FriendSessionQuery.SESSION_LID));
-        //this value is 0 when user start a friend request
+        //this value is 0 when user start a friend request (friend id in session table)
         friendSession.setSessionFriendId(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_FRIEND_ID));
         friendSession.setDateCreated(cursor.getLong(DataHelper.FriendSessionQuery.DATE_CREATED));
-        friendSession.setTimeToExpire(cursor.getLong(DataHelper.FriendSessionQuery.EXPIRE_MINUTES));
+        friendSession.setTimeToExpireInMilli(cursor.getLong(DataHelper.FriendSessionQuery.EXPIRE_MINUTES));
         friendSession.setDistance(cursor.getString(DataHelper.FriendSessionQuery.SESSION_DISTANCE));
         friendSession.setEta(cursor.getString(DataHelper.FriendSessionQuery.SESSION_ETA));
         friendSession.setLocation(cursor.getString(DataHelper.FriendSessionQuery.SESSION_LOCATION));

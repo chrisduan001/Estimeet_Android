@@ -62,7 +62,7 @@ dependencies {
     //    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     apt "org.androidannotations:androidannotations:3.3.2"
     compile 'org.androidannotations:androidannotations-api:3.3.2'
-    compile('com.digits.sdk.android:digits:1.9.3@aar') {
+    compile('com.digits.sdk.android:digits:1.10.2@aar') {
         transitive = true;
     }
     compile 'com.facebook.android:facebook-android-sdk:4.10.0'

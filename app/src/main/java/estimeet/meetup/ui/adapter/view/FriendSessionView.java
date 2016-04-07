@@ -15,9 +15,12 @@ import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.lang.ref.WeakReference;
+
 import estimeet.meetup.R;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.adapter.FriendListAdapter;
+import estimeet.meetup.util.SessionFactory;
 
 /**
  * Created by AmyDuan on 2/04/16.
@@ -35,18 +38,26 @@ public class FriendSessionView extends RelativeLayout {
     @ViewById(R.id.session_eta)                     TextView  sessionEta;
     @ViewById(R.id.session_location)                TextView  sessionLocation;
 
+    private FriendSession friendSession;
+    private WeakReference<SessionActionCallback> callback;
+
     public FriendSessionView(Context context) {
         super(context);
     }
 
-    public void bindView(FriendSession friendSession) {
+    public void bindView(FriendSession friendSession, SessionActionCallback callback) {
+        this.friendSession = friendSession;
+        this.callback = new WeakReference<>(callback);
+
         switch (friendSession.getType()) {
             case FriendListAdapter.SENT_SESSION:
+                setupRequestSessionView();
+                break;
             case FriendListAdapter.RECEIVED_SESSION:
-                setupPendingSessionView(friendSession);
+                setupReceivedSessionView();
                 break;
             case FriendListAdapter.ACTIVE_SESSION:
-                setupSessionInfoView(friendSession);
+                setupSessionInfoView();
                 break;
             default:
                 throw new RuntimeException("invalid session type");
@@ -55,13 +66,19 @@ public class FriendSessionView extends RelativeLayout {
         loadImageAsync(friendSession.getFriendDp());
     }
 
-    private void setupPendingSessionView(FriendSession friendSession) {
+    private void setupRequestSessionView() {
         friendName.setText(friendSession.getFriendName());
-        setViewVisibility(friendSession.getType() == FriendListAdapter.RECEIVED_SESSION ?
-                FriendListAdapter.RECEIVED_SESSION : FriendListAdapter.SENT_SESSION);
+        setViewVisibility(FriendListAdapter.SENT_SESSION);
     }
 
-    private void setupSessionInfoView(FriendSession friendSession) {
+    private void setupReceivedSessionView() {
+        //// TODO: 7/04/16 need a proper layout
+        friendName.setText(friendSession.getFriendName() + " " +
+                SessionFactory.getSessionLengthString(friendSession.getRequestedLength(), getContext()));
+        setViewVisibility(FriendListAdapter.RECEIVED_SESSION);
+    }
+
+    private void setupSessionInfoView() {
         sessionDistance.setText(friendSession.getDistance());
         sessionEta.setText(friendSession.getEta());
         sessionLocation.setText(friendSession.getLocation());
@@ -93,17 +110,32 @@ public class FriendSessionView extends RelativeLayout {
 
     @Click(R.id.btn_cancel_session)
     protected void onCancelSession() {
-
+        cancelSession();
     }
 
     @Click(R.id.action_accept_request)
     protected void onAcceptRequest() {
-
+        acceptRequest();
     }
 
     @Click(R.id.action_ignore_request)
     protected void onIgnoreRequest() {
+        ignoreRequest();
+    }
 
+    @Background
+    void cancelSession() {
+        callback.get().onCancelSession(friendSession);
+    }
+
+    @Background
+    void acceptRequest() {
+        callback.get().onAcceptRequest(friendSession);
+    }
+
+    @Background
+    void ignoreRequest() {
+        callback.get().onIgnoreRequest(friendSession);
     }
 
     @Background
@@ -115,5 +147,11 @@ public class FriendSessionView extends RelativeLayout {
     @UiThread
     void displayImage(Bitmap bitmap) {
         dpImage.setImageBitmap(bitmap);
+    }
+
+    public interface SessionActionCallback {
+        void onCancelSession(FriendSession friendSession);
+        void onAcceptRequest(FriendSession friendSession);
+        void onIgnoreRequest(FriendSession friendSession);
     }
 }

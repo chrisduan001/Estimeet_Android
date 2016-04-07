@@ -64,6 +64,10 @@ public class ServiceHelper {
         return estimeetApi.deleteNotifications(buildToken(token), id, userId, notificationId);
     }
 
+    public Observable<Boolean> cancelSession(String token, SessionRequest request) {
+        return estimeetApi.cancelSession(buildToken(token), request);
+    }
+
     private String buildToken(String token) {
         return "Bearer " + token;
     }

@@ -46,4 +46,5 @@
     <string name="accept">Accept</string>
     <string name="ignore">Ignore</string>
     <string name="push_session_starts">New session created</string>
+    <string name="session_length_15">15 Minutes</string>
 </resources>

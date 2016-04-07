@@ -1,20 +1,16 @@
 package estimeet.meetup.interactor;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.Friend;
-import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.NotificationEntity;
-import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import estimeet.meetup.ui.adapter.FriendListAdapter;
+import estimeet.meetup.util.SessionFactory;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by AmyDuan on 29/03/16.
@@ -108,9 +104,10 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
             int friendId = Integer.parseInt(appendixArray[0]);
             int sessionId = Integer.parseInt(appendixArray[1]);
             long sessionLId = Long.parseLong(appendixArray[2]);
-            //// TODO: 3/04/16 server need to provide expire time in milliseconds (time to expire in millis = time to expire in millis - (time notification received - time session created)
+            long expireTimeInMilli = Long.parseLong(appendixArray[3]);
             if (dataHelper.getFriend(friendId) != null) {
-                dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId, sessionLId));
+                dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId,
+                        sessionLId, expireTimeInMilli));
             }
         }
     }
