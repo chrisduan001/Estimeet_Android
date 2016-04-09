@@ -9,7 +9,7 @@ import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
-import estimeet.meetup.model.PostModel.SessionRequest;
+import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
@@ -56,7 +56,7 @@ public class ServiceHelper {
         return estimeetApi.getAllNotifications(buildToken(token), id, userId);
     }
 
-    public Observable<Boolean> sendSessionRequest(String token, int length, SessionRequest request) {
+    public Observable<Boolean> sendSessionRequest(String token, int length, NotificationModel request) {
         return estimeetApi.sendRequestSession(buildToken(token), length, request);
     }
 
@@ -64,8 +64,13 @@ public class ServiceHelper {
         return estimeetApi.deleteNotifications(buildToken(token), id, userId, notificationId);
     }
 
-    public Observable<Boolean> cancelSession(String token, SessionRequest request) {
+    public Observable<Boolean> cancelSession(String token, NotificationModel request) {
         return estimeetApi.cancelSession(buildToken(token), request);
+    }
+
+    //need notify part is not implemented yet
+    public Observable<Void> sendGeodata(String token, String geoData, long userUid, NotificationModel model) {
+        return estimeetApi.sendGeoData(buildToken(token), geoData, userUid, false, model);
     }
 
     private String buildToken(String token) {

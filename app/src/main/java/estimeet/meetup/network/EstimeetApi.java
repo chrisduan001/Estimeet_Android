@@ -6,7 +6,7 @@ import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
-import estimeet.meetup.model.PostModel.SessionRequest;
+import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
@@ -15,9 +15,7 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Header;
-import retrofit.http.Headers;
 import retrofit.http.POST;
-import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -83,7 +81,7 @@ public interface EstimeetApi {
     Observable<Boolean> sendRequestSession(
             @Header("Authorization") String token,
             @Query("length") int length,
-            @Body SessionRequest sessionRequest
+            @Body NotificationModel notificationModel
     );
 
     @GET("/user/deleteNotifications")
@@ -97,6 +95,15 @@ public interface EstimeetApi {
     @POST("/session/cancelsession")
     Observable<Boolean> cancelSession(
         @Header("Authorization") String token,
-        @Body SessionRequest sessionRequest
+        @Body NotificationModel notificationModel
+    );
+
+    @POST("/user/sendgeodata")
+    Observable<Void> sendGeoData(
+            @Header("Authorization") String token,
+            @Query("data") String data,
+            @Query("userUId") long userUid,
+            @Query("needNotify") boolean needNotify,
+            @Body NotificationModel notificationModel
     );
 }

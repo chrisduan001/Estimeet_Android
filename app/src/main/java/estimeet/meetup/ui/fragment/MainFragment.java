@@ -35,6 +35,7 @@ import estimeet.meetup.ui.adapter.util.ItemTouchHelperCallback;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.MainPresenter;
 import estimeet.meetup.util.AnimationUtil;
+import estimeet.meetup.util.MeetupLocationService;
 import estimeet.meetup.util.push.NotificationHandler;
 
 /**
@@ -42,7 +43,7 @@ import estimeet.meetup.util.push.NotificationHandler;
  */
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView, LoaderManager.LoaderCallbacks<Cursor>,
-        FriendListAdapter.FriendAdapterCallback {
+        FriendListAdapter.FriendAdapterCallback, MeetupLocationService.LocationServiceListener {
 
     public interface MainCallback {
         void navToFriendList();
@@ -187,8 +188,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    public void showToastMessage(String message) {
-        showShortToastMessage(message);
+    public void onLocationPermissionGranted() {
+        setupLocationService();
     }
 
     private String getSelection() {
@@ -199,6 +200,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onAuthFailed() {
         super.onAuthFailed();
         mainCallback.onAuthFailed();
+    }
+
+    @Override
+    public void onNoActiveSessions() {
+        MeetupLocationService.getInstance(getActivity()).disconnectLocation();
     }
 
     //endregion
@@ -252,6 +258,18 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
+    }
+    //endregion
+
+    //region location service
+    @Override
+    public void onLocationDataReceived(String geoData) {
+        presenter.sendUserLocation(geoData);
+    }
+
+    private void setupLocationService() {
+        MeetupLocationService.getInstance(getActivity()).setServiceListener(this);
+        MeetupLocationService.getInstance(getActivity()).getLastKnownLocation();
     }
     //endregion
 }

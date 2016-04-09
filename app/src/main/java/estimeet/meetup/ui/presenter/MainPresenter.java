@@ -3,6 +3,8 @@ package estimeet.meetup.ui.presenter;
 import android.Manifest;
 import android.os.AsyncTask;
 
+import java.lang.ref.WeakReference;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.interactor.CancelSessionInteractor;
@@ -10,39 +12,47 @@ import estimeet.meetup.interactor.DeleteNotificationInteractor;
 import estimeet.meetup.interactor.GetNotificationInteractor;
 import estimeet.meetup.interactor.MainInteractor;
 import estimeet.meetup.interactor.PushInteractor;
+import estimeet.meetup.interactor.SendGeoDataInteractor;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.BaseView;
+import estimeet.meetup.ui.fragment.BaseFragment;
 
 /**
  * Created by AmyDuan on 6/02/16.
  */
-public class MainPresenter extends BasePresenter implements
-        GetNotificationInteractor.GetNotificationListener {
+public class MainPresenter extends BasePresenter implements GetNotificationInteractor.GetNotificationListener,
+        MainInteractor.MainListener{
 
     @Inject MainInteractor mainInteractor;
     @Inject PushInteractor pushInteractor;
     @Inject GetNotificationInteractor notificationInteractor;
     @Inject DeleteNotificationInteractor deleteNotificationInteractor;
     @Inject CancelSessionInteractor cancelSessionInteractor;
+    @Inject SendGeoDataInteractor geoInteractor;
 
-    private MainView view;
+    private WeakReference<MainView> view;
     private boolean isGetNotificationInProcess;
     private boolean isRequestSession;
+
+    private FriendSession friendSession;
 
     @Inject
     public MainPresenter(MainInteractor mainInteractor, PushInteractor pushInteractor,
                          GetNotificationInteractor notificationInteractor,
                          DeleteNotificationInteractor deleteNotificationInteractor,
-                         CancelSessionInteractor cancelSessionInteractor) {
+                         CancelSessionInteractor cancelSessionInteractor,
+                         SendGeoDataInteractor geoInteractor) {
         this.mainInteractor = mainInteractor;
         this.pushInteractor = pushInteractor;
         this.notificationInteractor = notificationInteractor;
         this.deleteNotificationInteractor = deleteNotificationInteractor;
         this.cancelSessionInteractor = cancelSessionInteractor;
+        this.geoInteractor = geoInteractor;
     }
 
     @Override
     public void onResume() {
+        mainInteractor.call(this);
         notificationInteractor.call(this);
         notificationInteractor.getNotifications();
         isGetNotificationInProcess = true;
@@ -50,19 +60,27 @@ public class MainPresenter extends BasePresenter implements
 
     @Override
     public void onAuthFailed() {
-        view.onAuthFailed();
+        view.get().onAuthFailed();
     }
 
     @Override
     public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
+            if (isRequestSession) {
+                mainInteractor.onSessionRequest(friendSession);
+            } else {
+                //accept session
+            }
 
+            view.get().onLocationPermissionGranted();
+        } else {
+            view.get().onError(BaseFragment.ERROR_LOCATION_PERMISSION + "");
         }
     }
 
     //region fragment call
     public void setView(MainView view) {
-        this.view = view;
+        this.view = new WeakReference<>(view);
     }
 
     public void registerPushChannel() {
@@ -70,9 +88,9 @@ public class MainPresenter extends BasePresenter implements
     }
 
     public void onSessionRequest(FriendSession friendSession) {
-        mainInteractor.onSessionRequest(friendSession);
+        this.friendSession = friendSession;
         isRequestSession = true;
-        view.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+        view.get().checkPermission(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
     public void requestNotification() {
@@ -84,6 +102,10 @@ public class MainPresenter extends BasePresenter implements
     public void cancelSession(FriendSession friendSession) {
         cancelSessionInteractor.call(this);
         cancelSessionInteractor.cancelSession(friendSession);
+    }
+
+    public void sendUserLocation(String geoData) {
+        geoInteractor.sendGeoData(geoData);
     }
     //endregion
 
@@ -102,11 +124,17 @@ public class MainPresenter extends BasePresenter implements
 
     @Override
     public void onError(String errorMessage) {
-        view.onError(errorMessage);
+        view.get().onError(errorMessage);
+    }
+
+    @Override
+    public void onNoActiveSessions() {
+        view.get().onNoActiveSessions();
     }
     //endregion
 
     public interface MainView extends BaseView {
-        void showToastMessage(String message);
+        void onLocationPermissionGranted();
+        void onNoActiveSessions();
     }
 }

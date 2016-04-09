@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.MeetUpSharedPreference;
-import estimeet.meetup.model.PostModel.SessionRequest;
+import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import estimeet.meetup.util.SessionFactory;
@@ -53,6 +53,10 @@ public class MainInteractor extends BaseInteractor<Boolean> {
                 onSessionFinished(session.getFriendId());
             }
         }
+
+        if (sessions.size() <= 0) {
+            listener.onNoActiveSessions();
+        }
     }
 
     public void onSessionFinished(int friendId) {
@@ -63,7 +67,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     @Override
     protected Observable<Boolean> getObservable() {
         return serviceHelper.sendSessionRequest(baseUser.token, session.getRequestedLength(),
-                new SessionRequest(baseUser.id, session.getFriendId(),
+                new NotificationModel(baseUser.id, session.getFriendId(),
                         dataHelper.getFriend(session.getFriendId()).userId));
     }
 
@@ -98,6 +102,6 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     }
 
     public interface MainListener extends BaseListener {
-
+        void onNoActiveSessions();
     }
 }

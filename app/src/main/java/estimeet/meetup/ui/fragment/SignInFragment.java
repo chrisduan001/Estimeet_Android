@@ -1,13 +1,18 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthConfig;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -63,6 +68,23 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
         initialize();
 
         setView();
+
+        checkGooglePlayService();
+    }
+
+    private void checkGooglePlayService() {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(getActivity());
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            showAlertDialog(getString(R.string.error_title), getString(R.string.error_play_service),
+                    new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            getActivity().finish();
+                        }
+                    });
+        }
     }
 
     @Override

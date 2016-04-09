@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import estimeet.meetup.DefaultSubscriber;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.MeetUpSharedPreference;
-import estimeet.meetup.model.PostModel.SessionRequest;
+import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import rx.Observable;
@@ -38,7 +38,7 @@ public class CancelSessionInteractor extends BaseInteractor<Boolean> {
     @Override
     protected Observable<Boolean> getObservable() {
         return serviceHelper.cancelSession(baseUser.token,
-                new SessionRequest(baseUser.id, friendSession.getFriendId(), friendUid));
+                new NotificationModel(baseUser.id, friendSession.getFriendId(), friendUid));
     }
 
     private class CancelSessionSub extends DefaultSubscriber<Boolean> {

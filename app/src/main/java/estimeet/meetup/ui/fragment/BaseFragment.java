@@ -1,6 +1,7 @@
 package estimeet.meetup.ui.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,12 @@ import estimeet.meetup.ui.presenter.BasePresenter;
 public abstract class BaseFragment extends Fragment {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
+
+    public static final int ERROR_CODE_500 = 500;
+    public static final int ERROR_GENERIC = 1000;
+    public static final int ERROR_LOCATION_PERMISSION = 1001;
+    public static final int ERROR_PLAY_SERVICE = 1002;
+    public static final int ERROR_NETWORK_REQUEST = 2013;
 
     //region lifecycle
     @Override
@@ -63,13 +70,15 @@ public abstract class BaseFragment extends Fragment {
         getProgressBar().setVisibility(View.VISIBLE);
     }
 
-    protected void showAlertDialog(String title, String message) {
+    //with dialog dismiss listener
+    protected void showAlertDialog(String title, String message, DialogInterface.OnDismissListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setPositiveButton(getString(R.string.button_ok), null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+        alertDialog.setOnDismissListener(listener);
     }
 
     public void onError(String errCode) {
@@ -81,6 +90,12 @@ public abstract class BaseFragment extends Fragment {
                 break;
             case 1000:
                 showShortToastMessage(getString(R.string.error_generic));
+                break;
+            case ERROR_LOCATION_PERMISSION:
+                showShortToastMessage(getString(R.string.error_location_permission));
+                break;
+            case ERROR_PLAY_SERVICE:
+                showShortToastMessage(getString(R.string.error_play_service));
                 break;
             case 2013:
                 showShortToastMessage(getString(R.string.error_network));
