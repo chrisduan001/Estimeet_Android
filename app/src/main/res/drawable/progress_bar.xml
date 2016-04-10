@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:anroid="http://schemas.android.com/apk/res/android">
+    <item anroid:id="@android:id/progress">
+        <rotate anroid:fromDegrees="270" anroid:toDegrees="270">
+            <shape anroid:thickness="6dp" anroid:useLevel="true" anroid:shape="ring">
+                <solid anroid:color="#77A500" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

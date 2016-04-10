@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,8 @@ public class FriendSessionView extends RelativeLayout {
     @ViewById(R.id.session_distance)                TextView  sessionDistance;
     @ViewById(R.id.session_eta)                     TextView  sessionEta;
     @ViewById(R.id.session_location)                TextView  sessionLocation;
+    @ViewById(R.id.active_session_friend_name)      TextView  sessionFriendName;
+    @ViewById(R.id.reward_progress)                 ProgressBar progressBar;
 
     private FriendSession friendSession;
     private WeakReference<SessionActionCallback> callback;
@@ -79,25 +82,37 @@ public class FriendSessionView extends RelativeLayout {
     }
 
     private void setupSessionInfoView() {
+        setViewVisibility(FriendListAdapter.ACTIVE_SESSION);
+        showEmptyActivitySessionView();
+    }
+
+    private void showEmptyActivitySessionView() {
+        sessionFriendName.setText(friendSession.getFriendName());
+        setVisibility(VISIBLE, sessionFriendName);
+        setVisibility(GONE, sessionDistance, sessionEta, sessionLocation);
+    }
+
+    private void showActivitySessionView() {
         sessionDistance.setText(friendSession.getDistance());
         sessionEta.setText(friendSession.getEta());
         sessionLocation.setText(friendSession.getLocation());
-        setViewVisibility(FriendListAdapter.ACTIVE_SESSION);
+        setVisibility(GONE, sessionFriendName);
+        setVisibility(VISIBLE, sessionDistance, sessionEta, sessionLocation);
     }
 
     private void setViewVisibility(int type) {
         switch (type) {
             case FriendListAdapter.SENT_SESSION:
-                setVisibility(GONE, activeSessionView, actionGroup);
+                setVisibility(GONE, activeSessionView, actionGroup, progressBar);
                 setVisibility(VISIBLE, pendingSession, friendName, sentMessage);
                 break;
             case FriendListAdapter.RECEIVED_SESSION:
-                setVisibility(GONE, activeSessionView, sentMessage);
+                setVisibility(GONE, activeSessionView, sentMessage, progressBar);
                 setVisibility(VISIBLE, pendingSession, friendName, actionGroup);
                 break;
             case FriendListAdapter.ACTIVE_SESSION:
                 setVisibility(GONE, pendingSession);
-                setVisibility(VISIBLE, activeSessionView);
+                setVisibility(VISIBLE, activeSessionView, progressBar);
                 break;
         }
     }
@@ -106,6 +121,10 @@ public class FriendSessionView extends RelativeLayout {
         for (View view: views) {
             view.setVisibility(visibility);
         }
+    }
+
+    public void setProgressBarView(int value) {
+        progressBar.setProgress(value);
     }
 
     @Click(R.id.btn_cancel_session)

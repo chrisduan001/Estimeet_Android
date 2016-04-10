@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="70dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/grey">
 
-    <ImageView
-        android:id="@+id/friend_dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+    <FrameLayout
+        android:id="@+id/dp_section"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:contentDescription="@null"
-        android:src="@drawable/placeholder_icon"/>
+        android:layout_marginStart="10dp">
+
+        <ProgressBar
+            android:id="@+id/reward_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:indeterminate="false"
+            android:layout_gravity="center"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/progress_bar"/>
+
+        <ImageView
+            android:id="@+id/friend_dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/placeholder_icon"/>
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/btn_cancel_session"
@@ -80,10 +99,20 @@
         style="@style/SessionLayoutStyle">
 
         <TextView
+            android:id="@+id/active_session_friend_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Friend name"/>
+
+        <TextView
             android:id="@+id/session_distance"
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:gravity="center_vertical"
+            android:visibility="gone"
             style="@style/SingleLineText"
             tools:text="Distance: 2.5Km"/>
 
@@ -91,6 +120,7 @@
             android:id="@+id/session_eta"
             android:layout_width="match_parent"
             android:layout_height="23dp"
+            android:visibility="gone"
             android:gravity="center_vertical"
             style="@style/SingleLineText"
             tools:text="Time: 5 Minutes(Walk)"/>
@@ -100,8 +130,8 @@
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:gravity="center_vertical"
+            android:visibility="gone"
             style="@style/SingleLineText"
             tools:text="Location: Auckland CBD"/>
-
     </LinearLayout>
 </RelativeLayout>

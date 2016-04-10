@@ -83,7 +83,7 @@ public class NotificationHandler extends NotificationsHandler {
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent pIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity_.class).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        PendingIntent pIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity_.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

@@ -2,6 +2,8 @@ package estimeet.meetup.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -29,6 +31,7 @@ import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
  */
 public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener,
         FriendSessionView.SessionActionCallback {
+    private static final String TAG = FriendListAdapter.class.getSimpleName();
     public static final int SENT_SESSION = 100;
     public static final int RECEIVED_SESSION = 101;
     public static final int ACTIVE_SESSION = 102;
@@ -66,7 +69,10 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
                     context.getString(R.string.session_header));
         } else if (isSession(position)) {
             FriendSessionView sessionView = (FriendSessionView) view;
-            sessionView.bindView(FriendSession.fromCursor(cursor), this);
+            FriendSession friendSession = FriendSession.fromCursor(cursor);
+            sessionView.bindView(friendSession, this);
+
+            setProgressBarTimer(sessionView, friendSession);
         } else {
             FriendListView friendView = (FriendListView)view;
             FriendSession friend = FriendSession.fromCursor(cursor);
@@ -76,6 +82,26 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
                 friendView.setSwipeView();
             }
         }
+    }
+
+    private void setProgressBarTimer(final FriendSessionView sessionView, final FriendSession friendSession) {
+        final long systemTimeToExpire = friendSession.getDateCreated() + friendSession.getTimeToExpireInMilli();
+        final long timeLeft = systemTimeToExpire - System.currentTimeMillis();
+
+        new CountDownTimer(timeLeft, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int percentage = (int)(((double)millisUntilFinished / (double)friendSession.getTimeToExpireInMilli())
+                        * 100);
+                Log.d(TAG, "percentage: " + percentage);
+                sessionView.setProgressBarView(percentage);
+            }
+
+            @Override
+            public void onFinish() {
+                sessionView.setProgressBarView(0);
+            }
+        }.start();
     }
 
     /**
