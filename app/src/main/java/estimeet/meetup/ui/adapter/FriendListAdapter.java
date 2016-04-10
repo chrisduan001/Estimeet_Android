@@ -183,12 +183,12 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
 
     @Override
     public void onAcceptRequest(FriendSession friendSession) {
-
+        callback.get().onAcceptSession(friendSession);
     }
 
     @Override
     public void onIgnoreRequest(FriendSession friendSession) {
-
+        callback.get().onIgnoreRequest(friendSession);
     }
     //endregion
     public void setCallback(FriendAdapterCallback callback) {
@@ -198,5 +198,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     public interface FriendAdapterCallback {
         void onSessionRequest(FriendSession friendSession);
         void onCancelSession(FriendSession friendSession);
+        void onAcceptSession(FriendSession friendSession);
+        void onIgnoreRequest(FriendSession friendSession);
     }
 }

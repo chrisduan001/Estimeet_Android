@@ -105,9 +105,10 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
             int sessionId = Integer.parseInt(appendixArray[1]);
             long sessionLId = Long.parseLong(appendixArray[2]);
             long expireTimeInMilli = Long.parseLong(appendixArray[3]);
+            int length = Integer.parseInt(appendixArray[4]);
             if (dataHelper.getFriend(friendId) != null) {
                 dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId,
-                        sessionLId, expireTimeInMilli));
+                        sessionLId, expireTimeInMilli, length));
             }
         }
     }

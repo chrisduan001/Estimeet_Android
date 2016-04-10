@@ -43,7 +43,7 @@ import estimeet.meetup.util.push.NotificationHandler;
  */
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView, LoaderManager.LoaderCallbacks<Cursor>,
-        FriendListAdapter.FriendAdapterCallback, MeetupLocationService.LocationServiceListener {
+        FriendListAdapter.FriendAdapterCallback {
 
     public interface MainCallback {
         void navToFriendList();
@@ -187,11 +187,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         showProgressDialog(getString(R.string.progress_loading));
     }
 
-    @Override
-    public void onLocationPermissionGranted() {
-        setupLocationService();
-    }
-
     private String getSelection() {
         return SqliteContract.FriendColumns.FAVOURITE + " = 1";
     }
@@ -250,26 +245,25 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     //endregion
 
     //region adapter callback
-    @Override
+    @Override @Background
     public void onSessionRequest(FriendSession friendSession) {
         presenter.onSessionRequest(friendSession);
     }
 
-    @Override
+    @Override @Background
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
     }
-    //endregion
 
-    //region location service
-    @Override
-    public void onLocationDataReceived(String geoData) {
-        presenter.sendUserLocation(geoData);
+    @Override @Background
+    public void onAcceptSession(FriendSession friendSession) {
+        presenter.createNewSession(friendSession);
     }
 
-    private void setupLocationService() {
-        MeetupLocationService.getInstance(getActivity()).setServiceListener(this);
-        MeetupLocationService.getInstance(getActivity()).getLastKnownLocation();
+    @Override @Background
+    public void onIgnoreRequest(FriendSession friendSession) {
+        presenter.ignoreSession(friendSession);
     }
+
     //endregion
 }

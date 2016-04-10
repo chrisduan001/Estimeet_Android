@@ -12,6 +12,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import javax.inject.Inject;
+import estimeet.meetup.di.Modules.BackgroundServiceModule;
+import estimeet.meetup.di.components.BackgroundServiceComponent;
+import estimeet.meetup.di.components.DaggerBackgroundServiceComponent;
+import estimeet.meetup.interactor.SendGeoDataInteractor;
+import estimeet.meetup.model.MeetUpSharedPreference;
+import estimeet.meetup.network.ServiceHelper;
 
 /**
  * Created by AmyDuan on 9/04/16.
@@ -29,7 +36,11 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
 
     private static boolean needsContinuousTracking;
 
-    private LocationServiceListener listener;
+    private SendGeoDataInteractor geoDataInteractor;
+
+    private BackgroundServiceComponent backgroundServiceComponent;
+
+    @Inject ServiceHelper serviceHelper;
 
     public static MeetupLocationService getInstance(Context ctx) {
         if (instance == null) {
@@ -39,23 +50,29 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
         return instance;
     }
 
-    public void setServiceListener(LocationServiceListener listener) {
-        this.listener = listener;
+    public void setGeoDataInteractor(SendGeoDataInteractor interactor) {
+        geoDataInteractor = interactor;
     }
 
-    public void getLastKnownLocation() {
-        needsContinuousTracking = false;
+    public void startLocationService(long expiresTime) {
         buildGoogleApiClient();
+
+        if (expiresTime > 0) {
+            buildLocationRequest(expiresTime);
+            needsContinuousTracking = true;
+        } else {
+            needsContinuousTracking = false;
+        }
+
         if (!googleApiClient.isConnected()) {
             googleApiClient.connect();
         } else {
-            getLastKnownLocationCoord();
+            if (needsContinuousTracking) {
+                setupContinuousTracking();
+            } else {
+                getLastKnownLocationCoord();
+            }
         }
-    }
-
-    public void startContinousTracking() {
-        needsContinuousTracking = true;
-        buildLocationRequest();
     }
 
     private synchronized void buildGoogleApiClient() {
@@ -67,7 +84,7 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
         }
     }
 
-    private void buildLocationRequest() {
+    private void buildLocationRequest(long expiresTime) {
         if (locationRequest == null) {
             locationRequest = new LocationRequest();
             //40 seconds
@@ -77,7 +94,9 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         }
 
-        locationRequest.setExpirationDuration(1000000);
+        if (locationRequest.getExpirationTime() < expiresTime) {
+            locationRequest.setExpirationDuration(expiresTime);
+        }
     }
 
     public void disconnectLocation() {
@@ -92,20 +111,24 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
                 != PackageManager.PERMISSION_DENIED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (location != null) {
-                listener.onLocationDataReceived(location.getLatitude() + "," + location.getLongitude());
+                geoDataInteractor.sendGeoData(location.getLatitude() + "," + location.getLongitude());
             }
+        }
+    }
+
+    private void setupContinuousTracking() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_DENIED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_DENIED) {
-            if (needsContinuousTracking) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            } else {
-                getLastKnownLocationCoord();
-            }
+        if (needsContinuousTracking) {
+            setupContinuousTracking();
+        } else {
+            getLastKnownLocationCoord();
         }
     }
 
@@ -114,13 +137,20 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
 
     @Override
     public void onLocationChanged(Location location) {
-        listener.onLocationDataReceived(location.getLatitude() + "," + location.getLongitude());
+        if (backgroundServiceComponent == null) {
+            backgroundServiceComponent = DaggerBackgroundServiceComponent.builder()
+                    .backgroundServiceModule(new BackgroundServiceModule(context))
+                    .build();
+
+            backgroundServiceComponent.inject(context);
+        }
+
+        ServiceHelper serviceHelper = backgroundServiceComponent.serviceHelper();
+        MeetUpSharedPreference sp = backgroundServiceComponent.meetUpSharedPreference();
+        SendGeoDataInteractor interactor = new SendGeoDataInteractor(serviceHelper, null, sp);
+        interactor.sendGeoData(location.getLatitude() + "," + location.getLongitude());
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {}
-
-    public interface LocationServiceListener {
-        void onLocationDataReceived(String geoData);
-    }
 }

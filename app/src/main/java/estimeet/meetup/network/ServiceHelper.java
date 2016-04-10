@@ -11,6 +11,7 @@ import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.PostModel.UpdateModel;
+import estimeet.meetup.model.Session;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
 import rx.Observable;
@@ -71,6 +72,10 @@ public class ServiceHelper {
     //need notify part is not implemented yet
     public Observable<Void> sendGeodata(String token, String geoData, long userUid, NotificationModel model) {
         return estimeetApi.sendGeoData(buildToken(token), geoData, userUid, false, model);
+    }
+
+    public Observable<Session> createSession(String token, int expireInMinutes, int length, NotificationModel model) {
+        return estimeetApi.createSession(buildToken(token), expireInMinutes, length, model);
     }
 
     private String buildToken(String token) {

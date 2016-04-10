@@ -45,6 +45,10 @@ public class MainInteractor extends BaseInteractor<Boolean> {
         makeRequest(subscriber, true);
     }
 
+    public void onSessionIgnored(FriendSession friendSession) {
+        dataHelper.deleteSession(friendSession.getFriendId());
+    }
+
     public void checkSessionExpiration() {
         List<FriendSession> sessions = dataHelper.getAllActiveSession();
 

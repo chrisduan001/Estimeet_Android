@@ -11,8 +11,12 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import com.microsoft.windowsazure.notifications.NotificationsHandler;
 import estimeet.meetup.R;
+import estimeet.meetup.interactor.SendGeoDataInteractor;
 import estimeet.meetup.model.database.DataHelper;
+import estimeet.meetup.network.EstimeetApi;
+import estimeet.meetup.network.ServiceHelper;
 import estimeet.meetup.ui.activity.MainActivity_;
+import estimeet.meetup.util.MeetupLocationService;
 
 /**
  * Created by AmyDuan on 25/03/16.
@@ -42,6 +46,7 @@ public class NotificationHandler extends NotificationsHandler {
                 //friend accepted session
                 case 102:
                     sendGeneralPush(context);
+                    startLocationService(context, Long.parseLong(msgArray[1]));
                     displayOnMainScreen(0, context, context.getString(R.string.app_name),
                             context.getString(R.string.push_session_starts));
                     break;
@@ -66,6 +71,12 @@ public class NotificationHandler extends NotificationsHandler {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.GENERAL_BROADCAST");
         context.sendBroadcast(intent);
+    }
+
+    private void startLocationService(Context context, long expiresInMillis) {
+        if (expiresInMillis > 0) { //>0 is a continuous tracking
+            MeetupLocationService.getInstance(context).startLocationService(expiresInMillis);
+        }
     }
 
     private void displayOnMainScreen(int notificationId, Context context, String title, String message) {

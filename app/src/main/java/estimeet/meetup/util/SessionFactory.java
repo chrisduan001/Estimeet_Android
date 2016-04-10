@@ -34,12 +34,13 @@ public class SessionFactory {
     }
 
     public static FriendSession createActiveSession(int friendId, int sessionId, long sessionLId,
-                                                    long expireTimeInMilli) {
+                                                    long expireTimeInMilli, int length) {
         FriendSession session = new FriendSession();
         session.setSessionId(sessionId);
         session.setSessionLId(sessionLId);
         session.setFriendId(friendId);
         session.setType(FriendListAdapter.ACTIVE_SESSION);
+        session.setRequestedLength(length);
         setupSessionTime(expireTimeInMilli, session);
 
         return session;
@@ -66,5 +67,18 @@ public class SessionFactory {
         }
 
         return "";
+    }
+
+    public static int getSessionLengthInMinutes(int length) {
+        switch (length) {
+            case 0:
+                return 15;
+            case 1:
+                return 30;
+            case 2:
+                return 60;
+            default:
+                return 15;
+        }
     }
 }
