@@ -28,6 +28,12 @@ public interface EstimeetApi {
     Observable<User> getUser(
             @Query("userid") int userId);
 
+    @GET("/signin/manualsignin")
+    Observable<User> manualSignin(
+            @Query("userid") int id,
+            @Query("useruid") long useruid
+    );
+
     @GET("/pauserequest")
     Observable<String> pauseRequest();
 

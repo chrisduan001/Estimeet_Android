@@ -206,7 +206,7 @@ public class SqliteProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = sqliteHelper.getWritableDatabase();
         final SelectionBuilder builder = buildSelection(uri);
-
+        Log.d("Sql command", "query: " + builder.toString());
         int retVal = builder.where(selection, selectionArgs).update(db, values);
         getContext().getContentResolver().notifyChange(uri, null);
         return retVal;

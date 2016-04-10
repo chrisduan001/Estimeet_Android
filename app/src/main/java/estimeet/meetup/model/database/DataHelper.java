@@ -96,7 +96,7 @@ public class DataHelper {
 
     public void updateSession(FriendSession friendSession) {
         ContentValues contentValues = friendSession.toContentValues();
-        contentResolver.update(SqliteContract.Sessions.buildSessionUri(friendSession.getSessionFriendId()), contentValues, null, null);
+        contentResolver.update(SqliteContract.Sessions.buildSessionUri(friendSession.getFriendId()), contentValues, null, null);
     }
 
     public FriendSession getSession(int id) {

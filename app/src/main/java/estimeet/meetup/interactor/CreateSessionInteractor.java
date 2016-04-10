@@ -9,6 +9,7 @@ import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.Session;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import estimeet.meetup.ui.fragment.BaseFragment;
 import estimeet.meetup.util.SessionFactory;
 import rx.Observable;
 
@@ -35,7 +36,7 @@ public class CreateSessionInteractor extends BaseInteractor<Session> {
         //insert active session in db first(active friend session), if network fails revert the data back to original one (friendsession)
         activeFriendSession = SessionFactory.createActiveSession(friendSession.getFriendId(), 0, 0,
                 expireInMillis, friendSession.getRequestedLength());
-        dataHelper.updateSession(friendSession);
+        dataHelper.updateSession(activeFriendSession);
 
         makeRequest(new SessionSubscriber(), true);
     }
@@ -70,6 +71,10 @@ public class CreateSessionInteractor extends BaseInteractor<Session> {
 
         @Override
         protected void onError(String err) {
+
+            if (err.equals(BaseFragment.ERROR_SESSION_EXPIRED + "")) {
+                dataHelper.deleteSession(friendSession.getFriendId());
+            }
             dataHelper.updateSession(friendSession);
             listener.onError(err);
         }

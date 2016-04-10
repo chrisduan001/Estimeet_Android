@@ -27,6 +27,7 @@ public abstract class BaseFragment extends Fragment {
     private static final int PERMISSION_REQUEST_CODE = 100;
 
     public static final int ERROR_CODE_500 = 500;
+    public static final int ERROR_SESSION_EXPIRED = 701;
     public static final int ERROR_GENERIC = 1000;
     public static final int ERROR_LOCATION_PERMISSION = 1001;
     public static final int ERROR_PLAY_SERVICE = 1002;
@@ -96,6 +97,9 @@ public abstract class BaseFragment extends Fragment {
                 break;
             case ERROR_PLAY_SERVICE:
                 showShortToastMessage(getString(R.string.error_play_service));
+                break;
+            case ERROR_SESSION_EXPIRED:
+                showShortToastMessage(getString(R.string.error_session_expired));
                 break;
             case 2013:
                 showShortToastMessage(getString(R.string.error_network));

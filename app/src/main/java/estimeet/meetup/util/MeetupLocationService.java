@@ -5,13 +5,18 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.util.TimeUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 import estimeet.meetup.di.Modules.BackgroundServiceModule;
 import estimeet.meetup.di.components.BackgroundServiceComponent;
@@ -25,9 +30,12 @@ import estimeet.meetup.network.ServiceHelper;
  */
 public class MeetupLocationService implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
         LocationListener {
-
-    private static final int FASTEST_INTERVAL = 20000;
-    private static final int UPDATE_INTERVAL = 40000;
+//      // TODO: 10/04/16  live interval
+//    private static final int FASTEST_INTERVAL = 20000;
+//    private static final int UPDATE_INTERVAL = 40000;
+    //// TODO: 10/04/16 debug interval
+    private static final int FASTEST_INTERVAL = 1000;
+    private static final int UPDATE_INTERVAL = 5000;
 
     private static GoogleApiClient googleApiClient;
     private static LocationRequest locationRequest;
@@ -92,9 +100,12 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
             //20 seconds
             locationRequest.setFastestInterval(FASTEST_INTERVAL);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        }
 
-        if (locationRequest.getExpirationTime() < expiresTime) {
+            locationRequest.setExpirationDuration(expiresTime);
+        }
+        //allow 10 seconds delay
+        if (locationRequest.getExpirationTime() - SystemClock.elapsedRealtime() <
+                expiresTime - TimeUnit.SECONDS.toMillis(10)) {
             locationRequest.setExpirationDuration(expiresTime);
         }
     }
@@ -103,6 +114,7 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
         if (googleApiClient != null && googleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             googleApiClient.disconnect();
+            locationRequest = null;
         }
     }
 

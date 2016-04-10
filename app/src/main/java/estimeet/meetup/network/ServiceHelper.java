@@ -29,6 +29,10 @@ public class ServiceHelper {
         this.estimeetApi = restApi;
     }
 
+    public Observable<User> manualSignin(int id, long uid) {
+        return estimeetApi.manualSignin(id, uid);
+    }
+
     public Observable<User> signInUser(AuthUser authUser) {
         return estimeetApi.signInUser(authUser);
     }

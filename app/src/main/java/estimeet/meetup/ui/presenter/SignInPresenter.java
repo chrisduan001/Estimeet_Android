@@ -100,6 +100,10 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         signInInteractor.sendContacts(contacts);
     }
 
+    public void manualSignin() {
+        signInInteractor.manualSignin(this);
+    }
+
     private AuthCallback getAuthCallback() {
         authCallback = new AuthCallback() {
             @Override

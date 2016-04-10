@@ -117,7 +117,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
 
     public void createNewSession(FriendSession friendSession) {
         int lengthInMins = SessionFactory.getSessionLengthInMinutes(friendSession.getRequestedLength());
-        long expireInMillis = TimeUnit.MINUTES.toMinutes(lengthInMins);
+        long expireInMillis = TimeUnit.MINUTES.toMillis(lengthInMins);
         createSessionInteractor.call(this);
         createSessionInteractor.createSession(friendSession, expireInMillis);
 
@@ -136,12 +136,17 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     }
     //endregion
 
-    //region mainInteractor callback
+    //region interactor callback
     @Override
     public void getNotificationFinished() {
         isGetNotificationInProcess = false;
         deleteNotificationInteractor.call();
         checkSessionExpiration();
+    }
+
+    @Override
+    public void onCreateNewSession(long expireTimeInMilli) {
+        MeetupLocationService.getInstance(context).startLocationService(expireTimeInMilli);
     }
 
     @Override

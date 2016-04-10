@@ -112,6 +112,16 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     protected void signInClicked() {
         presenter.createDigitsAuthCallback();
     }
+
+    private int num = 0;
+    @Click(R.id.manual_sign_in)
+    protected void manualSignIn() {
+        num++;
+        if (num == 5) {
+            presenter.manualSignin();
+            num = 0;
+        }
+    }
     //endregion
 
     //region call presenter

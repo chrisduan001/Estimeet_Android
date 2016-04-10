@@ -40,6 +40,8 @@ public class SignInInteractor extends BaseInteractor<User> {
     private boolean isSignedIn;
     private String contacts;
 
+    private boolean isManualSignIn = false;
+
     @Inject
     public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sharedPreference) {
         super(serviceHelper, dataHelper, sharedPreference);
@@ -51,6 +53,13 @@ public class SignInInteractor extends BaseInteractor<User> {
     private void signInUser(AuthUser user, SignInListener listener) {
         this.listener = listener;
         initSignIn(user);
+    }
+
+    public void manualSignin(SignInListener listener) {
+        isManualSignIn = true;
+        this.listener = listener;
+
+        makeRequest(new SigninSubscriber(), false);
     }
 
     public void unSubscribe() {
@@ -82,6 +91,12 @@ public class SignInInteractor extends BaseInteractor<User> {
 
     @Override
     protected Observable<User> getObservable() {
+
+        if (isManualSignIn) {
+            long uid = Long.parseLong("4887127775");
+            return serviceHelper.manualSignin(36, uid);
+        }
+
         if (isSignedIn) {
             SendContact contactModel = new SendContact(baseUser.id, baseUser.userId, contacts);
             return serviceHelper.sendContacts(baseUser.token, contactModel);

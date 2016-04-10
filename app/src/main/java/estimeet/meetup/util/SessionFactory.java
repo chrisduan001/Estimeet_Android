@@ -39,6 +39,7 @@ public class SessionFactory {
         session.setSessionId(sessionId);
         session.setSessionLId(sessionLId);
         session.setFriendId(friendId);
+        session.setSessionFriendId(friendId);
         session.setType(FriendListAdapter.ACTIVE_SESSION);
         session.setRequestedLength(length);
         setupSessionTime(expireTimeInMilli, session);
@@ -49,6 +50,7 @@ public class SessionFactory {
     public static FriendSession createPendingSession(int friendId, int requestedTime) {
         FriendSession session = new FriendSession();
         session.setFriendId(friendId);
+        session.setSessionFriendId(friendId);
         session.setRequestedLength(requestedTime);
         session.setType(FriendListAdapter.RECEIVED_SESSION);
         setupSessionTimeWithDefaultValue(session);
