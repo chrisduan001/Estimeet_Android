@@ -99,6 +99,24 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         registerPushChannel();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.pauseTimer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.resumeTimer();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.destoryTimer();
+    }
+
     private void initialize() {
         getComponent(MainComponent.class).inject(this);
     }
@@ -135,11 +153,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         NotificationsManager.handleNotifications(getContext(), getString(R.string.push_SENDER_ID),
                 NotificationHandler.class);
         presenter.registerPushChannel();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

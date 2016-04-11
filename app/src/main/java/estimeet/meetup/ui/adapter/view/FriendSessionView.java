@@ -3,6 +3,8 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
+import org.androidannotations.annotations.Receiver;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
@@ -28,6 +31,7 @@ import estimeet.meetup.util.SessionFactory;
  */
 @EViewGroup(R.layout.item_friend_session)
 public class FriendSessionView extends RelativeLayout {
+    private static final String TAG = FriendSessionView.class.getSimpleName();
 
     @ViewById(R.id.friend_dp)                       ImageView dpImage;
     @ViewById(R.id.pending_session)                 ViewGroup pendingSession;
@@ -48,6 +52,7 @@ public class FriendSessionView extends RelativeLayout {
         super(context);
     }
 
+    //region view
     public void bindView(FriendSession friendSession, SessionActionCallback callback) {
         this.friendSession = friendSession;
         this.callback = new WeakReference<>(callback);
@@ -123,9 +128,20 @@ public class FriendSessionView extends RelativeLayout {
         }
     }
 
-    public void setProgressBarView(int value) {
-        progressBar.setProgress(value);
+    public void setProgressBarView() {
+        double systemTimeToExpire = friendSession.getDateCreated() + friendSession.getTimeToExpireInMilli();
+        double timeLeft = systemTimeToExpire - System.currentTimeMillis();
+        int percentage = (int)((timeLeft / friendSession.getTimeToExpireInMilli()) * 100);
+        Log.d(TAG, "setProgressBarTimer: " + friendSession.getFriendName() + " precentage: " + percentage);
+        progressBar.setProgress(percentage);
     }
+
+    @UiThread
+    void displayImage(Bitmap bitmap) {
+        dpImage.setImageBitmap(bitmap);
+    }
+
+    //endregion
 
     @Click(R.id.btn_cancel_session)
     protected void onCancelSession() {
@@ -142,6 +158,7 @@ public class FriendSessionView extends RelativeLayout {
         ignoreRequest();
     }
 
+    //region logic
     @Background
     void cancelSession() {
         callback.get().onCancelSession(friendSession);
@@ -162,11 +179,7 @@ public class FriendSessionView extends RelativeLayout {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         displayImage(bitmap);
     }
-
-    @UiThread
-    void displayImage(Bitmap bitmap) {
-        dpImage.setImageBitmap(bitmap);
-    }
+    //endregion
 
     public interface SessionActionCallback {
         void onCancelSession(FriendSession friendSession);

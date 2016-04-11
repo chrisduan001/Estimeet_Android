@@ -11,6 +11,9 @@ import android.widget.Adapter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -49,6 +52,9 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     private WeakReference<FriendAdapterCallback> callback;
     private FriendListView viewSwiped = null;
 
+    private CountDownTimer timer;
+    private List<FriendSessionView> viewToUpdate;
+
     private int itemSelected = Adapter.NO_SELECTION;
     private int currentSection = Integer.MIN_VALUE;
 
@@ -71,8 +77,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             FriendSessionView sessionView = (FriendSessionView) view;
             FriendSession friendSession = FriendSession.fromCursor(cursor);
             sessionView.bindView(friendSession, this);
-
-            setProgressBarTimer(sessionView, friendSession);
+            updateTimer(friendSession, sessionView);
         } else {
             FriendListView friendView = (FriendListView)view;
             FriendSession friend = FriendSession.fromCursor(cursor);
@@ -84,32 +89,14 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         }
     }
 
-    private void setProgressBarTimer(final FriendSessionView sessionView, final FriendSession friendSession) {
-        final long systemTimeToExpire = friendSession.getDateCreated() + friendSession.getTimeToExpireInMilli();
-        final long timeLeft = systemTimeToExpire - System.currentTimeMillis();
-
-        new CountDownTimer(timeLeft, 10000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int percentage = (int)(((double)millisUntilFinished / (double)friendSession.getTimeToExpireInMilli())
-                        * 100);
-                Log.d(TAG, "percentage: " + percentage);
-                sessionView.setProgressBarView(percentage);
-            }
-
-            @Override
-            public void onFinish() {
-                sessionView.setProgressBarView(0);
-            }
-        }.start();
-    }
-
     /**
      this method will find when should start a new section and at which position
      also find the how many sections in total, will be used for the total number of list
      */
     @Override
     public void buildSectionHash(Cursor cursor) {
+        viewToUpdate = new ArrayList<>();
+
         sectionHash = new HashMap<>();
         sectionPos = new ArrayList<>();
 
@@ -215,6 +202,47 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     @Override
     public void onIgnoreRequest(FriendSession friendSession) {
         callback.get().onIgnoreRequest(friendSession);
+    }
+    //endregion
+
+    //region timer logic
+    private void updateTimer(FriendSession friendSession, FriendSessionView view) {
+        if (viewToUpdate == null) viewToUpdate = new ArrayList<>();
+
+        if (friendSession.getType() == ACTIVE_SESSION) {
+            viewToUpdate.add(view);
+
+            if (timer == null) setProgressBarTimer();
+        }
+    }
+
+    private void setProgressBarTimer() {
+        timer = new CountDownTimer(10000000, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.d(TAG, "onTick: ");
+                if (viewToUpdate.size() <= 0) this.cancel();
+                for (FriendSessionView view: viewToUpdate) {
+                    view.setProgressBarView();
+                }
+            }
+            @Override
+            public void onFinish() {
+            }
+        }.start();
+    }
+
+    public void pauseTimer() {
+        if (timer != null) timer.cancel();
+    }
+
+    public void resumeTimer() {
+        if (timer != null) timer.start();
+    }
+
+    public void destoryTimer() {
+        timer = null;
+        viewToUpdate = null;
     }
     //endregion
     public void setCallback(FriendAdapterCallback callback) {
