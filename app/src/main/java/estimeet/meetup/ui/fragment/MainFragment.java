@@ -278,5 +278,10 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         presenter.ignoreSession(friendSession);
     }
 
+    @Override
+    public void onRequestLocation(FriendSession friendSession) {
+        presenter.requestLocationData(friendSession);
+    }
+
     //endregion
 }

@@ -10,8 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import estimeet.meetup.R;
-import estimeet.meetup.ui.adapter.FriendListAdapter;
+import estimeet.meetup.ui.adapter.view.FriendSessionView;
 
 /**
  * Created by AmyDuan on 21/03/16.
@@ -47,8 +46,7 @@ public class ItemTouchHelperCallback extends android.support.v7.widget.helper.It
 
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             //SWIPE
-            if (viewHolder.getItemId() == RecyclerView.NO_ID ||
-                    viewHolder.getItemViewType() == FriendListAdapter.VIEWTYPE_SESSION) return;
+            if (!listener.isViewSwipeable(viewHolder.itemView, viewHolder.getItemId())) return;
             listener.onStartSwipe(viewHolder.itemView, viewHolder.getAdapterPosition());
 
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
@@ -71,17 +69,14 @@ public class ItemTouchHelperCallback extends android.support.v7.widget.helper.It
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        if (viewHolder.getItemId() == RecyclerView.NO_ID ||
-                viewHolder.getItemViewType() == FriendListAdapter.VIEWTYPE_SESSION) return;
-        listener.onItemMove(viewHolder.getAdapterPosition());
+        if (!listener.isViewSwipeable(viewHolder.itemView, viewHolder.getItemId())) return;
+        listener.onItemMove(viewHolder);
     }
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        if (viewHolder.getItemId() == RecyclerView.NO_ID ||
-                viewHolder.getItemViewType() == FriendListAdapter.VIEWTYPE_SESSION) return;
-
         View itemView = viewHolder.itemView;
+        if (!listener.isViewSwipeable(itemView, viewHolder.getItemId())) return;
 
         if (dX > 0) {
             c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom(), paint);

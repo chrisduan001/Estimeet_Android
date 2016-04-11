@@ -3,6 +3,7 @@ package estimeet.meetup.ui.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.CountDownTimer;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -155,27 +156,50 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
 
     //region item touch listener (recyclerview touch actions)
     @Override
-    public void onItemMove(int position) {
-        if (position != Adapter.NO_SELECTION) {
-            resetSelection(position);
+    public void onItemMove(RecyclerView.ViewHolder viewHolder) {
+        int adapterPos = viewHolder.getAdapterPosition();
+        if (adapterPos != Adapter.NO_SELECTION) {
+            resetSelection(viewHolder.itemView, adapterPos);
         }
     }
     //swipe not complete(eg: user swiped half way and cancelled)
     @Override
     public void onStopSwipe() {
-        if (itemSelected != Adapter.NO_SELECTION) {
+        if (itemSelected != Adapter.NO_SELECTION && viewSwiped != null) {
             viewSwiped.bindFriend(viewSwiped.getFriendSession());
         }
     }
 
-    private void resetSelection(int position) {
+    @Override
+    public boolean isViewSwipeable(View view, long id) {
+        //disable view swipe when 1.recyclerview has no id (header section)
+        // 2. view friend sessionview but is not active session
+        if (id != RecyclerView.NO_ID) {
+            if (view instanceof FriendSessionView) {
+                FriendSessionView fSessionView = (FriendSessionView) view;
+                return fSessionView.getFriendSession().getType() == ACTIVE_SESSION;
+            }
+            return true;
+        } else return false;
+    }
+
+    private void resetSelection(View view, int position) {
         itemSelected = Adapter.NO_SELECTION;
-        FriendSession session = viewSwiped.getFriendSession();
-        //// TODO: 4/04/16 change to actual request time later
-        // TODO: 7/04/16 0 == 15 minutes 1 == 30minutes etc
-        session.setRequestedLength(0);
-        callback.get().onSessionRequest(session);
-        notifyItemRemoved(position);
+        viewSwiped = null;
+
+        FriendSession session;
+        if (view instanceof FriendListView) {
+            //// TODO: 4/04/16 change to actual request time later
+            // TODO: 7/04/16 0 == 15 minutes 1 == 30minutes etc
+            session = ((FriendListView) view).getFriendSession();
+            session.setRequestedLength(0);
+            callback.get().onSessionRequest(session);
+            notifyItemRemoved(position);
+        } else {
+            session = ((FriendSessionView) view).getFriendSession();
+            callback.get().onRequestLocation(session);
+            notifyItemChanged(position);
+        }
     }
 
     @Override
@@ -254,5 +278,6 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         void onCancelSession(FriendSession friendSession);
         void onAcceptSession(FriendSession friendSession);
         void onIgnoreRequest(FriendSession friendSession);
+        void onRequestLocation(FriendSession friendSession);
     }
 }

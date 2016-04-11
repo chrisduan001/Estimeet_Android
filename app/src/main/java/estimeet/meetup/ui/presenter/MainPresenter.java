@@ -12,6 +12,7 @@ import estimeet.meetup.interactor.CancelSessionInteractor;
 import estimeet.meetup.interactor.CreateSessionInteractor;
 import estimeet.meetup.interactor.DeleteNotificationInteractor;
 import estimeet.meetup.interactor.GetNotificationInteractor;
+import estimeet.meetup.interactor.LocationDataInteractor;
 import estimeet.meetup.interactor.MainInteractor;
 import estimeet.meetup.interactor.PushInteractor;
 import estimeet.meetup.interactor.SendGeoDataInteractor;
@@ -34,6 +35,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     @Inject CancelSessionInteractor cancelSessionInteractor;
     @Inject SendGeoDataInteractor geoInteractor;
     @Inject CreateSessionInteractor createSessionInteractor;
+    @Inject LocationDataInteractor locationDataInteractor;
 
     private WeakReference<MainView> view;
     private boolean isGetNotificationInProcess;
@@ -48,7 +50,8 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
                          DeleteNotificationInteractor deleteNotificationInteractor,
                          CancelSessionInteractor cancelSessionInteractor,
                          SendGeoDataInteractor geoInteractor,
-                         CreateSessionInteractor createSessionInteractor) {
+                         CreateSessionInteractor createSessionInteractor,
+                         LocationDataInteractor locationDataInteractor) {
         this.context = context;
         this.mainInteractor = mainInteractor;
         this.pushInteractor = pushInteractor;
@@ -57,10 +60,12 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         this.cancelSessionInteractor = cancelSessionInteractor;
         this.geoInteractor = geoInteractor;
         this.createSessionInteractor = createSessionInteractor;
+        this.locationDataInteractor = locationDataInteractor;
     }
 
     @Override
     public void onResume() {
+        locationDataInteractor.call(this);
         mainInteractor.call(this);
         notificationInteractor.call(this);
         notificationInteractor.getNotifications();
@@ -133,6 +138,10 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     public void cancelSession(FriendSession friendSession) {
         cancelSessionInteractor.call(this);
         cancelSessionInteractor.cancelSession(friendSession);
+    }
+
+    public void requestLocationData(FriendSession friendSession) {
+        locationDataInteractor.onRequestLocation(friendSession);
     }
     //endregion
 

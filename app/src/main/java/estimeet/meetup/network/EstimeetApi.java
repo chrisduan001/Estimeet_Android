@@ -3,8 +3,10 @@ package estimeet.meetup.network;
 import estimeet.meetup.model.BaseModel;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
+import estimeet.meetup.model.LocationModel;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.PostModel.AuthUser;
+import estimeet.meetup.model.PostModel.RequestLocationModel;
 import estimeet.meetup.model.PostModel.SendContact;
 import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.PostModel.UpdateModel;
@@ -120,5 +122,11 @@ public interface EstimeetApi {
             @Query("expireTimeInMinutes") int minutes,
             @Query("length") int length,
             @Body NotificationModel notificationModel
+    );
+
+    @POST("/Session/getSessionData")
+    Observable<ListItem<LocationModel>> getTravelInfo(
+            @Header("Authoriztion") String token,
+            @Body RequestLocationModel requestLocationModel
     );
 }

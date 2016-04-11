@@ -179,6 +179,10 @@ public class FriendSessionView extends RelativeLayout {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         displayImage(bitmap);
     }
+
+    public FriendSession getFriendSession() {
+        return friendSession;
+    }
     //endregion
 
     public interface SessionActionCallback {
