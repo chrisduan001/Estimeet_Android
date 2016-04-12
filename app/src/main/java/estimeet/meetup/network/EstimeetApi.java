@@ -112,6 +112,7 @@ public interface EstimeetApi {
             @Header("Authorization") String token,
             @Query("data") String data,
             @Query("userUId") long userUid,
+            @Query("travelMode") int travelMode,
             @Query("needNotify") boolean needNotify,
             @Body NotificationModel notificationModel
     );
@@ -126,7 +127,7 @@ public interface EstimeetApi {
 
     @POST("/Session/getSessionData")
     Observable<ListItem<LocationModel>> getTravelInfo(
-            @Header("Authoriztion") String token,
+            @Header("Authorization") String token,
             @Body RequestLocationModel requestLocationModel
     );
 }

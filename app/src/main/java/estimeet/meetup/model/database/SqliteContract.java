@@ -40,6 +40,7 @@ public class SqliteContract {
         String SESSION_REQUESTED_TIME = "RequestedTime";
         String SESSION_DISTANCE = "Distance";
         String SESSION_ETA = "ETA";
+        String TRAVEL_MODE = "TravelMode";
         String SESSION_LOCATION = "Location";
         String SESSION_TYPE = "Type";
     }

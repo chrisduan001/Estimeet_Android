@@ -143,6 +143,10 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     public void requestLocationData(FriendSession friendSession) {
         locationDataInteractor.onRequestLocation(friendSession);
     }
+
+    public void setTravelMode(int mode) {
+        geoInteractor.setTravelMode(mode);
+    }
     //endregion
 
     //region interactor callback

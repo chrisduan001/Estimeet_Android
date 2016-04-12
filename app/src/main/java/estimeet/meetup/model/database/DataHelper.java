@@ -192,6 +192,7 @@ public class DataHelper {
                 SqliteContract.SessionColumns.SESSION_LOCATION,
                 SqliteContract.SessionColumns.SESSION_TYPE,
                 SqliteContract.SessionColumns.SESSION_REQUESTED_TIME,
+                SqliteContract.SessionColumns.TRAVEL_MODE,
                 SqliteContract.FriendColumns.IMAGE,
                 SqliteContract.FriendColumns.USER_NAME,
                 SqliteContract.FriendColumns.ID,
@@ -208,8 +209,9 @@ public class DataHelper {
         int SESSION_LOCATION = 8;
         int SESSION_TYPE = 9;
         int SESSION_REQUESTED_TIME = 10;
-        int FRIEND_IMAGE = 11;
-        int FRIEND_NAME = 12;
-        int FRIEND_ID = 13;
+        int SESSION_TRAVEL_MODE = 11;
+        int FRIEND_IMAGE = 12;
+        int FRIEND_NAME = 13;
+        int FRIEND_ID = 14;
     }
 }

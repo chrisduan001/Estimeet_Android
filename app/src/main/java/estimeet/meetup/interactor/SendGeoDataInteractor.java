@@ -23,18 +23,25 @@ public class SendGeoDataInteractor extends BaseInteractor<Void> {
 
     public void sendGeoData(String geoCoord) {
         this.geoCoord = geoCoord;
+        sharedPreference.saveUserGeo(geoCoord);
         makeRequest(new DefaultSubscriber<Void>() {
             @Override
-            protected void onAuthError() {}
+            protected void onAuthError() {
+            }
 
             @Override
-            protected void onError(String err) {}
+            protected void onError(String err) {
+            }
         }, true);
+    }
+
+    public void setTravelMode(int travelMode) {
+        sharedPreference.saveTravelInfo(travelMode);
     }
 
     @Override
     protected Observable<Void> getObservable() {
-        return serviceHelper.sendGeodata(baseUser.token, geoCoord, baseUser.userId,
+        return serviceHelper.sendGeodata(baseUser.token, geoCoord, baseUser.userId, sharedPreference.getTravelMode(),
                 new NotificationModel(baseUser.id, 0, 0));
     }
 }

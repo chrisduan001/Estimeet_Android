@@ -1,5 +1,7 @@
 package estimeet.meetup.interactor;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
@@ -38,7 +40,7 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
     protected Observable<ListItem<LocationModel>> getObservable() {
         return serviceHelper.getTravelInfo(baseUser.token, new RequestLocationModel(baseUser.id,
                 friendSession.getFriendId(), dataHelper.getFriend(friendSession.getFriendId()).userId,
-                friendSession.getSessionId(), friendSession.getSessionLId(), 0, ""));
+                friendSession.getSessionId(), friendSession.getSessionLId(), -1, sharedPreference.getUserGeoCoord()));
     }
 
     private class RequestLocationSubscriber extends DefaultSubscriber<ListItem<LocationModel>> {
@@ -48,6 +50,7 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
             super.onNext(locationModelListItem);
 
             LocationModel model = locationModelListItem.items.get(0);
+            String distanceString = String.format("%.2f KM", (double)model.distance/1000);
             friendSession.setDistance(model.distance + "");
             friendSession.setEta(model.eta + "");
         }

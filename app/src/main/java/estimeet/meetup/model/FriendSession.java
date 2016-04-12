@@ -23,6 +23,7 @@ public class FriendSession {
     private byte[] friendDp;
     private int friendId;
     private int requestedLength;
+    private String travelMode;
 
     public int getSessionId() {
         return sessionId;
@@ -128,6 +129,14 @@ public class FriendSession {
         this.requestedLength = requestedLength;
     }
 
+    public String getTravelMode() {
+        return travelMode;
+    }
+
+    public void setTravelMode(String travelMode) {
+        this.travelMode = travelMode;
+    }
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(9);
         contentValues.put(SqliteContract.SessionColumns.SESSION_ID, getSessionId());
@@ -140,6 +149,7 @@ public class FriendSession {
         contentValues.put(SqliteContract.SessionColumns.SESSION_LOCATION, getLocation());
         contentValues.put(SqliteContract.SessionColumns.SESSION_TYPE, getType());
         contentValues.put(SqliteContract.SessionColumns.SESSION_REQUESTED_TIME, getRequestedLength());
+        contentValues.put(SqliteContract.SessionColumns.TRAVEL_MODE, getTravelMode());
         return contentValues;
     }
 
@@ -159,6 +169,7 @@ public class FriendSession {
         friendSession.setFriendDp(cursor.getBlob(DataHelper.FriendSessionQuery.FRIEND_IMAGE));
         friendSession.setFriendId(cursor.getInt(DataHelper.FriendSessionQuery.FRIEND_ID));
         friendSession.setRequestedLength(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_REQUESTED_TIME));
+        friendSession.setTravelMode(cursor.getString(DataHelper.FriendSessionQuery.SESSION_TRAVEL_MODE));
         return friendSession;
     }
 

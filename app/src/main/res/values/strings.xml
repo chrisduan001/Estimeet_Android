@@ -52,4 +52,5 @@
     <string name="error_title">Error</string>
     <string name="meetup_subtitle">Redefining the way we meet</string>
     <string name="error_session_expired">Session expired, user deleted the session or expired</string>
+    <string name="error_session_generic">An error occurred while get the distance, please try again</string>
 </resources>

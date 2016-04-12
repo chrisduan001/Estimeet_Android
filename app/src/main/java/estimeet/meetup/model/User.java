@@ -38,6 +38,8 @@ public class User extends BaseModel {
     @SerializedName("expires_in")
     public long expiresTime;
 
+    public int travelMode;
+
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues(3);
         values.put(SqliteContract.UserColumns.ID, userId);
@@ -45,15 +47,6 @@ public class User extends BaseModel {
 //        values.put(SqliteContract.UserColumns.LAST_NAME, lastName);
 
         return values;
-    }
-
-    public static User fromCursor(Cursor cursor) {
-        User user = new User();
-        user.userId = cursor.getInt(DataHelper.UserQuery.USER_ID);
-//        user.firstName = cursor.getString(DataHelper.UserQuery.FIRST_NAME);
-//        user.lastName = cursor.getString(DataHelper.UserQuery.LAST_NAME);
-
-        return user;
     }
 
     public boolean isProfileCompleted() {

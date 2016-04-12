@@ -21,6 +21,8 @@ public class MeetUpSharedPreference {
     private static final String PASSWORD        = "PASSWORD";
     private static final String TOKEN           = "AUTH_TOKEN";
     private static final String EXPIRES         = "TOKEN_EXPIRE_TIME";
+    private static final String TRAVEL_MODE     = "TRAVEL_MODE";
+    private static final String USER_GEO        = "USER_GEO";
 
     private static final String VERSION_CODE    = "VERSION_CODE";
     private static final String GCM_REG_ID      = "GCM_REG_ID";
@@ -44,6 +46,7 @@ public class MeetUpSharedPreference {
         user.password = sharedPreferences.getString(PASSWORD, "");
         user.token = sharedPreferences.getString(TOKEN, "");
         user.expiresTime = sharedPreferences.getLong(EXPIRES, 0);
+        user.travelMode = sharedPreferences.getInt(TRAVEL_MODE, 0);
 
         return user;
     }
@@ -108,6 +111,26 @@ public class MeetUpSharedPreference {
         editor.putLong(NOTIFICATIONID, id);
 
         editor.apply();
+    }
+
+    public void saveTravelInfo(int travelMode) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(TRAVEL_MODE, travelMode);
+        editor.apply();
+    }
+
+    public void saveUserGeo(String userGeo) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_GEO, userGeo);
+        editor.apply();
+    }
+
+    public int getTravelMode() {
+        return sharedPreferences.getInt(TRAVEL_MODE, 0);
+    }
+
+    public String getUserGeoCoord() {
+        return sharedPreferences.getString(USER_GEO, "");
     }
 
     public void removeSharedPreference() {

@@ -10,15 +10,15 @@ public class RequestLocationModel {
     private int sessionId;
     private long sessionLid;
     private int travelMode;
-    private String geo;
+    private String userGeo;
 
-    public RequestLocationModel(int userId, int friendId, long friendUid, int sessionId, long sessionLid, int travelMode, String geo) {
+    public RequestLocationModel(int userId, int friendId, long friendUid, int sessionId, long sessionLid, int travelMode, String userGeo) {
         this.userId = userId;
         this.friendId = friendId;
         this.friendUid = friendUid;
         this.sessionId = sessionId;
         this.sessionLid = sessionLid;
         this.travelMode = travelMode;
-        this.geo = geo;
+        this.userGeo = userGeo;
     }
 }
