@@ -93,6 +93,8 @@ public class FriendSessionView extends RelativeLayout {
         } else {
             showActivitySessionView();
         }
+
+        setProgressBarView();
     }
 
     private void showEmptyActivitySessionView() {
@@ -135,7 +137,7 @@ public class FriendSessionView extends RelativeLayout {
                 break;
             case FriendListAdapter.ACTIVE_SESSION:
                 setVisibility(GONE, pendingSession);
-                setVisibility(VISIBLE, activeSessionView, progressBar);
+                setVisibility(VISIBLE, activeSessionView);
                 break;
         }
     }
@@ -147,6 +149,7 @@ public class FriendSessionView extends RelativeLayout {
     }
 
     public void setProgressBarView() {
+        if (progressBar.getVisibility() == GONE) progressBar.setVisibility(VISIBLE);
         double systemTimeToExpire = friendSession.getDateCreated() + friendSession.getTimeToExpireInMilli();
         double timeLeft = systemTimeToExpire - System.currentTimeMillis();
         int percentage = (int)((timeLeft / friendSession.getTimeToExpireInMilli()) * 100);
