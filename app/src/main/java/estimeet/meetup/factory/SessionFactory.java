@@ -1,4 +1,4 @@
-package estimeet.meetup.util;
+package estimeet.meetup.factory;
 
 import android.content.Context;
 
@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.FriendSession;
+import estimeet.meetup.model.LocationModel;
 import estimeet.meetup.ui.adapter.FriendListAdapter;
 
 /**
@@ -45,6 +46,15 @@ public class SessionFactory {
         setupSessionTime(expireTimeInMilli, session);
 
         return session;
+    }
+
+    public static FriendSession updateDistanceEta(LocationModel locationModel, FriendSession friendSession) {
+        friendSession.setDistance(locationModel.distance);
+        friendSession.setEta(locationModel.eta);
+        friendSession.setTravelMode(locationModel.travelMode);
+        friendSession.setDateUpdated(System.currentTimeMillis());
+
+        return friendSession;
     }
 
     public static FriendSession createPendingSession(int friendId, int requestedTime) {

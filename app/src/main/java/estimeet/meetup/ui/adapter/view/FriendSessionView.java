@@ -3,7 +3,7 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +15,16 @@ import android.widget.TextView;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.Receiver;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import java.lang.ref.WeakReference;
 
 import estimeet.meetup.R;
+import estimeet.meetup.factory.TravelInfoFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.adapter.FriendListAdapter;
-import estimeet.meetup.util.SessionFactory;
+import estimeet.meetup.factory.SessionFactory;
 
 /**
  * Created by AmyDuan on 2/04/16.
@@ -88,7 +88,11 @@ public class FriendSessionView extends RelativeLayout {
 
     private void setupSessionInfoView() {
         setViewVisibility(FriendListAdapter.ACTIVE_SESSION);
-        showEmptyActivitySessionView();
+        if (friendSession.getDistance() == 0 && friendSession.getEta() == 0) {
+            showEmptyActivitySessionView();
+        } else {
+            showActivitySessionView();
+        }
     }
 
     private void showEmptyActivitySessionView() {
@@ -98,9 +102,23 @@ public class FriendSessionView extends RelativeLayout {
     }
 
     private void showActivitySessionView() {
-        sessionDistance.setText(friendSession.getDistance());
-        sessionEta.setText(friendSession.getEta());
-        sessionLocation.setText(friendSession.getLocation());
+        String expireString = TravelInfoFactory.isLocationDataExpired(friendSession.getDateUpdated()) ?
+                getContext().getString(R.string.expired_string) : "";
+
+        sessionDistance.setText(String.format("%s %s %s",
+                getContext().getString(R.string.distance_title),
+                TravelInfoFactory.getDistanceString((double)friendSession.getDistance(), getContext()),
+                expireString));
+
+        String locationString = getContext().getString(R.string.location_title);
+        sessionLocation.setText(String.format("%s %s", locationString,
+                TextUtils.isEmpty(friendSession.getLocation()) ?
+                getContext().getString(R.string.location_unknown) : friendSession.getLocation() + expireString));
+
+        String etaString = getContext().getString(R.string.eta_title) +
+                TravelInfoFactory.getEtaString(friendSession.getEta(), getContext()) + expireString;
+        sessionEta.setText(etaString);
+
         setVisibility(GONE, sessionFriendName);
         setVisibility(VISIBLE, sessionDistance, sessionEta, sessionLocation);
     }

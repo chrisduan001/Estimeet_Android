@@ -20,7 +20,7 @@ import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.BaseView;
 import estimeet.meetup.ui.fragment.BaseFragment;
 import estimeet.meetup.util.MeetupLocationService;
-import estimeet.meetup.util.SessionFactory;
+import estimeet.meetup.factory.SessionFactory;
 
 /**
  * Created by AmyDuan on 6/02/16.

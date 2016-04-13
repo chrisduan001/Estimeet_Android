@@ -14,16 +14,17 @@ public class FriendSession {
     private long sessionLId;
     private int sessionFriendId;
     private long dateCreated;
+    private long dateUpdated;
     private long timeToExpireInMilli;
-    private String distance;
-    private String eta;
+    private int distance;
+    private int eta;
     private String location;
     private int type;
     private String friendName;
     private byte[] friendDp;
     private int friendId;
     private int requestedLength;
-    private String travelMode;
+    private int travelMode;
 
     public int getSessionId() {
         return sessionId;
@@ -65,19 +66,19 @@ public class FriendSession {
         this.timeToExpireInMilli = timeToExpireInMilli;
     }
 
-    public String getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(String distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 
-    public String getEta() {
+    public int getEta() {
         return eta;
     }
 
-    public void setEta(String eta) {
+    public void setEta(int eta) {
         this.eta = eta;
     }
 
@@ -129,16 +130,24 @@ public class FriendSession {
         this.requestedLength = requestedLength;
     }
 
-    public String getTravelMode() {
+    public int getTravelMode() {
         return travelMode;
     }
 
-    public void setTravelMode(String travelMode) {
+    public void setTravelMode(int travelMode) {
         this.travelMode = travelMode;
     }
 
+    public long getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public void setDateUpdated(long dateUpdated) {
+        this.dateUpdated = dateUpdated;
+    }
+
     public ContentValues toContentValues() {
-        ContentValues contentValues = new ContentValues(9);
+        ContentValues contentValues = new ContentValues(11);
         contentValues.put(SqliteContract.SessionColumns.SESSION_ID, getSessionId());
         contentValues.put(SqliteContract.SessionColumns.SESSION_LID, getSessionLId());
         contentValues.put(SqliteContract.SessionColumns.FRIEND_ID, getFriendId());
@@ -150,6 +159,7 @@ public class FriendSession {
         contentValues.put(SqliteContract.SessionColumns.SESSION_TYPE, getType());
         contentValues.put(SqliteContract.SessionColumns.SESSION_REQUESTED_TIME, getRequestedLength());
         contentValues.put(SqliteContract.SessionColumns.TRAVEL_MODE, getTravelMode());
+        contentValues.put(SqliteContract.SessionColumns.DATE_UPDATED, getDateUpdated());
         return contentValues;
     }
 
@@ -161,15 +171,16 @@ public class FriendSession {
         friendSession.setSessionFriendId(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_FRIEND_ID));
         friendSession.setDateCreated(cursor.getLong(DataHelper.FriendSessionQuery.DATE_CREATED));
         friendSession.setTimeToExpireInMilli(cursor.getLong(DataHelper.FriendSessionQuery.EXPIRE_MINUTES));
-        friendSession.setDistance(cursor.getString(DataHelper.FriendSessionQuery.SESSION_DISTANCE));
-        friendSession.setEta(cursor.getString(DataHelper.FriendSessionQuery.SESSION_ETA));
+        friendSession.setDistance(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_DISTANCE));
+        friendSession.setEta(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_ETA));
         friendSession.setLocation(cursor.getString(DataHelper.FriendSessionQuery.SESSION_LOCATION));
         friendSession.setType(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_TYPE));
         friendSession.setFriendName(cursor.getString(DataHelper.FriendSessionQuery.FRIEND_NAME));
         friendSession.setFriendDp(cursor.getBlob(DataHelper.FriendSessionQuery.FRIEND_IMAGE));
         friendSession.setFriendId(cursor.getInt(DataHelper.FriendSessionQuery.FRIEND_ID));
         friendSession.setRequestedLength(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_REQUESTED_TIME));
-        friendSession.setTravelMode(cursor.getString(DataHelper.FriendSessionQuery.SESSION_TRAVEL_MODE));
+        friendSession.setTravelMode(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_TRAVEL_MODE));
+        friendSession.setDateUpdated(cursor.getLong(DataHelper.FriendSessionQuery.DATE_UPDATED));
         return friendSession;
     }
 

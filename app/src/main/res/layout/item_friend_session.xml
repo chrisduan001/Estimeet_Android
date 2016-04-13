@@ -96,6 +96,7 @@
 
     <LinearLayout
         android:id="@+id/session_active"
+        android:visibility="visible"
         style="@style/SessionLayoutStyle">
 
         <TextView

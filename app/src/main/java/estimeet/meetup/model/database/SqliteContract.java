@@ -36,6 +36,7 @@ public class SqliteContract {
         String FRIEND_ID = "FriendId";
         String SESSION_LID = "SessionLId";
         String DATE_CREATED = "DateCreated";
+        String DATE_UPDATED = "DateUpdated"; //set when distance and eta requested
         String EXPIRE_MINUTES = "TimeToExpire";
         String SESSION_REQUESTED_TIME = "RequestedTime";
         String SESSION_DISTANCE = "Distance";

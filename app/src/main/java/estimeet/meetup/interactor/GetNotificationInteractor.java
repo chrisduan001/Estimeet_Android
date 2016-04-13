@@ -9,7 +9,7 @@ import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import estimeet.meetup.util.SessionFactory;
+import estimeet.meetup.factory.SessionFactory;
 import rx.Observable;
 
 /**

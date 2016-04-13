@@ -13,11 +13,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.inject.Inject;
-
 import estimeet.meetup.R;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;

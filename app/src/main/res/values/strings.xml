@@ -53,4 +53,15 @@
     <string name="meetup_subtitle">Redefining the way we meet</string>
     <string name="error_session_expired">Session expired, user deleted the session or expired</string>
     <string name="error_session_generic">An error occurred while get the distance, please try again</string>
+    <string name="distance_format">KM</string>
+    <string name="travel_walk">Walk</string>
+    <string name="travel_drive">Drive</string>
+    <string name="location_unknown">Unknown</string>
+    <string name="expired_string">(EXPIRED)</string>
+    <string name="minute_string">Minute(s)</string>
+    <string name="hour_string">Hour(s)</string>
+
+    <string name="distance_title">Distance: </string>
+    <string name="eta_title">ETA: </string>
+    <string name="location_title">Location: </string>
 </resources>

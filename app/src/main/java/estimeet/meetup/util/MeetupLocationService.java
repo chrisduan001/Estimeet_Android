@@ -34,8 +34,8 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
 //    private static final int FASTEST_INTERVAL = 20000;
 //    private static final int UPDATE_INTERVAL = 40000;
     //// TODO: 10/04/16 debug interval
-    private static final int FASTEST_INTERVAL = 1000;
-    private static final int UPDATE_INTERVAL = 5000;
+    private static final int FASTEST_INTERVAL = 5000;
+    private static final int UPDATE_INTERVAL = 10000;
 
     private static GoogleApiClient googleApiClient;
     private static LocationRequest locationRequest;
