@@ -84,7 +84,6 @@ public class CustomRoundButton extends Button {
 
         //Draw text
         canvas.drawText(buttonText, xPos, yPos, paintColorStyle);
-
     }
 
     public static float dpToPixel(float dipValue,Context context) {

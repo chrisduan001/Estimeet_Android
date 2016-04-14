@@ -19,7 +19,6 @@ import rx.Observable;
 public class MainInteractor extends BaseInteractor<Boolean> {
 
     private MainListener listener;
-    private SendSessionRequestSubscriber subscriber;
 
     private FriendSession session;
 
@@ -41,8 +40,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
         SessionFactory.createRequestedSession(session);
         dataHelper.insertSession(session);
 
-        subscriber = new SendSessionRequestSubscriber();
-        makeRequest(subscriber, true);
+        makeRequest(new SendSessionRequestSubscriber(), true);
     }
 
     public void onSessionIgnored(FriendSession friendSession) {

@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -20,10 +24,12 @@ import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.Modules.MainModule;
 import estimeet.meetup.di.components.DaggerMainComponent;
 import estimeet.meetup.di.components.MainComponent;
+import estimeet.meetup.factory.TravelInfoFactory;
 import estimeet.meetup.model.User;
 import estimeet.meetup.ui.fragment.MainFragment;
 import estimeet.meetup.ui.fragment.MainFragment_;
 import estimeet.meetup.ui.fragment.ManageFriendFragment;
+import estimeet.meetup.util.AnimationUtil;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -33,11 +39,18 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
     private MainComponent mainComponent;
 
-    @ViewById(R.id.tool_bar) Toolbar toolbar;
-    @ViewById(R.id.toolbar_icon) ImageView estimeetIcon;
-    @ViewById(R.id.toolbar_title) TextView toolbarTitle;
+    @ViewById(R.id.tool_bar)                Toolbar toolbar;
+    @ViewById(R.id.toolbar_icon)            ImageView toolbarAppIcon;
+    @ViewById(R.id.toolbar_title)           TextView toolbarTitle;
+    @ViewById(R.id.toolbar_action_group)    ViewGroup actionGroup;
+    @ViewById(R.id.toolbar_action_walking)  ImageButton toolbarWalking;
+    @ViewById(R.id.toolbar_action_transit)  ImageButton toolbarTransit;
+    @ViewById(R.id.toolbar_action_car)      ImageButton toolbarCar;
+    @ViewById(R.id.toolbar_action_bike)     ImageButton toolbarBike;
 
     @Inject @Named("currentUser") User user;
+
+    private int currentTravelType = -1;
 
     //region layout&lifecycle
     @Override
@@ -64,13 +77,10 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @AfterViews
     protected void setupToolbar() {
         setSupportActionBar(toolbar);
-        estimeetIcon.setVisibility(View.VISIBLE);
-        toolbarTitle.setVisibility(View.GONE);
-        getSupportActionBar().setTitle("");
+        setDefaultToolbar();
     }
 
     private void initializeInjector() {
@@ -96,6 +106,74 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     }
     //endregion
 
+    //region toolbar
+    @SuppressWarnings("ConstantConditions")
+    private void setDefaultToolbar() {
+        toolbarAppIcon.setVisibility(View.VISIBLE);
+        toolbarTitle.setVisibility(View.GONE);
+        actionGroup.setVisibility(View.GONE);
+        getSupportActionBar().setTitle("");
+    }
+    //set up the init view
+    private void setupActionGroup(int type) {
+        if (type == currentTravelType) return;
+
+        //fade in animation when set up for the first time
+        if (toolbarAppIcon.getVisibility() != View.GONE) {
+            toolbarAppIcon.setVisibility(View.GONE);
+            AnimationUtil.performFadeInAnimation(this, actionGroup);
+        }
+
+        //reset icon to default and reselect
+        setActionType(currentTravelType, true);
+        setActionType(type, false);
+        currentTravelType = type;
+    }
+
+    private void setActionType(int type, boolean reset) {
+        switch (type) {
+            case TravelInfoFactory.TRAVEL_MODE_WALK:
+                toolbarWalking.setImageResource(reset ?
+                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                break;
+            case TravelInfoFactory.TRAVEL_MODE_BIKE:
+                toolbarBike.setImageResource(reset ?
+                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                break;
+            case TravelInfoFactory.TRAVEL_MODE_DRIVE:
+                toolbarCar.setImageResource(reset ?
+                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                break;
+            case TravelInfoFactory.TRAVEL_MODE_TRANSIT:
+                toolbarTransit.setImageResource(reset ?
+                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Click(R.id.toolbar_action_walking)
+    protected void onWalkingClicked() {
+        setupActionGroup(TravelInfoFactory.TRAVEL_MODE_WALK);
+    }
+
+    @Click(R.id.toolbar_action_car)
+    protected void onCarClicked() {
+        setupActionGroup(TravelInfoFactory.TRAVEL_MODE_DRIVE);
+    }
+
+    @Click(R.id.toolbar_action_transit)
+    protected void onTransitClicked() {
+        setupActionGroup(TravelInfoFactory.TRAVEL_MODE_TRANSIT);
+    }
+
+    @Click(R.id.toolbar_action_bike)
+    protected void onBikeClicked() {
+        setupActionGroup(TravelInfoFactory.TRAVEL_MODE_BIKE);
+    }
+    //endregion
+
     //region from fragment
     @Override
     public void navToFriendList() {
@@ -112,5 +190,16 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         startNewActivity(SignInActivity.getCallingIntent(this, 0));
         this.finish();
     }
+
+    @Override @UiThread
+    public void showDefaultToolbar() {
+        setDefaultToolbar();
+    }
+
+    @Override @UiThread
+    public void showToolbarActionGroup(int type) {
+        setupActionGroup(type);
+    }
+
     //endregion
 }

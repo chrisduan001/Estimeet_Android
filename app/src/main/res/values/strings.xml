@@ -64,4 +64,6 @@
     <string name="distance_title">Distance: </string>
     <string name="eta_title">ETA: </string>
     <string name="location_title">Location: </string>
+    <string name="dialog_top_text">How are you getting around?</string>
+    <string name="dialog_walking">Walking</string>
 </resources>

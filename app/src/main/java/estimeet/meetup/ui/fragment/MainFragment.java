@@ -26,6 +26,7 @@ import javax.inject.Named;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
+import estimeet.meetup.factory.TravelInfoFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
@@ -49,6 +50,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         void navToFriendList();
         void navToManageProfile();
         void onAuthFailed();
+        void showDefaultToolbar();
+        void showToolbarActionGroup(int type);
     }
 
     private static final int MAINCURSORLOADER = 1;
@@ -213,6 +216,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public void onNoActiveSessions() {
         MeetupLocationService.getInstance(getActivity()).disconnectLocation();
+        mainCallback.showDefaultToolbar();
     }
 
     //endregion
@@ -261,6 +265,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onSessionRequest(FriendSession friendSession) {
         presenter.onSessionRequest(friendSession);
+        mainCallback.showToolbarActionGroup(TravelInfoFactory.TRAVEL_MODE_DRIVE);
     }
 
     @Override @Background
@@ -278,10 +283,9 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         presenter.ignoreSession(friendSession);
     }
 
-    @Override
+    @Override @Background
     public void onRequestLocation(FriendSession friendSession) {
         presenter.requestLocationData(friendSession);
     }
-
     //endregion
 }

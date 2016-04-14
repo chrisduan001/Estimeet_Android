@@ -28,38 +28,37 @@
 
     <LinearLayout
         android:id="@+id/toolbar_action_group"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="visible"
         android:orientation="horizontal">
         <ImageButton
             android:id="@+id/toolbar_action_walking"
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
-            android:background="@drawable/image_button_selector"
+            android:background="@drawable/ripple_effect"
             android:src="@drawable/dialog_walking"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_transit"
             style="@style/ToolbarActionIcon"
+            android:background="@drawable/ripple_effect"
             android:contentDescription="@null"
-            android:background="@drawable/image_button_selector"
             android:src="@drawable/dialog_walking"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_car"
             style="@style/ToolbarActionIcon"
+            android:background="@drawable/ripple_effect"
             android:contentDescription="@null"
-            android:background="@drawable/image_button_selector"
             android:src="@drawable/dialog_walking"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_bike"
             style="@style/ToolbarActionIcon"
+            android:background="@drawable/ripple_effect"
             android:contentDescription="@null"
-            android:background="@drawable/image_button_selector"
             android:src="@drawable/dialog_walking"/>
     </LinearLayout>
 
-    
 </android.support.v7.widget.Toolbar>
