@@ -88,6 +88,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         presenter.requestNotification();
     }
 
+    @Receiver(actions = "android.intent.action.NO_ACTIVITY_BROADCAST")
+    protected void onReceiveNoActivityBroadcast() {
+        mainCallback.showDefaultToolbar();
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -162,6 +167,10 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     protected BasePresenter getPresenter() {
         return presenter;
     }
+
+    public void setTravelMode(int travelMode) {
+        presenter.setTravelMode(travelMode);
+    }
     //endregion
 
     //region cursor loader
@@ -214,11 +223,15 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    public void onNoActiveSessions() {
-        MeetupLocationService.getInstance(getActivity()).disconnectLocation();
+    public void onNoSessions() {
         mainCallback.showDefaultToolbar();
     }
 
+    @Override
+    public void onNoActiveSessions() {
+        mainCallback.showDefaultToolbar();
+        MeetupLocationService.getInstance(getActivity()).disconnectLocation();
+    }
     //endregion
 
     //region button
@@ -265,7 +278,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onSessionRequest(FriendSession friendSession) {
         presenter.onSessionRequest(friendSession);
-        mainCallback.showToolbarActionGroup(TravelInfoFactory.TRAVEL_MODE_DRIVE);
+        mainCallback.showToolbarActionGroup(friendSession.getTravelMode());
     }
 
     @Override @Background
@@ -276,6 +289,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onAcceptSession(FriendSession friendSession) {
         presenter.createNewSession(friendSession);
+        mainCallback.showToolbarActionGroup(friendSession.getTravelMode());
     }
 
     @Override @Background

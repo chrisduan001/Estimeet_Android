@@ -20,7 +20,7 @@ import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.BaseView;
 import estimeet.meetup.ui.fragment.BaseFragment;
 import estimeet.meetup.util.MeetupLocationService;
-import estimeet.meetup.factory.SessionFactory;
+import estimeet.meetup.factory.SessionCreationFactory;
 
 /**
  * Created by AmyDuan on 6/02/16.
@@ -70,6 +70,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         notificationInteractor.call(this);
         notificationInteractor.getNotifications();
         isGetNotificationInProcess = true;
+        checkSessionExpiration();
     }
 
     @Override
@@ -86,14 +87,14 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     @Override
     public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
-            long expires = 0;
+            //expires == 0: not continuous tracking. only need to get one off location
             if (isRequestSession) {
                 mainInteractor.onSessionRequest(friendSession);
+                onStartLocationService(0);
             } else {
                 //accept session
+                onPermissionGrantedForNewSession();
             }
-
-            onStartLocationService(expires);
         } else {
             view.get().onError(BaseFragment.ERROR_LOCATION_PERMISSION + "");
         }
@@ -121,13 +122,20 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     }
 
     public void createNewSession(FriendSession friendSession) {
-        int lengthInMins = SessionFactory.getSessionLengthInMinutes(friendSession.getRequestedLength());
+        isRequestSession = false;
+        this.friendSession = friendSession;
+        view.get().checkPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+
+    }
+
+    private void onPermissionGrantedForNewSession() {
+        int lengthInMins = SessionCreationFactory.getSessionLengthInMinutes(friendSession.getRequestedLength());
         long expireInMillis = TimeUnit.MINUTES.toMillis(lengthInMins);
         createSessionInteractor.call(this);
         createSessionInteractor.createSession(friendSession, expireInMillis);
 
         if (expireInMillis > 0) {
-            MeetupLocationService.getInstance(context).startLocationService(expireInMillis);
+            onStartLocationService(expireInMillis);
         }
     }
 
@@ -138,6 +146,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     public void cancelSession(FriendSession friendSession) {
         cancelSessionInteractor.call(this);
         cancelSessionInteractor.cancelSession(friendSession);
+        checkSessionExpiration();
     }
 
     public void requestLocationData(FriendSession friendSession) {
@@ -154,7 +163,6 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     public void getNotificationFinished() {
         isGetNotificationInProcess = false;
         deleteNotificationInteractor.call();
-        checkSessionExpiration();
     }
 
     @Override
@@ -165,12 +173,18 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     @Override
     public void onError(String errorMessage) {
         view.get().onError(errorMessage);
+        checkSessionExpiration();
     }
 
     @Override
-    public void onNoActiveSessions() {
-        view.get().onNoActiveSessions();
+    public void onCheckSessionExpiration(Boolean result) {
+        if (result == null) {
+            view.get().onNoSessions();
+        } else if (!result) {
+            view.get().onNoActiveSessions();
+        }
     }
+
     //endregion
 
     //region location service
@@ -193,6 +207,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     //endregion
 
     public interface MainView extends BaseView {
+        void onNoSessions();
         void onNoActiveSessions();
     }
 }

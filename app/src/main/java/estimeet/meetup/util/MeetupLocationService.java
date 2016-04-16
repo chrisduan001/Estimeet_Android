@@ -83,6 +83,14 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
         }
     }
 
+    public void disconnectLocation() {
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+            googleApiClient.disconnect();
+            locationRequest = null;
+        }
+    }
+
     private synchronized void buildGoogleApiClient() {
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(context)
@@ -107,14 +115,6 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
         if (locationRequest.getExpirationTime() - SystemClock.elapsedRealtime() <
                 expiresTime - TimeUnit.SECONDS.toMillis(10)) {
             locationRequest.setExpirationDuration(expiresTime);
-        }
-    }
-
-    public void disconnectLocation() {
-        if (googleApiClient != null && googleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
-            googleApiClient.disconnect();
-            locationRequest = null;
         }
     }
 

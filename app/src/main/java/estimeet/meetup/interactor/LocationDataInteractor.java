@@ -9,7 +9,7 @@ import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.RequestLocationModel;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import estimeet.meetup.factory.SessionFactory;
+import estimeet.meetup.factory.SessionCreationFactory;
 import rx.Observable;
 
 /**
@@ -49,7 +49,7 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
             super.onNext(locationModelListItem);
 
             LocationModel model = locationModelListItem.items.get(0);
-            dataHelper.updateSession(SessionFactory.updateDistanceEta(model, friendSession));
+            dataHelper.updateSession(SessionCreationFactory.updateDistanceEta(model, friendSession));
         }
 
         @Override

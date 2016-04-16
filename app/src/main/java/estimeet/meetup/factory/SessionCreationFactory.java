@@ -12,7 +12,7 @@ import estimeet.meetup.ui.adapter.FriendListAdapter;
 /**
  * Created by AmyDuan on 3/04/16.
  */
-public class SessionFactory {
+public class SessionCreationFactory {
 
     private static final int DEFAULT_EXPIRE_TIME = 5;
 
@@ -27,7 +27,7 @@ public class SessionFactory {
     }
 
     public static FriendSession createRequestedSession(FriendSession session) {
-        session.setType(FriendListAdapter.SENT_SESSION);
+        session.setType(SessionActivityFactory.SENT_SESSION);
         session.setSessionFriendId(session.getFriendId());
         setupSessionTimeWithDefaultValue(session);
 
@@ -41,7 +41,7 @@ public class SessionFactory {
         session.setSessionLId(sessionLId);
         session.setFriendId(friendId);
         session.setSessionFriendId(friendId);
-        session.setType(FriendListAdapter.ACTIVE_SESSION);
+        session.setType(SessionActivityFactory.ACTIVE_SESSION);
         session.setRequestedLength(length);
         setupSessionTime(expireTimeInMilli, session);
 
@@ -62,7 +62,7 @@ public class SessionFactory {
         session.setFriendId(friendId);
         session.setSessionFriendId(friendId);
         session.setRequestedLength(requestedTime);
-        session.setType(FriendListAdapter.RECEIVED_SESSION);
+        session.setType(SessionActivityFactory.RECEIVED_SESSION);
         setupSessionTimeWithDefaultValue(session);
 
         return session;

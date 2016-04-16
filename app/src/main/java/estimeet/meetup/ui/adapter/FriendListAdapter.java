@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
 import estimeet.meetup.R;
+import estimeet.meetup.factory.SessionActivityFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
 import estimeet.meetup.ui.adapter.util.ItemTouchListener;
@@ -32,9 +33,6 @@ import estimeet.meetup.ui.adapter.view.SimpleHeaderView_;
 public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouchListener,
         FriendSessionView.SessionActionCallback {
     private static final String TAG = FriendListAdapter.class.getSimpleName();
-    public static final int SENT_SESSION = 100;
-    public static final int RECEIVED_SESSION = 101;
-    public static final int ACTIVE_SESSION = 102;
 
     public static final int FRIEND_HEADER = 10;
     public static final int FRIEND_SECTION = 11;
@@ -173,7 +171,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         if (id != RecyclerView.NO_ID) {
             if (view instanceof FriendSessionView) {
                 FriendSessionView fSessionView = (FriendSessionView) view;
-                return fSessionView.getFriendSession().getType() == ACTIVE_SESSION;
+                return fSessionView.getFriendSession().getType() == SessionActivityFactory.ACTIVE_SESSION;
             }
             return true;
         } else return false;
@@ -229,7 +227,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     private void updateTimer(FriendSession friendSession, FriendSessionView view) {
         if (viewToUpdate == null) viewToUpdate = new ArrayList<>();
 
-        if (friendSession.getType() == ACTIVE_SESSION) {
+        if (friendSession.getType() == SessionActivityFactory.ACTIVE_SESSION) {
             viewToUpdate.add(view);
 
             if (timer == null) setProgressBarTimer();

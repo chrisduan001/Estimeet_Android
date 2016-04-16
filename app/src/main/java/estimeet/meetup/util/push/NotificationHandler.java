@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import com.microsoft.windowsazure.notifications.NotificationsHandler;
 import estimeet.meetup.R;
+import estimeet.meetup.factory.SessionActivityFactory;
 import estimeet.meetup.interactor.SendGeoDataInteractor;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.EstimeetApi;
@@ -54,8 +55,7 @@ public class NotificationHandler extends NotificationsHandler {
                 //delete item from db
                 case 103:
                     int friendId = Integer.parseInt(msgArray[1]);
-                    DataHelper dataHelper = new DataHelper(context.getContentResolver());
-                    dataHelper.deleteSession(friendId);
+                    onSessionCancelled(friendId, context);
                     break;
                 case 999:
                     displayOnMainScreen(1, context, "test", "this is a test");
@@ -66,10 +66,29 @@ public class NotificationHandler extends NotificationsHandler {
         }
     }
 
+    //process session cancelled notification
+    private void onSessionCancelled(int friendId, Context context) {
+        DataHelper dataHelper = new DataHelper(context.getContentResolver());
+        dataHelper.deleteSession(friendId);
+
+        Boolean isActiveSession = SessionActivityFactory.checkSession(dataHelper);
+        if (isActiveSession == null) {
+            sendNoSessionBroadCast(context);
+        } else if (!isActiveSession) {
+            MeetupLocationService.getInstance(context).disconnectLocation();
+        }
+    }
+
     //general broadcast will simple try to pull notifications from server
     private void sendGeneralPush(Context context) {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.GENERAL_BROADCAST");
+        context.sendBroadcast(intent);
+    }
+
+    private void sendNoSessionBroadCast(Context context) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.NO_ACTIVITY_BROADCAST");
         context.sendBroadcast(intent);
     }
 

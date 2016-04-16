@@ -21,10 +21,11 @@ import org.androidannotations.annotations.ViewById;
 import java.lang.ref.WeakReference;
 
 import estimeet.meetup.R;
+import estimeet.meetup.factory.SessionActivityFactory;
 import estimeet.meetup.factory.TravelInfoFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.ui.adapter.FriendListAdapter;
-import estimeet.meetup.factory.SessionFactory;
+import estimeet.meetup.factory.SessionCreationFactory;
 
 /**
  * Created by AmyDuan on 2/04/16.
@@ -58,13 +59,13 @@ public class FriendSessionView extends RelativeLayout {
         this.callback = new WeakReference<>(callback);
 
         switch (friendSession.getType()) {
-            case FriendListAdapter.SENT_SESSION:
+            case SessionActivityFactory.SENT_SESSION:
                 setupRequestSessionView();
                 break;
-            case FriendListAdapter.RECEIVED_SESSION:
+            case SessionActivityFactory.RECEIVED_SESSION:
                 setupReceivedSessionView();
                 break;
-            case FriendListAdapter.ACTIVE_SESSION:
+            case SessionActivityFactory.ACTIVE_SESSION:
                 setupSessionInfoView();
                 break;
             default:
@@ -76,18 +77,18 @@ public class FriendSessionView extends RelativeLayout {
 
     private void setupRequestSessionView() {
         friendName.setText(friendSession.getFriendName());
-        setViewVisibility(FriendListAdapter.SENT_SESSION);
+        setViewVisibility(SessionActivityFactory.SENT_SESSION);
     }
 
     private void setupReceivedSessionView() {
         //// TODO: 7/04/16 need a proper layout
         friendName.setText(friendSession.getFriendName() + " " +
-                SessionFactory.getSessionLengthString(friendSession.getRequestedLength(), getContext()));
-        setViewVisibility(FriendListAdapter.RECEIVED_SESSION);
+                SessionCreationFactory.getSessionLengthString(friendSession.getRequestedLength(), getContext()));
+        setViewVisibility(SessionActivityFactory.RECEIVED_SESSION);
     }
 
     private void setupSessionInfoView() {
-        setViewVisibility(FriendListAdapter.ACTIVE_SESSION);
+        setViewVisibility(SessionActivityFactory.ACTIVE_SESSION);
         if (friendSession.getDistance() == 0 && friendSession.getEta() == 0) {
             showEmptyActivitySessionView();
         } else {
@@ -127,15 +128,15 @@ public class FriendSessionView extends RelativeLayout {
 
     private void setViewVisibility(int type) {
         switch (type) {
-            case FriendListAdapter.SENT_SESSION:
+            case SessionActivityFactory.SENT_SESSION:
                 setVisibility(GONE, activeSessionView, actionGroup, progressBar);
                 setVisibility(VISIBLE, pendingSession, friendName, sentMessage);
                 break;
-            case FriendListAdapter.RECEIVED_SESSION:
+            case SessionActivityFactory.RECEIVED_SESSION:
                 setVisibility(GONE, activeSessionView, sentMessage, progressBar);
                 setVisibility(VISIBLE, pendingSession, friendName, actionGroup);
                 break;
-            case FriendListAdapter.ACTIVE_SESSION:
+            case SessionActivityFactory.ACTIVE_SESSION:
                 setVisibility(GONE, pendingSession);
                 setVisibility(VISIBLE, activeSessionView);
                 break;

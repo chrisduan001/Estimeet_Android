@@ -33,7 +33,7 @@ public class AnimationUtil {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                for (View view: views) {
+                for (View view : views) {
                     view.setVisibility(View.INVISIBLE);
                 }
             }
@@ -65,26 +65,18 @@ public class AnimationUtil {
         }
     }
 
-    public static void performFadeInAnimation(Context context, final View view) {
-        Animation fadeInAnim = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-        view.startAnimation(fadeInAnim);
+    public static void performFadeInAnimation(Context context, View... views) {
+        for (View view: views) {
+            Animation fadeInAnim = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+            view.startAnimation(fadeInAnim);
+        }
+    }
 
-        fadeInAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+    public static void performFadeOutAnimation(Context context, View... views) {
+        for (View view: views) {
+            Animation fadeInAnim = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+            view.startAnimation(fadeInAnim);
+        }
     }
 
     private static Animator createExpandAnimator(View view, float offset) {

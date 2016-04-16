@@ -1,16 +1,15 @@
 package estimeet.meetup.interactor;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
+import estimeet.meetup.factory.SessionActivityFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.NotificationModel;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import estimeet.meetup.factory.SessionFactory;
+import estimeet.meetup.factory.SessionCreationFactory;
 import rx.Observable;
 /**
  * Created by AmyDuan on 6/02/16.
@@ -37,7 +36,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
         this.session = session;
         //create session
         //session will be deleted if request failed
-        SessionFactory.createRequestedSession(session);
+        SessionCreationFactory.createRequestedSession(session);
         dataHelper.insertSession(session);
 
         makeRequest(new SendSessionRequestSubscriber(), true);
@@ -48,17 +47,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     }
 
     public void checkSessionExpiration() {
-        List<FriendSession> sessions = dataHelper.getAllActiveSession();
-
-        for (FriendSession session: sessions) {
-            if (System.currentTimeMillis() > session.getDateCreated() + session.getTimeToExpireInMilli()) {
-                onSessionFinished(session.getFriendId());
-            }
-        }
-
-        if (sessions.size() <= 0) {
-            listener.onNoActiveSessions();
-        }
+        listener.onCheckSessionExpiration(SessionActivityFactory.checkSession(dataHelper));
     }
 
     public void onSessionFinished(int friendId) {
@@ -104,6 +93,6 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     }
 
     public interface MainListener extends BaseListener {
-        void onNoActiveSessions();
+        void onCheckSessionExpiration(Boolean result);
     }
 }

@@ -109,6 +109,9 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     //region toolbar
     @SuppressWarnings("ConstantConditions")
     private void setDefaultToolbar() {
+        if (actionGroup.getVisibility() != View.GONE) {
+            AnimationUtil.performFadeOutAnimation(this, toolbarWalking, toolbarTransit, toolbarCar, toolbarBike);
+        }
         toolbarAppIcon.setVisibility(View.VISIBLE);
         toolbarTitle.setVisibility(View.GONE);
         actionGroup.setVisibility(View.GONE);
@@ -121,7 +124,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         //fade in animation when set up for the first time
         if (toolbarAppIcon.getVisibility() != View.GONE) {
             toolbarAppIcon.setVisibility(View.GONE);
-            AnimationUtil.performFadeInAnimation(this, actionGroup);
+            actionGroup.setVisibility(View.VISIBLE);
+            AnimationUtil.performFadeInAnimation(this, toolbarWalking, toolbarTransit, toolbarCar, toolbarBike);
         }
 
         //reset icon to default and reselect
@@ -156,21 +160,29 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     @Click(R.id.toolbar_action_walking)
     protected void onWalkingClicked() {
         setupActionGroup(TravelInfoFactory.TRAVEL_MODE_WALK);
+        getMainFragment().setTravelMode(TravelInfoFactory.TRAVEL_MODE_WALK);
     }
 
     @Click(R.id.toolbar_action_car)
     protected void onCarClicked() {
         setupActionGroup(TravelInfoFactory.TRAVEL_MODE_DRIVE);
+        getMainFragment().setTravelMode(TravelInfoFactory.TRAVEL_MODE_DRIVE);
     }
 
     @Click(R.id.toolbar_action_transit)
     protected void onTransitClicked() {
         setupActionGroup(TravelInfoFactory.TRAVEL_MODE_TRANSIT);
+        getMainFragment().setTravelMode(TravelInfoFactory.TRAVEL_MODE_TRANSIT);
     }
 
     @Click(R.id.toolbar_action_bike)
     protected void onBikeClicked() {
         setupActionGroup(TravelInfoFactory.TRAVEL_MODE_BIKE);
+        getMainFragment().setTravelMode(TravelInfoFactory.TRAVEL_MODE_BIKE);
+    }
+
+    private MainFragment getMainFragment() {
+        return (MainFragment) getSupportFragmentManager().getFragments().get(0);
     }
     //endregion
 

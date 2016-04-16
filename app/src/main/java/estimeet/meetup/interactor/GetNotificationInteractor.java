@@ -9,7 +9,7 @@ import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.NotificationEntity;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
-import estimeet.meetup.factory.SessionFactory;
+import estimeet.meetup.factory.SessionCreationFactory;
 import rx.Observable;
 
 /**
@@ -95,7 +95,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
             int length = Integer.parseInt(appendixArray[1]);
 
             if (dataHelper.getFriend(friendId) != null) {
-                dataHelper.insertSession(SessionFactory.createPendingSession(friendId, length));
+                dataHelper.insertSession(SessionCreationFactory.createPendingSession(friendId, length));
             }
         }
 
@@ -110,7 +110,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
             long expireTimeInMilli = Long.parseLong(appendixArray[5]);
 
             if (dataHelper.getFriend(friendId) != null) {
-                dataHelper.insertSession(SessionFactory.createActiveSession(friendId, sessionId,
+                dataHelper.insertSession(SessionCreationFactory.createActiveSession(friendId, sessionId,
                         sessionLId, expireTimeInMilli, length));
 
                 listener.onCreateNewSession(expireTimeInMilli);
