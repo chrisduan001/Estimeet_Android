@@ -2,8 +2,10 @@ package estimeet.meetup.ui.fragment;
 
 import android.os.Bundle;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,12 +26,24 @@ public class ManageProfileFragment extends BaseFragment implements ManageProfile
     @Inject ManageProfilePresenter presenter;
     @Inject @Named("currentUser") User user;
 
+    @ViewById(R.id.profile_name) TextView profileName;
+    @ViewById(R.id.profile_id) TextView profileId;
+    @ViewById(R.id.profile_mobile_number) TextView profileMobile;
+
+
     //region lifecycle
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialize();
         presenter.setView(this);
+
+        initProfileData();
+    }
+
+    private void initProfileData() {
+        profileName.setText(user.userName);
+        profileMobile.setText(user.phoneNumber);
     }
 
     private void initialize() {

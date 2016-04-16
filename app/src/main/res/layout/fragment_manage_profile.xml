@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/greyLighter"
+    >
 
     <ImageView
         android:id="@+id/profile_dp"
@@ -14,23 +16,41 @@
         android:src="@drawable/placeholder_icon"
         android:contentDescription="@null"/>
 
-    <TextView
-        android:id="@+id/profile_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/colorMain"
+        android:orientation="vertical"
         android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:textSize="16sp"
-        tools:text="Edward Snowden"
-        android:textStyle="bold" />
+        android:layout_marginTop="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorMain"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center_horizontal"
+            tools:text="Edward Snowden"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/profile_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="abc123"/>
+    </LinearLayout>
+
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:orientation="horizontal"
         android:background="@color/white">
 
@@ -39,7 +59,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textStyle="bold"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:paddingRight="10dp"
             android:text="@string/profile_title_mobile_number"/>
 
@@ -48,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical|end"
-            android:paddingRight="10dp"
+            android:paddingRight="20dp"
             android:paddingLeft="10dp"
             tools:text="+6422 1223 123323"/>
 
