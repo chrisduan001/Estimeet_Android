@@ -29,8 +29,7 @@ public class ManageProfileFragment extends BaseFragment implements ManageProfile
     @ViewById(R.id.profile_name) TextView profileName;
     @ViewById(R.id.profile_id) TextView profileId;
     @ViewById(R.id.profile_mobile_number) TextView profileMobile;
-
-
+    
     //region lifecycle
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class ManageProfileFragment extends BaseFragment implements ManageProfile
     //region presenter call
     @Override
     public void showProgressDialog() {
-
     }
 
     @Override

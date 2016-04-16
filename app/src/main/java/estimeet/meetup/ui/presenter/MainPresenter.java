@@ -90,6 +90,8 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
             //expires == 0: not continuous tracking. only need to get one off location
             if (isRequestSession) {
                 mainInteractor.onSessionRequest(friendSession);
+                //get travel mode to set the action bar
+                mainInteractor.getTravelMode();
                 onStartLocationService(0);
             } else {
                 //accept session
@@ -133,6 +135,8 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         long expireInMillis = TimeUnit.MINUTES.toMillis(lengthInMins);
         createSessionInteractor.call(this);
         createSessionInteractor.createSession(friendSession, expireInMillis);
+        //get travel mode to set the action bar
+        mainInteractor.getTravelMode();
 
         if (expireInMillis > 0) {
             onStartLocationService(expireInMillis);
@@ -154,7 +158,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     }
 
     public void setTravelMode(int mode) {
-        geoInteractor.setTravelMode(mode);
+        mainInteractor.setTravelMode(mode);
     }
     //endregion
 
@@ -183,6 +187,10 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         }
     }
 
+    @Override
+    public void onGetTravelMode(int travelMode) {
+        view.get().onTravelMode(travelMode);
+    }
     //endregion
 
     //region location service
@@ -206,5 +214,6 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
 
     public interface MainView extends BaseView {
         void onNoActiveSessions();
+        void onTravelMode(int travelMode);
     }
 }

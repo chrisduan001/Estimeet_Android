@@ -227,6 +227,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         mainCallback.showDefaultToolbar();
         MeetupLocationService.getInstance(getActivity()).disconnectLocation();
     }
+
+    @Override
+    public void onTravelMode(int travelMode) {
+        mainCallback.showToolbarActionGroup(travelMode);
+    }
     //endregion
 
     //region button
@@ -273,7 +278,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onSessionRequest(FriendSession friendSession) {
         presenter.onSessionRequest(friendSession);
-        mainCallback.showToolbarActionGroup(friendSession.getTravelMode());
     }
 
     @Override @Background
@@ -284,7 +288,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onAcceptSession(FriendSession friendSession) {
         presenter.createNewSession(friendSession);
-        mainCallback.showToolbarActionGroup(friendSession.getTravelMode());
     }
 
     @Override @Background

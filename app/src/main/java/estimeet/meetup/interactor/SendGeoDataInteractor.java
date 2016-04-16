@@ -27,10 +27,6 @@ public class SendGeoDataInteractor extends BaseInteractor<Void> {
         makeRequest(new SendGeoSubscriber(), true);
     }
 
-    public void setTravelMode(int travelMode) {
-        sharedPreference.saveTravelInfo(travelMode);
-    }
-
     @Override
     protected Observable<Void> getObservable() {
         return serviceHelper.sendGeodata(baseUser.token, geoCoord, baseUser.userId, sharedPreference.getTravelMode(),

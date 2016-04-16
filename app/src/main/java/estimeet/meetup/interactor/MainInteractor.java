@@ -53,6 +53,14 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     public void onSessionFinished(int friendId) {
         dataHelper.deleteSession(friendId);
     }
+
+    public void setTravelMode(int travelMode) {
+        sharedPreference.saveTravelInfo(travelMode);
+    }
+
+    public void getTravelMode() {
+        listener.onGetTravelMode(sharedPreference.getTravelMode());
+    }
     //endregion
 
     @Override
@@ -94,5 +102,6 @@ public class MainInteractor extends BaseInteractor<Boolean> {
 
     public interface MainListener extends BaseListener {
         void onCheckSessionExpiration(Boolean result);
+        void onGetTravelMode(int travelMode);
     }
 }
