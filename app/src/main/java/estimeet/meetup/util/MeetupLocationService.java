@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TimeUtils;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +31,7 @@ import estimeet.meetup.network.ServiceHelper;
  */
 public class MeetupLocationService implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
         LocationListener {
+    private static final String TAG = MeetupLocationService.class.getSimpleName();
 //      // TODO: 10/04/16  live interval
 //    private static final int FASTEST_INTERVAL = 20000;
 //    private static final int UPDATE_INTERVAL = 40000;
@@ -85,6 +87,8 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
 
     public void disconnectLocation() {
         if (googleApiClient != null && googleApiClient.isConnected()) {
+            Log.d(TAG, "disconnectLocation:");
+            
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             googleApiClient.disconnect();
             locationRequest = null;
@@ -131,6 +135,7 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
     private void setupContinuousTracking() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_DENIED) {
+            Log.d(TAG, "ContinuousTracking: started");
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
     }

@@ -223,11 +223,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     @Override
-    public void onNoSessions() {
-        mainCallback.showDefaultToolbar();
-    }
-
-    @Override
     public void onNoActiveSessions() {
         mainCallback.showDefaultToolbar();
         MeetupLocationService.getInstance(getActivity()).disconnectLocation();

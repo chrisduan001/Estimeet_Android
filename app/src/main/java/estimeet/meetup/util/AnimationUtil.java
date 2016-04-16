@@ -72,11 +72,16 @@ public class AnimationUtil {
         }
     }
 
-    public static void performFadeOutAnimation(Context context, View... views) {
+    public static void performFadeOutAnimation(Context context, Animation.AnimationListener listener,
+                                               View... views) {
+        Animation fadeOutAnim = null;
         for (View view: views) {
-            Animation fadeInAnim = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-            view.startAnimation(fadeInAnim);
+            fadeOutAnim = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+            view.startAnimation(fadeOutAnim);
         }
+
+        //noinspection ConstantConditions
+        fadeOutAnim.setAnimationListener(listener);
     }
 
     private static Animator createExpandAnimator(View view, float offset) {

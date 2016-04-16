@@ -74,9 +74,10 @@ public class NotificationHandler extends NotificationsHandler {
         Boolean isActiveSession = SessionActivityFactory.checkSession(dataHelper);
         if (isActiveSession == null) {
             sendNoSessionBroadCast(context);
-        } else if (!isActiveSession) {
-            MeetupLocationService.getInstance(context).disconnectLocation();
+        } else if (isActiveSession) {
+            return;
         }
+        MeetupLocationService.getInstance(context).disconnectLocation();
     }
 
     //general broadcast will simple try to pull notifications from server

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -107,15 +108,37 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     //endregion
 
     //region toolbar
-    @SuppressWarnings("ConstantConditions")
     private void setDefaultToolbar() {
         if (actionGroup.getVisibility() != View.GONE) {
-            AnimationUtil.performFadeOutAnimation(this, toolbarWalking, toolbarTransit, toolbarCar, toolbarBike);
+            AnimationUtil.performFadeOutAnimation(this, new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            resetToolbar();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    }, toolbarWalking, toolbarTransit, toolbarCar, toolbarBike);
+        } else {
+            resetToolbar();
         }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void resetToolbar() {
         toolbarAppIcon.setVisibility(View.VISIBLE);
         toolbarTitle.setVisibility(View.GONE);
         actionGroup.setVisibility(View.GONE);
         getSupportActionBar().setTitle("");
+
+        currentTravelType = -1;
     }
     //set up the init view
     private void setupActionGroup(int type) {

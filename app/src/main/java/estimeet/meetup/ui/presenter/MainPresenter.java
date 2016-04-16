@@ -178,9 +178,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
 
     @Override
     public void onCheckSessionExpiration(Boolean result) {
-        if (result == null) {
-            view.get().onNoSessions();
-        } else if (!result) {
+        if (result == null || !result) {
             view.get().onNoActiveSessions();
         }
     }
@@ -207,7 +205,6 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     //endregion
 
     public interface MainView extends BaseView {
-        void onNoSessions();
         void onNoActiveSessions();
     }
 }

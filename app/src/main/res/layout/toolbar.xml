@@ -30,7 +30,7 @@
         android:id="@+id/toolbar_action_group"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:orientation="horizontal">
         <ImageButton
             android:id="@+id/toolbar_action_walking"
