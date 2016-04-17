@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.util.TimeUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,7 +29,7 @@ import estimeet.meetup.network.ServiceHelper;
  * Created by AmyDuan on 9/04/16.
  */
 public class MeetupLocationService implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
-        LocationListener {
+        LocationListener, SendGeoDataInteractor.SendGeoListener {
     private static final String TAG = MeetupLocationService.class.getSimpleName();
 //      // TODO: 10/04/16  live interval
 //    private static final int FASTEST_INTERVAL = 20000;
@@ -46,13 +45,13 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
 
     private static boolean needsContinuousTracking;
 
-    private SendGeoDataInteractor geoDataInteractor;
+    private static SendGeoDataInteractor geoDataInteractor;
 
     private BackgroundServiceComponent backgroundServiceComponent;
 
     @Inject ServiceHelper serviceHelper;
 
-    public static MeetupLocationService getInstance(Context ctx) {
+    public synchronized static MeetupLocationService getInstance(Context ctx) {
         if (instance == null) {
             context = ctx;
             instance = new MeetupLocationService();
@@ -127,6 +126,12 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
                 != PackageManager.PERMISSION_DENIED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (location != null) {
+                /**
+                 set the listener to null, as server will return false if there is no active session
+                 it will terminate the background continuously location tracking
+                 on-off send geo data to server should not affected by false value returned by server
+                 */
+                geoDataInteractor.call(null);
                 geoDataInteractor.sendGeoData(location.getLatitude() + "," + location.getLongitude());
             }
         }
@@ -162,10 +167,20 @@ public class MeetupLocationService implements GoogleApiClient.OnConnectionFailed
             backgroundServiceComponent.inject(context);
         }
 
-        ServiceHelper serviceHelper = backgroundServiceComponent.serviceHelper();
-        MeetUpSharedPreference sp = backgroundServiceComponent.meetUpSharedPreference();
-        SendGeoDataInteractor interactor = new SendGeoDataInteractor(serviceHelper, null, sp);
-        interactor.sendGeoData(location.getLatitude() + "," + location.getLongitude());
+        if (geoDataInteractor == null) {
+            ServiceHelper serviceHelper = backgroundServiceComponent.serviceHelper();
+            MeetUpSharedPreference sp = backgroundServiceComponent.meetUpSharedPreference();
+            geoDataInteractor = new SendGeoDataInteractor(serviceHelper, null, sp);
+        }
+
+        //set up the listener, if not active session found in server onsendgeofailed will be called to terminate location tracking
+        geoDataInteractor.call(this);
+        geoDataInteractor.sendGeoData(location.getLatitude() + "," + location.getLongitude());
+    }
+
+    @Override
+    public void onSendGeoFailed() {
+        disconnectLocation();
     }
 
     @Override

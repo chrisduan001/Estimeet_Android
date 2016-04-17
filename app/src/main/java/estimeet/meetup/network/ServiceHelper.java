@@ -76,7 +76,7 @@ public class ServiceHelper {
     }
 
     //need notify part is not implemented yet
-    public Observable<Void> sendGeodata(String token, String geoData, long userUid, int travelMode, NotificationModel model) {
+    public Observable<Boolean> sendGeodata(String token, String geoData, long userUid, int travelMode, NotificationModel model) {
         return estimeetApi.sendGeoData(buildToken(token), geoData, userUid, travelMode, false, model);
     }
 

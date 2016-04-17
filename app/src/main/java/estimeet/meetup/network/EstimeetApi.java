@@ -108,7 +108,7 @@ public interface EstimeetApi {
     );
 
     @POST("/user/sendgeodata")
-    Observable<Void> sendGeoData(
+    Observable<Boolean> sendGeoData(
             @Header("Authorization") String token,
             @Query("data") String data,
             @Query("userUId") long userUid,
