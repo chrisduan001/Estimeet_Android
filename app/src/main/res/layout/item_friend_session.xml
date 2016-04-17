@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/grey">
+    android:background="@color/grey_Lighter">
 
     <FrameLayout
         android:id="@+id/dp_section"
@@ -48,14 +48,16 @@
 
     <LinearLayout
         android:id="@+id/pending_session"
-        style="@style/SessionLayoutStyle">
+        style="@style/SessionLayoutStyle"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/friend_name"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:textSize="18sp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/greyDarker"
             android:textStyle="bold"
             tools:text="Friend name"/>
 
@@ -63,7 +65,8 @@
             android:id="@+id/estimeet_sent_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/greyDarker"
             android:text="@string/send_estimeet_message" />
 
         <LinearLayout
@@ -97,6 +100,7 @@
     <LinearLayout
         android:id="@+id/session_active"
         android:visibility="visible"
+        android:gravity="center_vertical"
         style="@style/SessionLayoutStyle">
 
         <TextView
@@ -111,7 +115,7 @@
         <TextView
             android:id="@+id/session_distance"
             android:layout_width="match_parent"
-            android:layout_height="23dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:visibility="gone"
             style="@style/SingleLineText"
@@ -120,7 +124,7 @@
         <TextView
             android:id="@+id/session_eta"
             android:layout_width="match_parent"
-            android:layout_height="23dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             android:gravity="center_vertical"
             style="@style/SingleLineText"
@@ -129,7 +133,7 @@
         <TextView
             android:id="@+id/session_location"
             android:layout_width="match_parent"
-            android:layout_height="23dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:visibility="gone"
             style="@style/SingleLineText"

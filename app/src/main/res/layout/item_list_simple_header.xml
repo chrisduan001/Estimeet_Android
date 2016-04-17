@@ -9,8 +9,11 @@
         android:id="@+id/header_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
-        android:textColor="@color/white"
+        android:background="@color/grey_Lighter"
+        android:textColor="@color/greyDarker"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         tools:text="Friend List"/>
 
 </LinearLayout>

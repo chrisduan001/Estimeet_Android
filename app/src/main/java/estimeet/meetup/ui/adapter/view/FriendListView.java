@@ -40,7 +40,7 @@ public class FriendListView extends RelativeLayout {
         friendSession = friend;
         friendName.setVisibility(VISIBLE);
         requestView.setVisibility(GONE);
-        viewGroupView.setBackgroundColor(Color.parseColor("#9e9e9e"));
+        viewGroupView.setBackgroundColor(Color.parseColor("#F3F3F3"));
         friendName.setText(friend.getFriendName());
         if (friend.getFriendDp() != null) {
             loadImageAsync(friend.getFriendDp());
