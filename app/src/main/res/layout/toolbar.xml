@@ -37,28 +37,28 @@
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_walk_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_transit"
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_walk_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_car"
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_walk_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_bike"
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_walk_grey_48dp"/>
     </LinearLayout>
 
     

@@ -161,19 +161,19 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         switch (type) {
             case TravelInfoFactory.TRAVEL_MODE_WALK:
                 toolbarWalking.setImageResource(reset ?
-                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                        R.drawable.ic_directions_walk_grey_48dp : R.drawable.ic_directions_walk_green_48dp);
                 break;
             case TravelInfoFactory.TRAVEL_MODE_BIKE:
                 toolbarBike.setImageResource(reset ?
-                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                        R.drawable.ic_directions_bike_grey_48dp : R.drawable.ic_directions_bike_green_48dp);
                 break;
             case TravelInfoFactory.TRAVEL_MODE_DRIVE:
                 toolbarCar.setImageResource(reset ?
-                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                        R.drawable.ic_directions_car_grey_48dp : R.drawable.ic_directions_car_green_48dp);
                 break;
             case TravelInfoFactory.TRAVEL_MODE_TRANSIT:
                 toolbarTransit.setImageResource(reset ?
-                        R.drawable.dialog_walking : R.drawable.dialog_walking_selected);
+                        R.drawable.ic_directions_bus_grey_48dp : R.drawable.ic_directions_bus_green_48dp);
                 break;
             default:
                 break;

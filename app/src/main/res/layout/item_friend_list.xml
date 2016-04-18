@@ -24,7 +24,7 @@
         android:layout_toRightOf="@id/friend_dp"
         android:layout_toEndOf="@id/friend_dp"
         android:layout_centerVertical="true"
-        android:paddingLeft="20dp"
+        android:paddingLeft="30dp"
         android:paddingRight="20dp"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -40,7 +40,7 @@
         android:layout_toEndOf="@id/friend_dp"
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:paddingLeft="20dp"
+        android:paddingLeft="30dp"
         android:paddingRight="20dp"
         android:visibility="gone">
 

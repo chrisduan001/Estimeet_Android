@@ -37,28 +37,28 @@
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/ripple_effect"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_walk_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_transit"
             style="@style/ToolbarActionIcon"
             android:background="@drawable/ripple_effect"
             android:contentDescription="@null"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_bus_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_car"
             style="@style/ToolbarActionIcon"
             android:background="@drawable/ripple_effect"
             android:contentDescription="@null"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_car_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_bike"
             style="@style/ToolbarActionIcon"
             android:background="@drawable/ripple_effect"
             android:contentDescription="@null"
-            android:src="@drawable/dialog_walking"/>
+            android:src="@drawable/ic_directions_bike_grey_48dp"/>
     </LinearLayout>
 
 </android.support.v7.widget.Toolbar>
