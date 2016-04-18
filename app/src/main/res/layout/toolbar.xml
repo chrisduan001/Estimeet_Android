@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@null"
-        android:src="@android:drawable/ic_menu_more"/>
+        android:src="@drawable/ic_launcher"/>
 
     <LinearLayout
         android:id="@+id/toolbar_action_group"
