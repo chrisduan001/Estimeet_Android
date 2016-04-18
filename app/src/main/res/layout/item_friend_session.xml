@@ -36,15 +36,14 @@
 
     <ImageView
         android:id="@+id/btn_cancel_session"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:contentDescription="@null"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+        android:src="@drawable/ic_cancel_red_48dp"/>
 
     <LinearLayout
         android:id="@+id/pending_session"

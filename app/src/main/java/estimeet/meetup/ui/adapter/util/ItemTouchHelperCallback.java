@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import estimeet.meetup.ui.adapter.view.FriendSessionView;
+import estimeet.meetup.R;
 
 /**
  * Created by AmyDuan on 21/03/16.
@@ -26,8 +26,8 @@ public class ItemTouchHelperCallback extends android.support.v7.widget.helper.It
         this.listener = listener;
 
         paint = new Paint();
-        paint.setColor(Color.parseColor("#77A500"));
-        icon = BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_delete);
+        paint.setColor(Color.parseColor("#F3F3F3"));
+        icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_refresh_grey_48dp);
     }
 
     @Override
