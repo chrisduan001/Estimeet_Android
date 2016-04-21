@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Meetup</string>
+    <string name="app_name">Estimeet</string>
     <string name="text_enter_mobile_number">Enter your mobile number</string>
     <string name="sign_in">SIGN IN</string>
 
