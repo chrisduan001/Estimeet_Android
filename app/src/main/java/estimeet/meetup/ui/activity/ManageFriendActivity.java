@@ -1,8 +1,12 @@
 package estimeet.meetup.ui.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +47,10 @@ public class ManageFriendActivity extends BaseActivity implements HasComponent<M
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.toolbar_search)
+                .getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.search_id));
+        
         return true;
     }
 
