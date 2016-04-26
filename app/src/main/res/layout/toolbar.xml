@@ -44,21 +44,21 @@
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/ic_directions_walk_grey_48dp"/>
+            android:src="@drawable/ic_directions_bus_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_car"
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/ic_directions_walk_grey_48dp"/>
+            android:src="@drawable/ic_directions_car_grey_48dp"/>
 
         <ImageButton
             android:id="@+id/toolbar_action_bike"
             style="@style/ToolbarActionIcon"
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
-            android:src="@drawable/ic_directions_walk_grey_48dp"/>
+            android:src="@drawable/ic_directions_bike_grey_48dp"/>
     </LinearLayout>
 
     
