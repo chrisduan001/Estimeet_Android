@@ -1,6 +1,9 @@
 package estimeet.meetup.factory;
 
 import android.content.Context;
+
+import java.util.concurrent.TimeUnit;
+
 import estimeet.meetup.R;
 
 /**
@@ -33,9 +36,10 @@ public class TravelInfoFactory {
         return System.currentTimeMillis() - dateCreated > ACTIVE_SESSION_EXPIRE_MILLIS;
     }
 
-    public static String getEtaString(int minutes, Context context) {
+    public static String getEtaString(int seconds, Context context) {
         String minuteString = context.getString(R.string.minute_string);
         String hourString = context.getString(R.string.hour_string);
+        int minutes = (int) TimeUnit.SECONDS.toMinutes(seconds);
         if (minutes <= 60) {
             return String.format("%d %s", minutes, minuteString);
         } else {
