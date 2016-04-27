@@ -65,12 +65,12 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
 
     @Override
     public void onResume() {
+        checkSessionExpiration();
         locationDataInteractor.call(this);
         mainInteractor.call(this);
         notificationInteractor.call(this);
         notificationInteractor.getNotifications();
         isGetNotificationInProcess = true;
-        checkSessionExpiration();
     }
 
     @Override
@@ -182,8 +182,14 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
 
     @Override
     public void onCheckSessionExpiration(Boolean result) {
+        //null == no session available, no == no active session, yes == active session
         if (result == null || !result) {
             view.get().onNoActiveSessions();
+        }
+
+        //session on pending or active session, this will show the toolbar
+        if (result != null) {
+            mainInteractor.getTravelMode();
         }
     }
 
@@ -214,6 +220,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
 
     public interface MainView extends BaseView {
         void onNoActiveSessions();
+
         void onTravelMode(int travelMode);
     }
 }

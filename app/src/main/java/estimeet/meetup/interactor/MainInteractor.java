@@ -47,6 +47,7 @@ public class MainInteractor extends BaseInteractor<Boolean> {
     }
 
     public void checkSessionExpiration() {
+        //null == no session available, no == no active session, yes == active session
         listener.onCheckSessionExpiration(SessionActivityFactory.checkSession(dataHelper));
     }
 

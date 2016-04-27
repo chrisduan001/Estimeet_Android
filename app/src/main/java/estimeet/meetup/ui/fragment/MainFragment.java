@@ -168,6 +168,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         return presenter;
     }
 
+    //when icon on toolbar clicked
     public void setTravelMode(int travelMode) {
         presenter.setTravelMode(travelMode);
     }
