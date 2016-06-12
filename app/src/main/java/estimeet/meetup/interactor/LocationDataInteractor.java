@@ -37,7 +37,7 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
     //-1, travel mode not specified, will use the travel mode that provided by friend
     @Override
     protected Observable<ListItem<LocationModel>> getObservable() {
-        return serviceHelper.getTravelInfo(baseUser.token, new RequestLocationModel(baseUser.id,
+        return serviceHelper.getTravelInfo(baseUser.token, new RequestLocationModel(baseUser.id, baseUser.userId,
                 friendSession.getFriendId(), dataHelper.getFriend(friendSession.getFriendId()).userId,
                 friendSession.getSessionId(), friendSession.getSessionLId(), -1, sharedPreference.getUserGeoCoord()));
     }
