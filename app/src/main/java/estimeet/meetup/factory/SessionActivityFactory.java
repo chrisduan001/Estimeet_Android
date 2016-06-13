@@ -24,9 +24,11 @@ public class SessionActivityFactory {
                 dataHelper.deleteSession(session.getFriendId());
             } else {
                 if (session.getType() == ACTIVE_SESSION) {
-                    return true;
+                    isAnyActiveSession = true;
                 } else {
-                    isAnyActiveSession = false;
+                    if (isAnyActiveSession == null) {
+                        isAnyActiveSession = false;
+                    }
                 }
             }
         }

@@ -3,6 +3,7 @@ package estimeet.meetup.interactor;
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
+import estimeet.meetup.factory.SessionActivityFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.NotificationModel;
@@ -37,6 +38,10 @@ public class CancelSessionInteractor extends BaseInteractor<Boolean> {
 
     @Override
     protected Observable<Boolean> getObservable() {
+        // TODO: 2/06/16 handle cancel active session request
+        if (friendSession.getType() == SessionActivityFactory.ACTIVE_SESSION) {
+
+        }
         return serviceHelper.cancelSession(baseUser.token,
                 new NotificationModel(baseUser.id, friendSession.getFriendId(), friendUid));
     }
