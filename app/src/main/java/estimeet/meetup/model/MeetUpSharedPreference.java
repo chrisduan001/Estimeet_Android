@@ -28,6 +28,8 @@ public class MeetUpSharedPreference {
     private static final String GCM_REG_ID      = "GCM_REG_ID";
     private static final String NOTIFICATIONID  = "NOTIFICATION_ID";
 
+    private static final String AVAILABLE_FRIEND= "AVAILABLE_FRIEND_ID";
+
     private final SharedPreferences sharedPreferences;
 
     @Inject
@@ -122,6 +124,16 @@ public class MeetUpSharedPreference {
     public void saveUserGeo(String userGeo) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_GEO, userGeo);
+        editor.apply();
+    }
+
+    public String getAvailableFriendsId() {
+        return sharedPreferences.getString(AVAILABLE_FRIEND, null);
+    }
+
+    public void saveAvailableFriendId(String friendsId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(AVAILABLE_FRIEND, friendsId);
         editor.apply();
     }
 

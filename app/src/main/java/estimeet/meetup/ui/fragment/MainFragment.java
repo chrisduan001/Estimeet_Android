@@ -1,6 +1,7 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -83,14 +84,19 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         }
     }
 
-    @Receiver(actions = "android.intent.action.GENERAL_BROADCAST")
+    @Receiver(actions = NotificationHandler.GENERAL_BROADCAST_ACTION)
     protected void onReceiveBoradcast() {
         presenter.requestNotification();
     }
 
-    @Receiver(actions = "android.intent.action.NO_ACTIVITY_BROADCAST")
+    @Receiver(actions = NotificationHandler.NO_ACTIVITY_BROADCAST_ACTION)
     protected void onReceiveNoActivityBroadcast() {
         mainCallback.showDefaultToolbar();
+    }
+
+    @Receiver(actions = NotificationHandler.FRIEND_LOCATION_AVAILABLE_ACTION)
+    protected void onReceiveFriendLocationAvailable() {
+        presenter.requestPendingLocationData();
     }
 
     @Override

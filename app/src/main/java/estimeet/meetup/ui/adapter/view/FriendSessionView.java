@@ -72,7 +72,9 @@ public class FriendSessionView extends RelativeLayout {
                 throw new RuntimeException("invalid session type");
         }
 
-        loadImageAsync(friendSession.getFriendDp());
+        if (friendSession.getFriendDp() != null) {
+            loadImageAsync(friendSession.getFriendDp());
+        }
     }
 
     private void setupRequestSessionView() {
