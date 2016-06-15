@@ -57,6 +57,12 @@ public class SessionCreationFactory {
         return friendSession;
     }
 
+    public static FriendSession updateWaitingForLocationUpdateTime(long waitingMillis, FriendSession friendSession) {
+        friendSession.setWaitingTime(waitingMillis);
+
+        return friendSession;
+    }
+
     public static FriendSession createPendingSession(int friendId, int requestedTime) {
         FriendSession session = new FriendSession();
         session.setFriendId(friendId);

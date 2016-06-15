@@ -25,6 +25,7 @@ public class FriendSession {
     private int friendId;
     private int requestedLength;
     private int travelMode;
+    private long waitingTime;
 
     public int getSessionId() {
         return sessionId;
@@ -146,6 +147,14 @@ public class FriendSession {
         this.dateUpdated = dateUpdated;
     }
 
+    public long getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(long waitingTime) {
+        this.waitingTime = waitingTime;
+    }
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(11);
         contentValues.put(SqliteContract.SessionColumns.SESSION_ID, getSessionId());
@@ -160,6 +169,7 @@ public class FriendSession {
         contentValues.put(SqliteContract.SessionColumns.SESSION_REQUESTED_TIME, getRequestedLength());
         contentValues.put(SqliteContract.SessionColumns.TRAVEL_MODE, getTravelMode());
         contentValues.put(SqliteContract.SessionColumns.DATE_UPDATED, getDateUpdated());
+        contentValues.put(SqliteContract.SessionColumns.WAITING_TIME, getWaitingTime() <= 0 ? null : getWaitingTime());
         return contentValues;
     }
 
@@ -181,6 +191,7 @@ public class FriendSession {
         friendSession.setRequestedLength(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_REQUESTED_TIME));
         friendSession.setTravelMode(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_TRAVEL_MODE));
         friendSession.setDateUpdated(cursor.getLong(DataHelper.FriendSessionQuery.DATE_UPDATED));
+        friendSession.setWaitingTime(cursor.getLong(DataHelper.FriendSessionQuery.WAITING_TIME));
         return friendSession;
     }
 

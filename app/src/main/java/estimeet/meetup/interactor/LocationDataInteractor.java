@@ -96,9 +96,16 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
         @Override
         public void onNext(ListItem<LocationModel> locationModelListItem) {
             super.onNext(locationModelListItem);
-
-            LocationModel model = locationModelListItem.items.get(0);
-            dataHelper.updateSession(SessionCreationFactory.updateDistanceEta(model, friendSession));
+            if (locationModelListItem.items.size() <= 0) {
+                //latest location updates not found, push notification has been sent to friend and requested to upload the geo location
+                //this method records the time that the request was sent
+                //if not get location updates, will need to show user that their friend's either doesn't have connection or location updates was turned off
+                dataHelper.updateSession(SessionCreationFactory
+                        .updateWaitingForLocationUpdateTime(System.currentTimeMillis(), friendSession));
+            } else {
+                LocationModel model = locationModelListItem.items.get(0);
+                dataHelper.updateSession(SessionCreationFactory.updateDistanceEta(model, friendSession));
+            }
 
             processLocationRequest();
         }
