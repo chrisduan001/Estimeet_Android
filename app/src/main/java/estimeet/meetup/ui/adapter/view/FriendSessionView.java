@@ -33,6 +33,8 @@ import estimeet.meetup.factory.SessionCreationFactory;
 @EViewGroup(R.layout.item_friend_session)
 public class FriendSessionView extends RelativeLayout {
     private static final String TAG = FriendSessionView.class.getSimpleName();
+    //time to waiting before show friend location not available message (milliseconds)
+    private static final int MAX_WAITING_TIME = 1000 * 3 * 60; //3 minutes
 
     @ViewById(R.id.friend_dp)                       ImageView dpImage;
     @ViewById(R.id.pending_session)                 ViewGroup pendingSession;
@@ -100,15 +102,25 @@ public class FriendSessionView extends RelativeLayout {
         setProgressBarView();
     }
 
+    //check how long has user been waiting for their friend location to update
+    //if > MAX_WAITING_TIME, show location not available message
+    private boolean isWaitingTimeExceeded() {
+        return friendSession.getWaitingTime() > 0
+                && System.currentTimeMillis() - friendSession.getWaitingTime() > MAX_WAITING_TIME;
+    }
+
     private void showEmptyActivitySessionView() {
-        sessionFriendName.setText(friendSession.getFriendName());
+        //// TODO: 16/06/16 need to find a proper ui for when unable to get friend's location due to network connection or they turned off location manually
+        sessionFriendName.setText(friendSession.getFriendName() + (isWaitingTimeExceeded() ? "Location unavailable" : ""));
         setVisibility(VISIBLE, sessionFriendName);
         setVisibility(GONE, sessionDistance, sessionEta, sessionLocation);
     }
 
     private void showActivitySessionView() {
+        //// TODO: 16/06/16 find a proper ui to handle the message
         String expireString = TravelInfoFactory.isLocationDataExpired(friendSession.getDateUpdated()) ?
                 getContext().getString(R.string.expired_string) : "";
+        expireString = expireString + (isWaitingTimeExceeded() ? "(Location unavailable)" : "");
 
         sessionDistance.setText(String.format("%s %s %s",
                 getContext().getString(R.string.distance_title),
