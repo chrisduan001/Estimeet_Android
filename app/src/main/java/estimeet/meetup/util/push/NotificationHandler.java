@@ -36,6 +36,8 @@ public class NotificationHandler extends NotificationsHandler {
 
             //100 general notification, need to pull data from server
             switch (code) {
+                //generic push, pull data from server
+                case 99:
                 //new friend join
                 case 100:
                     sendGeneralPush(context);

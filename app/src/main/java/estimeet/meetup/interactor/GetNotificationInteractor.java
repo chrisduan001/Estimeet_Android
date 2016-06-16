@@ -1,5 +1,12 @@
 package estimeet.meetup.interactor;
 
+import android.graphics.BitmapFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
@@ -11,6 +18,10 @@ import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import estimeet.meetup.factory.SessionCreationFactory;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by AmyDuan on 29/03/16.
@@ -19,6 +30,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
     private static final int NOTIFICATION_FRIEND_REQUEST = 0;
     private static final int NOTIFICATION_SESSION_REQUEST = 1;
     private static final int NOTIFICATION_SESSION_ACCEPTANCE = 2;
+    private static final int NOTIFICATION_PROFILE_CHAGNE = 3;
 
     private GetNotificationListener listener;
 
@@ -59,6 +71,9 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                         break;
                     case NOTIFICATION_SESSION_ACCEPTANCE:
                         createNewSession(entity.appendix);
+                        break;
+                    case NOTIFICATION_PROFILE_CHAGNE:
+                        onFriendProfileChanged(entity.appendix);
                         break;
                 }
                 if (entity.notificationId > notificationId) {
@@ -115,6 +130,48 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
 
                 listener.onCreateNewSession(expireTimeInMilli);
             }
+        }
+
+        private void onFriendProfileChanged(String appendix) {
+            String[] appendixArray = appendix.split(",");
+            Friend friend = dataHelper.getFriend(Integer.parseInt(appendixArray[0]));
+            if (friend != null) {
+                if (!friend.userName.equals(appendixArray[1])) {
+                    friend.userName = appendixArray[1];
+                }
+
+                updateFriendDp(friend);
+            }
+        }
+
+        private void updateFriendDp(final Friend friend) {
+            Observable.just(friend.dpUri)
+                    .map(new Func1<String, byte[]>() {
+                        @Override
+                        public byte[] call(String s) {
+                            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                            try {
+                                InputStream is = (InputStream) new URL(s).getContent();
+                                byte[] byteChunk = new byte[1024];
+                                int n;
+
+                                while ( (n = is.read(byteChunk)) > 0 ) {
+                                    bao.write(byteChunk, 0, n);
+                                }
+                            } catch (IOException e) {}
+
+                            return bao.toByteArray();
+                        }
+                    })
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Action1<byte[]>() {
+                        @Override
+                        public void call(byte[] bytes) {
+                            friend.image = bytes;
+                            dataHelper.updateFriendData(friend);
+                        }
+                    });
         }
     }
 
