@@ -1,10 +1,18 @@
 package estimeet.meetup.ui.fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -21,7 +29,7 @@ import estimeet.meetup.ui.presenter.ManageProfilePresenter;
  * Created by AmyDuan on 20/03/16.
  */
 @EFragment(R.layout.fragment_manage_profile)
-public class ManageProfileFragment extends BaseFragment implements ManageProfilePresenter.ManageProfileView {
+public class ManageProfileFragment extends DpBaseFragment implements ManageProfilePresenter.ManageProfileView {
 
     @Inject ManageProfilePresenter presenter;
     @Inject @Named("currentUser") User user;
@@ -30,14 +38,55 @@ public class ManageProfileFragment extends BaseFragment implements ManageProfile
     @ViewById(R.id.profile_id) TextView profileId;
     @ViewById(R.id.profile_mobile_number) TextView profileMobile;
 
+    private ManageProfileCallback manageProfileCallback;
+
+    public interface ManageProfileCallback {
+        void onUserDpChanged();
+        void onUserDpSaved();
+    }
+    //region activity
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ManageProfileCallback) {
+            manageProfileCallback = (ManageProfileCallback) context;
+        } else {
+            throw new UnsupportedOperationException("Activity must implement " +
+                ManageProfileCallback.class.getSimpleName());
+        }
+    }
+
+    public void onSaveClicked() {
+        presenter.onUpdateProfile(profileName.getText().toString(),
+                ((BitmapDrawable) profileImage.getDrawable()).getBitmap());
+    }
+    //endregion
+
     //region lifecycle
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initialize();
+
         presenter.setView(this);
 
         initProfileData();
+
+        loadUserDp();
+    }
+
+    @Override
+    protected void initInjector() {
+        getComponent(ManageProfileComponent.class).inject(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Activity.RESULT_OK) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == CROP_IMAGE_CODE) {
+                manageProfileCallback.onUserDpChanged();
+            }
+        }
     }
 
     private void initProfileData() {
@@ -45,12 +94,13 @@ public class ManageProfileFragment extends BaseFragment implements ManageProfile
         profileMobile.setText(user.phoneNumber);
     }
 
-    private void initialize() {
-        getComponent(ManageProfileComponent.class).inject(this);
+    @Background
+    private void loadUserDp() {
+        presenter.loadUserDp(user.dpUri);
     }
 
     @Override
-    protected BasePresenter getPresenter() {
+    protected BasePresenter getSubclassPresenter() {
         return presenter;
     }
     //endregion
@@ -58,11 +108,32 @@ public class ManageProfileFragment extends BaseFragment implements ManageProfile
     //region presenter call
     @Override
     public void showProgressDialog() {
+        startShowProgress();
     }
 
     @Override
-    protected ProgressBar getProgressBar() {
-        return null;
+    public void startCameraAction() {
+        showPickImage();
+    }
+
+    @Override
+    public void onProfileUpdated() {
+        manageProfileCallback.onUserDpSaved();
+    }
+
+    @UiThread
+    @Override
+    public void setUserDp(Bitmap bitmap) {
+        if (bitmap != null) {
+            profileImage.setImageBitmap(bitmap);
+        }
+    }
+    //endregion
+
+    //region button click event
+    @Click(R.id.profile_image)
+    protected void profileImageClicked() {
+        presenter.intentToStartCamera();
     }
     //endregion
 }

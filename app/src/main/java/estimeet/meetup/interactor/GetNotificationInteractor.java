@@ -164,7 +164,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                         }
                     })
                     .observeOn(Schedulers.io())
-                    .subscribeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<byte[]>() {
                         @Override
                         public void call(byte[] bytes) {

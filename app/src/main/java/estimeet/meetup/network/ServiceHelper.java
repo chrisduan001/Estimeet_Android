@@ -47,8 +47,8 @@ public class ServiceHelper {
         return estimeetApi.renewToken("password", id, deviceId);
     }
 
-    public Observable<User> updateProfile(String token, UpdateModel model) {
-        return estimeetApi.updateProfile(buildToken(token), model);
+    public Observable<User> updateProfile(String token, boolean register, UpdateModel model) {
+        return estimeetApi.updateProfile(buildToken(token), register, model);
     }
 
     public Observable<ListItem<Friend>> getFriendsList(String token, int id, long userId) {

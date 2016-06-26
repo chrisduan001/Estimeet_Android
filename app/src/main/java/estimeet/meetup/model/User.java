@@ -43,8 +43,6 @@ public class User extends BaseModel {
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues(3);
         values.put(SqliteContract.UserColumns.ID, userId);
-//        values.put(SqliteContract.UserColumns.FIRST_NAME, firstName);
-//        values.put(SqliteContract.UserColumns.LAST_NAME, lastName);
 
         return values;
     }

@@ -17,6 +17,7 @@ public class MeetUpSharedPreference {
     private static final String USER_ID         = "USER_ID";
     private static final String NAME            = "USER_NAME";
     private static final String DP              = "USER_DP";
+    private static final String DP_DATA         = "USER_DP_DATA";
     private static final String PHONE           = "PHONE_NUMBER";
     private static final String PASSWORD        = "PASSWORD";
     private static final String TOKEN           = "AUTH_TOKEN";
@@ -62,11 +63,25 @@ public class MeetUpSharedPreference {
         editor.apply();
     }
 
-    public void updateUserProfile(String name, String imageUri) {
+    public void updateUserProfile(String name, String imageUri, String imageString) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(NAME, name);
         editor.putString(DP, imageUri);
+        editor.putString(DP_DATA, imageString);
 
+        editor.apply();
+    }
+
+    public String getUserDpImageString() {
+        return sharedPreferences.getString(DP_DATA, null);
+    }
+
+    public void setUserDpData(String imageString, SharedPreferences.Editor editor) {
+        if (editor == null) {
+            editor = sharedPreferences.edit();
+        }
+
+        editor.putString(DP_DATA, imageString);
         editor.apply();
     }
 

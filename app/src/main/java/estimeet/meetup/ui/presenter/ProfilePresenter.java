@@ -1,14 +1,8 @@
 package estimeet.meetup.ui.presenter;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -16,16 +10,12 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
-import java.io.ByteArrayOutputStream;
-import java.util.List;
+import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import estimeet.meetup.MainApplication;
-import estimeet.meetup.R;
 import estimeet.meetup.interactor.FriendsInteractor;
 import estimeet.meetup.interactor.ProfileInteractor;
-import estimeet.meetup.model.Friend;
 import estimeet.meetup.ui.BaseView;
 
 /**
@@ -34,7 +24,7 @@ import estimeet.meetup.ui.BaseView;
 public class ProfilePresenter extends BasePresenter implements ProfileInteractor.ProfileListener,
         FriendsInteractor.GetFreindsListener{
 
-    private ProfileView view;
+    private WeakReference<ProfileView> view;
     private ProfileInteractor interactor;
     private FriendsInteractor friendsInteractor;
 
@@ -59,17 +49,17 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onPermissionResult(boolean isGranted) {
         if (isGranted) {
-            view.startCameraAction();
+            view.get().startCameraAction();
         }
     }
 
     //region fragment call
     public void setView(ProfileView view) {
-        this.view = view;
+        this.view = new WeakReference<>(view);
     }
 
     public void intentToStartCamera() {
-        view.checkPermission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        view.get().checkPermission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public void registerCallBack(CallbackManager callbackManager) {
@@ -93,17 +83,13 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     public void onUpdateProfile(String name, Bitmap bitmap) {
         if (TextUtils.isEmpty(name)) {
-            view.onInvalidName();
+            view.get().onInvalidName();
             return;
         }
 
-        view.showProgressDialog();
+        view.get().showProgressDialog();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-        String imageString = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
-        interactor.initUpdateProfile(name, imageString);
+        interactor.initUpdateProfile(name, bitmap, true);
     }
     //endregion
 
@@ -111,18 +97,18 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onError(String errorMessage) {
         dismissProgressDialog();
-        view.onError(errorMessage);
+        view.get().onError(errorMessage);
     }
 
     @Override
     public void onAuthFailed() {
-        view.onAuthFailed();
+        view.get().onAuthFailed();
         dismissProgressDialog();
     }
 
     @Override
     public void onFacebookResponse(String name, String dpUri) {
-        view.onReceivedFbData(name, dpUri);
+        view.get().onReceivedFbData(name, dpUri);
     }
 
     @Override
@@ -135,17 +121,19 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     public void onFriendListCompleted(boolean isAnyFriends) {
         dismissProgressDialog();
         if (isAnyFriends) {
-            view.onNonEmptyFriendList();
+            view.get().onNonEmptyFriendList();
         } else {
-            view.onProfileCompleted();
+            view.get().onProfileCompleted();
         }
     }
-
+    //not implemented
+    @Override
+    public void onGetUserDp(Bitmap bitmap) {}
     //endregion
 
     //region logic
     private void dismissProgressDialog() {
-        view.dismissProgressDialog();
+        view.get().dismissProgressDialog();
     }
 
     //endregion

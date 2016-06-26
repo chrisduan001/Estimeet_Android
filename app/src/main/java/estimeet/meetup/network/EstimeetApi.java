@@ -61,6 +61,7 @@ public interface EstimeetApi {
     @POST("/profile/updateuserprofile")
     Observable<User> updateProfile(
             @Header("Authorization") String token,
+            @Query("isRegister") boolean register,
             @Body UpdateModel userModel
     );
 
