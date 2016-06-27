@@ -78,9 +78,12 @@ public class ManageProfilePresenter extends BasePresenter implements ProfileInte
     public void onGetUserDp(Bitmap bitmap) {
         view.get().setUserDp(bitmap);
     }
-    //not implemented for this class
+
     @Override
-    public void onAuthFailed() {}
+    public void onAuthFailed() {
+        dismissProgressDialog();
+        view.get().onAuthFailed();
+    }
     //not implemented for this class
     @Override
     public void onFacebookResponse(String name, String dpUri) {}

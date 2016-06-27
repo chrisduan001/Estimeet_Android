@@ -81,9 +81,9 @@ public class ManageProfileFragment extends DpBaseFragment implements ManageProfi
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == CROP_IMAGE_CODE) {
+            if (requestCode == CROP_IMAGE_CODE) {
                 manageProfileCallback.onUserDpChanged();
             }
         }
@@ -128,6 +128,12 @@ public class ManageProfileFragment extends DpBaseFragment implements ManageProfi
             profileImage.setImageBitmap(bitmap);
         }
     }
+
+    @Override
+    public void onAuthFailed() {
+        getActivity().finish();
+    }
+
     //endregion
 
     //region button click event

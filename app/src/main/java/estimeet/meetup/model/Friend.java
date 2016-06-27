@@ -36,7 +36,7 @@ public class Friend extends BaseModel {
         contentValues.put(SqliteContract.FriendColumns.USER_ID, userId);
         contentValues.put(SqliteContract.FriendColumns.USER_NAME, userName);
         contentValues.put(SqliteContract.FriendColumns.IMAGE_URI, dpUri);
-        contentValues.put(SqliteContract.FriendColumns.IMAGE, image.length <= 0 ? null : image);
+        contentValues.put(SqliteContract.FriendColumns.IMAGE, image == null || image.length <= 0 ? null : image);
         contentValues.put(SqliteContract.FriendColumns.FAVOURITE, isFavourite ? 1 : 0);
         return contentValues;
     }
