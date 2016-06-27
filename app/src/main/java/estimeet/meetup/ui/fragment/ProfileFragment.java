@@ -19,6 +19,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 import java.util.Arrays;
+import java.util.Random;
+
 import javax.inject.Inject;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.SignInComponent;
@@ -71,7 +73,7 @@ public class ProfileFragment extends DpBaseFragment implements ProfilePresenter.
 
         presenter.setView(this);
 
-        picasso.load(R.drawable.download).resize(300, 300).centerCrop()
+        picasso.load(getDrawable()).resize(300, 300).centerCrop()
                 .transform(circleTransform).into(profileImage);
     }
 
@@ -181,4 +183,59 @@ public class ProfileFragment extends DpBaseFragment implements ProfilePresenter.
         callbackManager = CallbackManager.Factory.create();
     }
     //endregion
+
+    private int getDrawable() {
+        Random r = new Random();
+        int drawable;
+        switch (r.nextInt(15)) {
+            case 0:
+                drawable = R.drawable.dp_1;
+                break;
+            case 1:
+                drawable = R.drawable.dp_2;
+                break;
+            case 2:
+                drawable = R.drawable.dp_3;
+                break;
+            case 3:
+                drawable = R.drawable.dp_4;
+                break;
+            case 4:
+                drawable = R.drawable.dp_5;
+                break;
+            case 5:
+                drawable = R.drawable.dp_6;
+                break;
+            case 6:
+                drawable = R.drawable.dp_7;
+                break;
+            case 7:
+                drawable = R.drawable.dp_8;
+                break;
+            case 8:
+                drawable = R.drawable.dp_9;
+                break;
+            case 9:
+                drawable = R.drawable.dp_10;
+                break;
+            case 10:
+                drawable = R.drawable.dp_11;
+                break;
+            case 11:
+                drawable = R.drawable.dp_12;
+                break;
+            case 12:
+                drawable = R.drawable.dp_13;
+                break;
+            case 13:
+                drawable = R.drawable.dp_14;
+                break;
+            default:
+                drawable = R.drawable.dp_15;
+                break;
+
+        }
+
+        return drawable;
+    }
 }

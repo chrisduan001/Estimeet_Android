@@ -27,15 +27,16 @@
         android:name=".MainApplication">
         <activity android:launchMode="singleTop"
             android:name=".ui.activity.MainActivity_">
+        </activity>
+
+        <activity android:name=".ui.activity.SignInActivity_"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.SignInActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".ui.activity.ManageFriendActivity_" />
 

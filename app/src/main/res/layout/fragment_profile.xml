@@ -15,7 +15,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/download"
+            android:src="@drawable/dp_1"
             android:scaleType="centerInside"
             android:contentDescription="@null"/>
 
