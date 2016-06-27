@@ -1,6 +1,7 @@
 package estimeet.meetup.interactor;
 
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -158,13 +159,21 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
                                 while ( (n = is.read(byteChunk)) > 0 ) {
                                     bao.write(byteChunk, 0, n);
                                 }
-                            } catch (IOException e) {}
+                            } catch (IOException e) {
+                                throw new RuntimeException("Error while get dp byte");
+                            }
 
                             return bao.toByteArray();
                         }
                     })
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .doOnError(new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            //// TODO: 27/06/16 add error handling
+                            Log.d("error", "call: " + throwable.getLocalizedMessage());
+                        }
+                    })
                     .subscribe(new Action1<byte[]>() {
                         @Override
                         public void call(byte[] bytes) {
