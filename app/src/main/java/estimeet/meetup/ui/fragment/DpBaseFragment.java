@@ -1,6 +1,5 @@
 package estimeet.meetup.ui.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.widget.ProgressBar;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
+import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.File;
@@ -24,6 +24,7 @@ import estimeet.meetup.util.CircleTransform;
 /**
  * Created by AmyDuan on 26/06/16.
  */
+@EFragment
 public abstract class DpBaseFragment extends BaseFragment {
 
     protected static final int CAPTURE_IMAGE_CODE = 100;

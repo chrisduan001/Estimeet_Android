@@ -120,7 +120,7 @@ public class SignInInteractor extends BaseInteractor<User> {
 
             sharedPreference.storeUserInfo(user);
             if (!TextUtils.isEmpty(user.userName) && !TextUtils.isEmpty(user.dpUri)) {
-                sharedPreference.updateUserProfile(user.userName, user.dpUri);
+                sharedPreference.updateUserProfile(user.userName, user.dpUri, null);
             }
             listener.onSignInSuccessful(user);
         }

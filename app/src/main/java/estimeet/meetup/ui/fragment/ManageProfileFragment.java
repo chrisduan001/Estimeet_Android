@@ -95,7 +95,7 @@ public class ManageProfileFragment extends DpBaseFragment implements ManageProfi
     }
 
     @Background
-    private void loadUserDp() {
+    protected void loadUserDp() {
         presenter.loadUserDp(user.dpUri);
     }
 

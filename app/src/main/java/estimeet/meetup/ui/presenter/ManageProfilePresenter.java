@@ -24,6 +24,7 @@ public class ManageProfilePresenter extends BasePresenter implements ProfileInte
     @Inject
     public ManageProfilePresenter(ProfileInteractor profileInteractor) {
         this.profileInteractor = profileInteractor;
+        this.profileInteractor.call(this);
     }
 
     @Override
@@ -51,7 +52,6 @@ public class ManageProfilePresenter extends BasePresenter implements ProfileInte
     public void onUpdateProfile(String name, Bitmap bitmap) {
         if (!TextUtils.isEmpty(name) && bitmap != null) {
             view.get().showProgressDialog();
-            profileInteractor.call(this);
             profileInteractor.initUpdateProfile(name, bitmap, false);
         }
     }
