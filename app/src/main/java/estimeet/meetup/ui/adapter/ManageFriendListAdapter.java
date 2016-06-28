@@ -16,6 +16,7 @@ import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.ManageFriendListView;
 import estimeet.meetup.ui.adapter.view.ManageFriendListView_;
+import estimeet.meetup.util.CircleTransform;
 
 /**
  * Created by AmyDuan on 15/03/16.
@@ -25,19 +26,21 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter
 
     private Context context;
     private Picasso picasso;
+    private CircleTransform circleTransform;
 
     private WeakReference<ManageFriendAdapterCallback> callback;
     @Inject
-    public ManageFriendListAdapter(Context context, Picasso picasso) {
+    public ManageFriendListAdapter(Context context, Picasso picasso, CircleTransform circleTransform) {
         this.context = context;
         this.picasso = picasso;
+        this.circleTransform = circleTransform;
     }
 
     @Override
     public void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position) {
         ManageFriendListView view = (ManageFriendListView)holder.getView();
         Friend friend = Friend.fromCursor(cursor);
-        view.bind(friend, picasso, this);
+        view.bind(friend, picasso, circleTransform, this);
         if (position == 0) {
             view.showSectionHeader(context.getString(R.string.friend_recommend_friend));
         }

@@ -24,8 +24,8 @@ import estimeet.meetup.R;
 import estimeet.meetup.factory.SessionActivityFactory;
 import estimeet.meetup.factory.TravelInfoFactory;
 import estimeet.meetup.model.FriendSession;
-import estimeet.meetup.ui.adapter.FriendListAdapter;
 import estimeet.meetup.factory.SessionCreationFactory;
+import estimeet.meetup.util.CircleTransform;
 
 /**
  * Created by AmyDuan on 2/04/16.
@@ -213,7 +213,7 @@ public class FriendSessionView extends RelativeLayout {
     @Background
     void loadImageAsync(byte[] image) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        displayImage(bitmap);
+        displayImage(CircleTransform.transformToCircleBitmap(bitmap));
     }
 
     public FriendSession getFriendSession() {

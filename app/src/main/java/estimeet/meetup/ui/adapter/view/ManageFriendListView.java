@@ -3,9 +3,7 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,6 +23,7 @@ import java.lang.ref.WeakReference;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.util.CircleTransform;
 
 /**
  * Created by AmyDuan on 16/03/16.
@@ -44,13 +43,13 @@ public class ManageFriendListView extends RelativeLayout {
         super(context);  
     }
 
-    public void bind(Friend friend, Picasso picasso, FriendListViewCallback callback) {
+    public void bind(Friend friend, Picasso picasso, CircleTransform circleTransform, FriendListViewCallback callback) {
         this.callback = new WeakReference<>(callback);
         this.friend = friend;
 
         setView();
         setManageFriendAction();
-        loadUserDpImage(picasso);
+        loadUserDpImage(picasso, circleTransform);
     }
 
     public void showSectionHeader(String header) {
@@ -71,10 +70,10 @@ public class ManageFriendListView extends RelativeLayout {
         }
     }
 
-    private void loadUserDpImage(Picasso picasso) {
+    private void loadUserDpImage(Picasso picasso, CircleTransform circleTransform) {
         //load image from imageuri and save to local db if it is not done yet
         if (friend.image == null || friend.image.length <= 0) {
-            picasso.load(friend.dpUri).into(friendDp, new Callback() {
+            picasso.load(friend.dpUri).transform(circleTransform).into(friendDp, new Callback() {
                 @Override
                 public void onSuccess() {
                     storeFriendImage();
@@ -93,7 +92,7 @@ public class ManageFriendListView extends RelativeLayout {
     @Background
     void loadImageAsync(byte[] image) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        displayImage(bitmap);
+        displayImage(CircleTransform.transformToCircleBitmap(bitmap));
     }
 
     @Background

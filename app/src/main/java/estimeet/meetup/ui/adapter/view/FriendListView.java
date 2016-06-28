@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,8 +15,8 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import estimeet.meetup.R;
-import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.FriendSession;
+import estimeet.meetup.util.CircleTransform;
 
 /**
  * Created by AmyDuan on 22/03/16.
@@ -60,7 +59,7 @@ public class FriendListView extends RelativeLayout {
     @Background
     void loadImageAsync(byte[] image) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        displayImage(bitmap);
+        displayImage(CircleTransform.transformToCircleBitmap(bitmap));
     }
 
     @UiThread

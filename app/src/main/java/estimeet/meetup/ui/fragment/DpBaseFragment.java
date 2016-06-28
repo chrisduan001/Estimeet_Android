@@ -73,7 +73,7 @@ public abstract class DpBaseFragment extends BaseFragment {
                 Bundle bundle = data.getExtras();
                 try {
                     //noinspection ConstantConditions
-                    picasso.load(Uri.parse(bundle.get("output").toString())).resize(300,300)
+                    picasso.load(Uri.parse(bundle.get("output").toString())).resize(100,100)
                             .centerCrop().transform(circleTransform).into(profileImage);
                 } catch (Exception e) {
                     showShortToastMessage(getString(R.string.error_unable_to_crop_image));
