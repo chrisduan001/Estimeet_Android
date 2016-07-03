@@ -9,13 +9,14 @@
     app:theme="@style/ToolbarTheme"
     android:minHeight="@dimen/toolbar_height">
 
-    <TextView
+    <estimeet.meetup.util.widget.OmnesTextView
         android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:visibility="gone"
+        app:typeface="regular"
         tools:text="@string/title_profile_and_setting"/>
 
     <ImageView

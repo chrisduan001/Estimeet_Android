@@ -2,6 +2,7 @@ package estimeet.meetup;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.digits.sdk.android.Digits;
 import com.facebook.stetho.Stetho;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -26,7 +27,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new TwitterCore(authConfig), new Digits());
+        Fabric.with(this, new TwitterCore(authConfig), new Digits(), new Crashlytics());
         initializeInjector();
 
         Stetho.initializeWithDefaults(this);

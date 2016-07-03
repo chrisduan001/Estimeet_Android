@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     >
     <LinearLayout
@@ -21,16 +22,18 @@
                 android:src="@drawable/ic_launcher"
                 android:contentDescription="@null"/>
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/colorMain"
                 android:text="@string/app_name"
                 android:textSize="40sp"
+                app:typeface="semiBold"
                 android:layout_marginTop="20dp" />
 
-            <TextView
+
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -38,9 +41,11 @@
                 android:textAlignment="center"
                 android:textColor="@color/greyDarker"
                 android:id="@+id/textView2"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                app:typeface="medium"
+                android:layout_margin="5dp" />
 
-            <Button
+            <estimeet.meetup.util.widget.OmnesButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -50,6 +55,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/rounded_button"
                 android:textColor="@color/white"
+                app:typeface="semiBold"
                 android:text="@string/sign_in"
                 android:textSize="16sp"
                 android:stateListAnimator="@null"/>

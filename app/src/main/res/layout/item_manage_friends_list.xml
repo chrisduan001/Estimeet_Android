@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/grey_Lighter"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <estimeet.meetup.util.widget.OmnesTextView
         android:id="@+id/friend_header"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:textColor="@color/greyDarker"
+        app:typeface="regular"
         tools:text="@string/friend_recommend_friend"
         android:visibility="gone"/>
 
@@ -39,7 +40,7 @@
         android:src="@drawable/ic_person_add_grey_48dp"
         android:background="@color/tw__transparent"/>
 
-    <TextView
+    <estimeet.meetup.util.widget.OmnesTextView
         android:id="@+id/friend_name"
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -53,6 +54,7 @@
         android:paddingRight="20dp"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        app:typeface="medium"
         android:textColor="@color/greyDarker"
         style="@style/SingleLineText"
         tools:text="John Key"/>
