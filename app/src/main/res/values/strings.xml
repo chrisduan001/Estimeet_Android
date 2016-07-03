@@ -52,7 +52,7 @@
     <string name="error_location_permission">We need your permission for your location, please enable it in settings.</string>
     <string name="error_play_service">Google play service not available, the core functionality is based on the Play Service.</string>
     <string name="error_title">Error</string>
-    <string name="meetup_subtitle">Redefining the way we meet</string>
+    <string name="meetup_subtitle">Estimeet helps you meet up with your friends. \nNo more calls and texts to find out where they are!</string>
     <string name="error_session_expired">Session expired, user deleted the session or expired</string>
     <string name="error_session_generic">An error occurred while get the distance, please try again</string>
     <string name="distance_format">KM</string>
