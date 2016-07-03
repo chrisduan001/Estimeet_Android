@@ -11,16 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey_Lighter">
-
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/placeholder_icon"
-            android:contentDescription="@null"/>
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/placeholder_icon"
+                android:contentDescription="@null"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@id/profile_image"
+                android:layout_marginLeft="-25dp"
+                android:layout_marginTop="70dp"
+                android:src="@drawable/ic_camera_icon"/>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,8 +56,11 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="5dp"
+                android:textColor="@color/colorMain"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 app:typeface="medium"
-                tools:text="abc123"/>
+                tools:text="abc123"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

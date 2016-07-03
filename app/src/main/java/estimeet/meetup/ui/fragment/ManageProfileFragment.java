@@ -90,7 +90,7 @@ public class ManageProfileFragment extends DpBaseFragment implements ManageProfi
     }
 
     private void initProfileData() {
-        profileName.setText(user.userName);
+        profileName.setText("Hi, "+ user.userName + "!");
         profileMobile.setText(user.phoneNumber);
     }
 
