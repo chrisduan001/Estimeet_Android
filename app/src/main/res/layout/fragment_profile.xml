@@ -8,18 +8,30 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="20dp">
-
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/dp_1"
-            android:scaleType="centerInside"
-            android:contentDescription="@null"/>
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/dp_1"
+                android:scaleType="centerInside"
+                android:contentDescription="@null"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@id/profile_image"
+                android:layout_marginLeft="-30dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_camera_icon"/>
+        </RelativeLayout>
         <estimeet.meetup.util.widget.OmnesTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +47,9 @@
             android:id="@+id/et_user_name"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             app:typeface="regular"
             android:hint="@null"
             android:background="@drawable/round_edit_text"/>
@@ -49,19 +63,20 @@
             android:text="@string/get_started_text"
             app:typeface="semiBold"
             android:textColor="@color/white"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/rounded_button"
+            android:stateListAnimator="@null"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="30dp">
 
             <View
                 android:id="@+id/line_view"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_centerVertical="true"
-                android:background="@android:color/darker_gray"/>
+                android:background="@color/grey_Light"/>
 
             <estimeet.meetup.util.widget.OmnesTextView
                 android:layout_width="wrap_content"
@@ -72,7 +87,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="@string/profile_or_text"
-                android:background="#fff"
+                android:background="@color/grey_Lighter"
                 app:typeface="medium"
                 android:textColor="@android:color/darker_gray"/>
 
@@ -87,7 +102,8 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             app:typeface="semiBold"
-            android:text="@string/fb_button_text"/>
+            android:text="@string/fb_button_text"
+            android:stateListAnimator="@null"/>
 
     </LinearLayout>
 
