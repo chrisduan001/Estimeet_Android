@@ -3,7 +3,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:orientation="vertical"
@@ -29,22 +30,24 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp">
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:id="@+id/profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorMain"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:gravity="center_horizontal"
+                app:typeface="semiBold"
                 tools:text="Edward Snowden"
                 android:textStyle="bold" />
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:id="@+id/profile_id"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="5dp"
+                app:typeface="medium"
                 tools:text="abc123"/>
 
         </LinearLayout>
@@ -58,22 +61,24 @@
             android:orientation="horizontal"
             android:background="@color/white">
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textStyle="bold"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
+                app:typeface="semiBold"
                 android:text="@string/profile_title_mobile_number"/>
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:id="@+id/profile_mobile_number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|end"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
+                app:typeface="medium"
                 tools:text="+6422 1223 123323"/>
 
         </LinearLayout>

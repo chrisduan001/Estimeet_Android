@@ -7,4 +7,8 @@
         <attr name="customButtonTextColor" format="color"/>
         <attr name="customButtonTextSize" format="float"/>
     </declare-styleable>
+
+    <declare-styleable name="OmnesTextView">
+        <attr name="typeface" format="string" />
+    </declare-styleable>
 </resources>

@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#FFF8F8">
     <LinearLayout
@@ -22,20 +23,22 @@
                 android:src="@drawable/placeholder_icon"
                 android:contentDescription="@null"/>
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLargeInverse"
                 android:text="@string/app_name"
                 android:textSize="40sp"
+                app:typeface="semiBold"
                 android:layout_marginTop="20dp" />
 
-            <TextView
+            <estimeet.meetup.util.widget.OmnesTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmallInverse"
                 android:text="@string/meetup_subtitle"
                 android:id="@+id/textView2"
+                app:typeface="medium"
                 android:layout_margin="5dp" />
         </LinearLayout>
 
@@ -44,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_weight="3">
 
-            <Button
+            <estimeet.meetup.util.widget.OmnesButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -52,6 +55,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/rounded_button"
                 android:textColor="@color/white"
+                app:typeface="semiBold"
                 android:text="@string/sign_in"
                 android:textSize="16sp" />
         </FrameLayout>
