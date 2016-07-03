@@ -10,7 +10,7 @@
     <string name="button_ok">Ok</string>
 
     <string name="fb_button_text">Import from facebook</string>
-    <string name="get_started_text">Get Started!!</string>
+    <string name="get_started_text">Get Started</string>
 
     <string name="error_invialid_name">Please enter your name</string>
     <string name="http_generic_error">500</string>

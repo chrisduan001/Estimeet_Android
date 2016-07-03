@@ -10,15 +10,25 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp">
 
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/dp_1"
-            android:scaleType="centerInside"
-            android:contentDescription="@null"/>
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/dp_1"
+                android:scaleType="centerInside"
+                android:contentDescription="@null"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@id/profile_image"
+                android:layout_marginLeft="-30dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_camera_icon"/>
+        </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +43,9 @@
             android:id="@+id/et_user_name"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:hint="@null"
             android:background="@drawable/round_edit_text"/>
 
@@ -45,12 +57,13 @@
             android:textSize="16sp"
             android:text="@string/get_started_text"
             android:textColor="@color/white"
-            android:background="@drawable/rounded_button"/>
+            android:background="@drawable/rounded_button"
+            android:stateListAnimator="@null"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="30dp">
 
             <View
                 android:id="@+id/line_view"
@@ -68,7 +81,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="@string/profile_or_text"
-                android:background="#fff"
+                android:background="@color/grey_Lighter"
                 android:textColor="@android:color/darker_gray"/>
 
         </RelativeLayout>
@@ -81,7 +94,9 @@
             android:background="@drawable/facebook_button"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="@string/fb_button_text"/>
+            android:text="@string/fb_button_text"
+            android:stateListAnimator="@null"
+            />
 
     </LinearLayout>
 
