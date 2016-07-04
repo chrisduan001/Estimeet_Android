@@ -3,6 +3,9 @@ package estimeet.meetup.ui.presenter;
 import android.Manifest;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
@@ -98,7 +101,12 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
                 onPermissionGrantedForNewSession();
             }
         } else {
-            view.get().onError(BaseFragment.ERROR_LOCATION_PERMISSION + "");
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    view.get().onError(BaseFragment.ERROR_LOCATION_PERMISSION + "");
+                }
+            });
         }
     }
 

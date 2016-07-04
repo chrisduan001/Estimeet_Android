@@ -27,7 +27,6 @@ import javax.inject.Named;
 
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
-import estimeet.meetup.factory.TravelInfoFactory;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
