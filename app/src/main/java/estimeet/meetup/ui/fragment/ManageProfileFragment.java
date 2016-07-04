@@ -57,7 +57,7 @@ public class ManageProfileFragment extends DpBaseFragment implements ManageProfi
     }
 
     public void onSaveClicked() {
-        presenter.onUpdateProfile(profileName.getText().toString(),
+        presenter.onUpdateProfile(user.userName,
                 ((BitmapDrawable) profileImage.getDrawable()).getBitmap());
     }
     //endregion
