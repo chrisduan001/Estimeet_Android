@@ -34,12 +34,18 @@ public class MainInteractor extends BaseInteractor<Boolean> {
 
     public void onSessionRequest(FriendSession session) {
         this.session = session;
+        makeRequest(new SendSessionRequestSubscriber(), true);
+    }
+
+    public void insertSession(FriendSession session) {
         //create session
         //session will be deleted if request failed
         SessionCreationFactory.createRequestedSession(session);
         dataHelper.insertSession(session);
+    }
 
-        makeRequest(new SendSessionRequestSubscriber(), true);
+    public void deleteSession(int id) {
+        dataHelper.deleteSession(id);
     }
 
     public void onSessionIgnored(FriendSession friendSession) {

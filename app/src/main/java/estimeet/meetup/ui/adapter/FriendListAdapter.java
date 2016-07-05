@@ -77,7 +77,6 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             FriendListView friendView = (FriendListView)view;
             FriendSession friend = FriendSession.fromCursor(cursor);
             friendView.bindFriend(friend);
-
             if (position == itemSelected) {
                 friendView.setSwipeView();
             }
@@ -187,8 +186,8 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
             // TODO: 7/04/16 0 == 15 minutes 1 == 30minutes etc
             session = ((FriendListView) view).getFriendSession();
             session.setRequestedLength(0);
-            callback.get().onSessionRequest(session);
             notifyItemRemoved(position);
+            callback.get().onSessionRequest(session);
         } else {
             session = ((FriendSessionView) view).getFriendSession();
             callback.get().onRequestLocation(session);
@@ -263,10 +262,12 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         viewToUpdate = null;
     }
     //endregion
+
+    //region from view
     public void setCallback(FriendAdapterCallback callback) {
         this.callback = new WeakReference<>(callback);
     }
-
+    //endregion
     public interface FriendAdapterCallback {
         void onSessionRequest(FriendSession friendSession);
         void onCancelSession(FriendSession friendSession);

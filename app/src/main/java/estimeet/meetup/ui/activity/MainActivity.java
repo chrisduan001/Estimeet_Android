@@ -131,12 +131,14 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void resetToolbar() {
         toolbarAppIcon.setVisibility(View.VISIBLE);
         toolbarTitle.setVisibility(View.GONE);
         actionGroup.setVisibility(View.GONE);
-        getSupportActionBar().setTitle("");
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
 
         currentTravelType = -1;
     }

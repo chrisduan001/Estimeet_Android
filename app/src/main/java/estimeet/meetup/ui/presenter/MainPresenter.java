@@ -107,6 +107,21 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
                     view.get().onError(BaseFragment.ERROR_LOCATION_PERMISSION + "");
                 }
             });
+
+            /**
+             Problem: when user denied the permission, the cell suppose to reset to the original state
+             However, the cell was not reset. Not sure if this is a bug related to recyclerview/content provider
+             Current solution is to create a session and then delete it after 100milliseconds
+             delay is required here, otherwise it won't work
+             */
+            Looper.prepare();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mainInteractor.deleteSession(friendSession.getFriendId());
+                }
+            }, 100);
+            Looper.loop();
         }
     }
 
@@ -120,6 +135,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
     }
 
     public void onSessionRequest(FriendSession friendSession) {
+        mainInteractor.insertSession(friendSession);
         this.friendSession = friendSession;
         isRequestSession = true;
         view.get().checkPermission(Manifest.permission.ACCESS_FINE_LOCATION);
