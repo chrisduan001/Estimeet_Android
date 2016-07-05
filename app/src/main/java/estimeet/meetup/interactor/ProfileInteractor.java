@@ -25,6 +25,7 @@ import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
+import estimeet.meetup.util.CircleTransform;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -57,7 +58,7 @@ public class ProfileInteractor extends BaseInteractor<User> {
 
         if (dpString != null) {
             byte[] b = Base64.decode(sharedPreference.getUserDpImageString(), Base64.DEFAULT);
-            listener.onGetUserDp(BitmapFactory.decodeByteArray(b, 0, b.length));
+            processBitmapToCircle(BitmapFactory.decodeByteArray(b, 0, b.length));
         } else {
             Observable.just(dpUri)
                     .map(new Func1<String, Bitmap>() {
@@ -73,10 +74,14 @@ public class ProfileInteractor extends BaseInteractor<User> {
                         @Override
                         public void call(Bitmap bitmap) {
                             sharedPreference.setUserDpData(changeBitmapToString(bitmap), null);
-                            listener.onGetUserDp(bitmap);
+                            processBitmapToCircle(bitmap);
                         }
                     });
         }
+    }
+
+    private void processBitmapToCircle(Bitmap bitmap) {
+        listener.onGetUserDp(CircleTransform.transformToCircleBitmap(bitmap));
     }
 
     public void initUpdateProfile(String name, Bitmap imgBitmap, boolean isRegister) {
