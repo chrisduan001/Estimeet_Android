@@ -40,6 +40,7 @@
     <string name="title_manage_profile">Profile and Settings</string>
     <string name="send_request_title">Send Estimeet</string>
     <string name="send_request_sub_title">Release to request</string>
+    <string name="profile_greeting_message">Hi %s !</string>
 
     <string name="push_SENDER_ID">403360413079</string>
     <string name="push_HUB_NAME">meetup</string>
