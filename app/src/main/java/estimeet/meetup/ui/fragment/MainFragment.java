@@ -11,7 +11,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.microsoft.windowsazure.notifications.NotificationsManager;
@@ -68,6 +70,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @ViewById(R.id.fab)             FloatingActionButton fab;
     @ViewById(R.id.fab_action1)     ViewGroup fabAction1;
     @ViewById(R.id.fab_action2)     ViewGroup fabAction2;
+
+    @ViewById(R.id.no_friend_layout)FrameLayout noFriendLayout;
 
     private MainCallback mainCallback;
 
@@ -198,6 +202,9 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        boolean isAnyFriends = data.getCount() > 0;
+        recyclerView.setVisibility(isAnyFriends ? View.VISIBLE : View.GONE);
+        noFriendLayout.setVisibility(isAnyFriends ? View.GONE : View.VISIBLE);
         adapter.changeCursor(data);
     }
 
@@ -265,6 +272,11 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     protected void onFabAction2Clicked() {
         mainCallback.navToManageProfile();
         collapseFab();
+    }
+
+    @Click(R.id.btn_add_friends)
+    protected void addFriends() {
+        mainCallback.navToFriendList();
     }
 
     private void expandFab() {
