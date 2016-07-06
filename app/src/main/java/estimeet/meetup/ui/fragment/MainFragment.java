@@ -1,7 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -226,7 +225,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     }
 
     private String getSelection() {
-        return SqliteContract.FriendColumns.FAVOURITE + " = 1";
+        return SqliteContract.FriendColumns.FAVOURITE + " = 1 or " + SqliteContract.SessionColumns.FRIEND_ID + " not null";
     }
 
     @Override

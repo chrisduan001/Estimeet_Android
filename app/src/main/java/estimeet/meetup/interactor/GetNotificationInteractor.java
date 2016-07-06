@@ -1,6 +1,5 @@
 package estimeet.meetup.interactor;
 
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -19,7 +18,6 @@ import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.network.ServiceHelper;
 import estimeet.meetup.factory.SessionCreationFactory;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;

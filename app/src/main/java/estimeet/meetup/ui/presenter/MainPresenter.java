@@ -114,14 +114,16 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
              Current solution is to create a session and then delete it after 100milliseconds
              delay is required here, otherwise it won't work
              */
-            Looper.prepare();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mainInteractor.deleteSession(friendSession.getFriendId());
-                }
-            }, 100);
-            Looper.loop();
+            if (isRequestSession) {
+                Looper.prepare();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainInteractor.deleteSession(friendSession.getFriendId());
+                    }
+                }, 100);
+                Looper.loop();
+            }
         }
     }
 
