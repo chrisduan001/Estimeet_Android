@@ -7,6 +7,12 @@
     <string name="profile_enter_name_hint">Enter Your Name</string>
     <string name="profile_or_text">or</string>
 
+    <string name="permission_page_contact_book">Contact Book</string>
+    <string name="permission_page_text_top">We need to access your contact</string>
+    <string name="permission_page_text_bot">book to find your friends</string>
+    <string name="permission_page_button">Grant Contact Permission</string>
+    <string name="permission_page_addon">We also need access to location and notification</string>
+
     <string name="facebook_id">1725764340993391</string>
     <string name="button_ok">Ok</string>
 
