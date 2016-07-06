@@ -64,7 +64,7 @@ public class ManageFriendListView extends RelativeLayout {
 
     private void setManageFriendAction() {
         if (friend.isFavourite) {
-            actionButton.setImageResource(R.drawable.ic_cancel_red_48dp);
+            actionButton.setImageResource(R.drawable.ic_person_add_green_48dp);
         } else {
             actionButton.setImageResource(R.drawable.ic_person_add_grey_48dp);
         }
