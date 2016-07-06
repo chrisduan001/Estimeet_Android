@@ -3,6 +3,7 @@ package estimeet.meetup.interactor;
 import javax.inject.Inject;
 
 import estimeet.meetup.DefaultSubscriber;
+import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.FriendSession;
 import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.PostModel.NotificationModel;
@@ -36,9 +37,20 @@ public class CreateSessionInteractor extends BaseInteractor<Session> {
         //insert active session in db first(active friend session), if network fails revert the data back to original one (friendsession)
         activeFriendSession = SessionCreationFactory.createActiveSession(friendSession.getFriendId(), 0, 0,
                 expireInMillis, friendSession.getRequestedLength());
+
+        addToFavouriteFriend(friendSession.getFriendId());
+
         dataHelper.updateSession(activeFriendSession);
 
         makeRequest(new SessionSubscriber(), true);
+    }
+
+    private void addToFavouriteFriend(int id) {
+        Friend friend = dataHelper.getFriend(id);
+        if (!friend.isFavourite) {
+            friend.isFavourite = true;
+            dataHelper.updateFriendData(friend);
+        }
     }
 
     @Override

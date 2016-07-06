@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.support.v4.app.NavUtils;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class DataHelper {
                 new String[] {SqliteContract.UserColumns.ID}, null, null, SqliteContract.Users.DEFAULT_SORT);
 
         int userId = -1;
+
         while (cursor.moveToNext()) {
             userId = cursor.getInt(0);
         }
