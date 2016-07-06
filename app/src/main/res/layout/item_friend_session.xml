@@ -76,7 +76,8 @@
             android:id="@+id/receive_request_action_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <estimeet.meetup.util.widget.OmnesTextView
                 android:id="@+id/action_accept_request"
@@ -87,6 +88,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"
+                android:textColor="@color/white"
                 app:typeface="regular"
                 android:text="@string/accept"/>
 
@@ -98,6 +100,7 @@
                 android:layout_marginRight="10dp"
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"
+                android:textColor="@color/greyDarker"
                 app:typeface="regular"
                 android:text="@string/ignore"/>
 
@@ -115,7 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textSize="18sp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/greyDarker"
             app:typeface="semiBold"
             tools:text="Friend name"
             android:visibility="visible"/>
