@@ -85,9 +85,8 @@ public class FriendSessionView extends RelativeLayout {
     }
 
     private void setupReceivedSessionView() {
-        //// TODO: 7/04/16 need a proper layout
-        friendName.setText(friendSession.getFriendName() + " " +
-                SessionCreationFactory.getSessionLengthString(friendSession.getRequestedLength(), getContext()));
+        //// TODO: 7/04/16 need a proper layout //HD removed duration text
+        friendName.setText(friendSession.getFriendName());
         setViewVisibility(SessionActivityFactory.RECEIVED_SESSION);
     }
 
