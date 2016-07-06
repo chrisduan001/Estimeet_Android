@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/meetup_subtitle"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/greyDarker"
                 android:id="@+id/textView2"
                 android:layout_marginTop="10dp"
@@ -58,7 +58,7 @@
                 app:typeface="semiBold"
                 android:text="@string/sign_in"
                 android:textSize="16sp"
-                android:stateListAnimator="@null"/>
+                />
         </LinearLayout>
 
     </LinearLayout>

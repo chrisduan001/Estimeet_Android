@@ -9,13 +9,13 @@
         android:id="@+id/no_friend_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="80dp"
             android:src="@drawable/no_friend_icon"
             android:contentDescription="@null"/>
 
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             app:typeface="medium"
             android:text="@string/no_friend_top_line"/>
 
@@ -31,13 +31,13 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             app:typeface="medium"
             android:text="@string/no_friend_bot_line"/>
 
         <estimeet.meetup.util.widget.OmnesButton
             android:id="@+id/btn_add_friends"
-            android:layout_width="180dp"
+            android:layout_width="140dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginTop="80dp"
@@ -52,7 +52,8 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_manage_friends_list"/>
+        tools:listitem="@layout/item_manage_friends_list"
+        android:visibility="gone"/>
 
     <include layout="@layout/floating_action_button" />
 

@@ -61,7 +61,7 @@
     <string name="travel_walk">Walk</string>
     <string name="travel_drive">Drive</string>
     <string name="location_unknown">Unknown</string>
-    <string name="expired_string">(EXPIRED)</string>
+    <string name="expired_string">(Need Refresh)</string>
     <string name="minute_string">Minute(s)</string>
     <string name="hour_string">Hour(s)</string>
 
