@@ -15,6 +15,8 @@ import estimeet.meetup.di.HasComponent;
 import estimeet.meetup.di.components.DaggerSignInComponent;
 import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.model.User;
+import estimeet.meetup.ui.fragment.PermissionFragment;
+import estimeet.meetup.ui.fragment.PermissionFragment_;
 import estimeet.meetup.ui.fragment.ProfileFragment;
 import estimeet.meetup.ui.fragment.ProfileFragment_;
 import estimeet.meetup.ui.fragment.SignInFragment;
@@ -25,7 +27,7 @@ import estimeet.meetup.ui.fragment.SignInFragment_;
  */
 @EActivity(R.layout.activity_sign_in)
 public class SignInActivity extends BaseActivity implements HasComponent<SignInComponent>,
-        SignInFragment.SignInCallback, ProfileFragment.SignInCallback {
+        SignInFragment.SignInCallback, ProfileFragment.SignInCallback, PermissionFragment.PermissionCallback {
 
     private static final String USER_ID = "SIGNIN_ACTIVITY_USER_ID";
 
@@ -82,7 +84,7 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
         if (isProfileCompleted) {
             startMainActivity();
         } else {
-            replaceFragment(R.id.container, new ProfileFragment_());
+            replaceFragment(R.id.container, new PermissionFragment_());
         }
     }
 
@@ -102,9 +104,8 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
     }
 
     @Override
-    public void navToFriendList() {
-        startMainActivity();
-        ManageFriendActivity_.intent(this).start();
+    public void onPermissionFinished() {
+        replaceFragment(R.id.container, new ProfileFragment_());
     }
     //endregion
 }
