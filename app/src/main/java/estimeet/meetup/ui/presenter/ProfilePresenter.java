@@ -21,17 +21,14 @@ import estimeet.meetup.ui.BaseView;
 /**
  * Created by AmyDuan on 9/02/16.
  */
-public class ProfilePresenter extends BasePresenter implements ProfileInteractor.ProfileListener,
-        FriendsInteractor.GetFreindsListener{
+public class ProfilePresenter extends BasePresenter implements ProfileInteractor.ProfileListener {
 
     private WeakReference<ProfileView> view;
     private ProfileInteractor interactor;
-    private FriendsInteractor friendsInteractor;
 
     @Inject
-    public ProfilePresenter(ProfileInteractor interactor, FriendsInteractor fInteractor) {
+    public ProfilePresenter(ProfileInteractor interactor) {
         this.interactor = interactor;
-        this.friendsInteractor = fInteractor;
     }
 
     @Override
@@ -42,7 +39,6 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     @Override
     public void onPause() {
         interactor.unSubscribe();
-        friendsInteractor.unSubscribe();
     }
 
     //override from base presenter
@@ -113,19 +109,10 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     @Override
     public void onUpdateProfileSuccessful() {
-        friendsInteractor.call(this);
-        friendsInteractor.getFriendsList();
+        dismissProgressDialog();
+        view.get().onProfileCompleted();
     }
 
-    @Override
-    public void onFriendListCompleted(boolean isAnyFriends) {
-        dismissProgressDialog();
-        if (isAnyFriends) {
-            view.get().onNonEmptyFriendList();
-        } else {
-            view.get().onProfileCompleted();
-        }
-    }
     //not implemented
     @Override
     public void onGetUserDp(Bitmap bitmap) {}
@@ -142,6 +129,5 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
         void onReceivedFbData(String name, String dpUri);
         void onProfileCompleted();
         void onInvalidName();
-        void onNonEmptyFriendList();
     }
 }

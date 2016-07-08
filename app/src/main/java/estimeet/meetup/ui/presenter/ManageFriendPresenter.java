@@ -50,10 +50,8 @@ public class ManageFriendPresenter extends BasePresenter implements FriendsInter
     }
 
     @Override
-    public void onFriendListCompleted(boolean isAnyFriends) {
-        if (isAnyFriends) {
-            view.get().onGetFriendsList();
-        }
+    public void onFriendListCompleted() {
+        view.get().onGetFriendsList();
     }
 
     @Override

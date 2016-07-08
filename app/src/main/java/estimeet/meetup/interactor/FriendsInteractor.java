@@ -54,12 +54,12 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
             List<Friend> friendList = friendListItem.items;
             dataHelper.insertFriendsData(friendList);
 
-            listener.onFriendListCompleted(friendList != null && friendList.size() > 0);
+            listener.onFriendListCompleted();
         }
 
         @Override
         public void onError(Throwable e) {
-            listener.onFriendListCompleted(false);
+            listener.onFriendListCompleted();
         }
 
         @Override
@@ -70,6 +70,6 @@ public class FriendsInteractor extends BaseInteractor<ListItem<Friend>> {
     }
 
     public interface GetFreindsListener extends BaseListener {
-        void onFriendListCompleted(boolean isAnyFriends);
+        void onFriendListCompleted();
     }
 }
