@@ -2,6 +2,8 @@ package estimeet.meetup.interactor;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +43,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
     //region presenter call
     public void call(GetNotificationListener listener) {
         this.listener = listener;
+        Crashlytics.setInt("UserId", baseUser.id);
     }
 
     public void getNotifications() {
