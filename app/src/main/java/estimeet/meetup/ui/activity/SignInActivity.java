@@ -2,6 +2,7 @@ package estimeet.meetup.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import org.androidannotations.annotations.EActivity;
 
@@ -84,7 +85,13 @@ public class SignInActivity extends BaseActivity implements HasComponent<SignInC
         if (isProfileCompleted) {
             startMainActivity();
         } else {
-            replaceFragment(R.id.container, new PermissionFragment_());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                //above m need to ask user permission for contact
+                replaceFragment(R.id.container, new PermissionFragment_());
+            } else {
+                replaceFragment(R.id.container, new ProfileFragment_());
+            }
+
         }
     }
 
