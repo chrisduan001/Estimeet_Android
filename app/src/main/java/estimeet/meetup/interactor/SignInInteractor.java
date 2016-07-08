@@ -37,16 +37,12 @@ public class SignInInteractor extends BaseInteractor<User> {
     private SigninSubscriber signinSubscriber;
 
     private AuthUser authUser;
-    private boolean isSignedIn;
-    private String contacts;
 
     private boolean isManualSignIn = false;
 
     @Inject
     public SignInInteractor(ServiceHelper serviceHelper, DataHelper dataHelper, MeetUpSharedPreference sharedPreference) {
         super(serviceHelper, dataHelper, sharedPreference);
-
-        isSignedIn = false;
     }
 
     //region fragment call
@@ -80,13 +76,6 @@ public class SignInInteractor extends BaseInteractor<User> {
 
         signInUser(new AuthUser(authToken, authProvider, phoneNumber, id), listener);
     }
-
-    public void sendContacts(String contacts) {
-        isSignedIn = true;
-        this.contacts = contacts;
-        baseUser = sharedPreference.getUserFromSp();
-        makeRequest(new SendContactSubscriber(), true);
-    }
     //endregion
 
     @Override
@@ -95,11 +84,6 @@ public class SignInInteractor extends BaseInteractor<User> {
         if (isManualSignIn) {
             long uid = Long.parseLong("4887127775");
             return serviceHelper.manualSignin(36, uid);
-        }
-
-        if (isSignedIn) {
-            SendContact contactModel = new SendContact(baseUser.id, baseUser.userId, contacts);
-            return serviceHelper.sendContacts(baseUser.token, contactModel);
         } else {
             return serviceHelper.signInUser(authUser);
         }
@@ -139,17 +123,6 @@ public class SignInInteractor extends BaseInteractor<User> {
         protected void onError(String err) {
             listener.onError(err);
         }
-    }
-
-    private class SendContactSubscriber extends DefaultSubscriber<User> {
-        @Override
-        public void onError(Throwable e) {}
-
-        @Override
-        protected void onError(String err) {}
-
-        @Override
-        protected void onAuthError() {}
     }
 
     //endregion

@@ -8,6 +8,7 @@ import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,7 +35,7 @@ import estimeet.meetup.util.ContactList;
 public class SignInPresenter extends BasePresenter implements SignInInteractor.SignInListener,
         FriendsInteractor.GetFreindsListener{
 
-    private SignInView view;
+    private WeakReference<SignInView> view;
     private final SignInInteractor.SignInListener listener;
     //needs to set this field to class variable, otherwise the callback will be called
     //as the AuthCallback holds a weak reference and will be set to null when nav to digits auth page
@@ -71,33 +72,18 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
 
     @Override
     public void onAuthFailed() {
-        view.dismissProgressDialog();
-        view.onAuthFailed();
+        view.get().dismissProgressDialog();
+        view.get().onAuthFailed();
     }
-
-    @Override
-    public void onPermissionResult(boolean isGranted) {
-        if (isGranted) {
-            view.showProgressDialog();
-            view.onReadContactPermissionGranted();
-        }
-        view.dismissProgressDialog();
-        view.onSignInSuccessful(false);
-    }
-
     //endregion
 
     //region fragment call
     public void setView(SignInView view) {
-        this.view = view;
+        this.view = new WeakReference<>(view);
     }
 
     public void createDigitsAuthCallback() {
-        view.setAuthCallback(getAuthCallback());
-    }
-
-    public void sendContactList(String contacts) {
-        signInInteractor.sendContacts(contacts);
+        view.get().setAuthCallback(getAuthCallback());
     }
 
     public void manualSignin() {
@@ -109,13 +95,13 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
             @Override
             public void success(DigitsSession digitsSession, String s) {
                 //todo..temp progress dialog, change to a better one later
-                view.showProgressDialog();
+                view.get().showProgressDialog();
                 signInInteractor.onAuthSuccessful(digitsSession, s, listener);
             }
 
             @Override
             public void failure(DigitsException e) {
-                view.onDigitsError();
+                view.get().onDigitsError();
             }
         };
 
@@ -128,8 +114,8 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
     public void onSignInSuccessful(User user) {
         //request user friend list if they logged in for the first time
         if (!user.isProfileCompleted()) {
-            view.dismissProgressDialog();
-            view.checkPermission(Manifest.permission.READ_CONTACTS);
+            view.get().dismissProgressDialog();
+            view.get().onSignInSuccessful(false);
         } else {
             friendsInteractor.call(this);
             friendsInteractor.getFriendsList();
@@ -138,19 +124,14 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
 
     @Override
     public void onError(String errorMessage) {
-        view.dismissProgressDialog();
-        view.onError(errorMessage);
+        view.get().dismissProgressDialog();
+        view.get().onError(errorMessage);
     }
 
     @Override
-    public void onFriendListCompleted(boolean isAnyFriends) {
-        view.dismissProgressDialog();
-        if (isAnyFriends) {
-            view.onNonEmptyFriendsList();
-        } else {
-            view.onSignInSuccessful(true);
-        }
-
+    public void onFriendListCompleted() {
+        view.get().dismissProgressDialog();
+        view.get().onSignInSuccessful(true);
     }
     //endregion
 
@@ -158,7 +139,5 @@ public class SignInPresenter extends BasePresenter implements SignInInteractor.S
         void setAuthCallback(AuthCallback callback);
         void onSignInSuccessful(boolean isProfileCompleted);
         void onDigitsError();
-        void onReadContactPermissionGranted();
-        void onNonEmptyFriendsList();
     }
 }

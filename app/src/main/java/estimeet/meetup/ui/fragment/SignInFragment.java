@@ -40,7 +40,6 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     //call back to activity listener
     public interface SignInCallback {
         void onSigninSuccessful(boolean isProfileCompleted);
-        void navToFriendList();
     }
 
     @Inject SignInPresenter presenter;
@@ -145,16 +144,6 @@ public class SignInFragment extends BaseFragment implements SignInPresenter.Sign
     @Override
     public void onSignInSuccessful(boolean isProfileCompleted) {
         signInCallback.onSigninSuccessful(isProfileCompleted);
-    }
-
-    @Override
-    public void onReadContactPermissionGranted() {
-        presenter.sendContactList(ContactList.getUserContactList(getActivity()));
-    }
-
-    @Override
-    public void onNonEmptyFriendsList() {
-        signInCallback.navToFriendList();
     }
 
     @Override
