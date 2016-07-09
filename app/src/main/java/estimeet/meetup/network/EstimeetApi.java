@@ -45,7 +45,7 @@ public interface EstimeetApi {
     );
 
     @POST("/Profile/buildFriendsFromContacts")
-    Observable<User> sendContacts(
+    Observable<Void> sendContacts(
         @Header("Authorization") String token,
         @Body SendContact contactModel
     );

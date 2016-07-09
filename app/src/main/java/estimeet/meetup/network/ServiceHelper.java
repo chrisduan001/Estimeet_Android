@@ -39,7 +39,7 @@ public class ServiceHelper {
         return estimeetApi.signInUser(authUser);
     }
 
-    public Observable<User> sendContacts(String token, SendContact contactModel) {
+    public Observable<Void> sendContacts(String token, SendContact contactModel) {
         return estimeetApi.sendContacts(buildToken(token), contactModel);
     }
 

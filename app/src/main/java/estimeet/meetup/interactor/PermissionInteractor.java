@@ -15,7 +15,7 @@ import rx.Observable;
 /**
  * Created by AmyDuan on 6/07/16.
  */
-public class PermissionInteractor extends BaseInteractor<User> {
+public class PermissionInteractor extends BaseInteractor<Void> {
 
     private String contacts;
 
@@ -46,15 +46,15 @@ public class PermissionInteractor extends BaseInteractor<User> {
     }
 
     @Override
-    protected Observable<User> getObservable() {
+    protected Observable<Void> getObservable() {
         SendContact contactModel = new SendContact(baseUser.id, baseUser.userId, contacts);
         return serviceHelper.sendContacts(baseUser.token, contactModel);
     }
 
-    private class SendContactSubscriber extends DefaultSubscriber<User> {
+    private class SendContactSubscriber extends DefaultSubscriber<Void> {
         @Override
-        public void onNext(User user) {
-            sendContactCompleted();
+        public void onNext(Void aVoid) {
+            super.onNext(aVoid);
         }
 
         @Override
