@@ -27,15 +27,22 @@ public class PermissionInteractor extends BaseInteractor<User> {
     }
 
     public void sendContacts(String contacts, PermissionListener listener) {
-        if (TextUtils.isEmpty(contacts)) {
-            listener.onSendContactCompleted();
-            return;
-        }
         this.contacts = contacts;
         this.listener = listener;
+
+        if (TextUtils.isEmpty(contacts)) {
+            sendContactCompleted();
+            return;
+        }
         baseUser = sharedPreference.getUserFromSp();
 
         makeRequest(new SendContactSubscriber(), true);
+    }
+
+    private void sendContactCompleted() {
+        if (listener != null) {
+            listener.onSendContactCompleted();
+        }
     }
 
     @Override
@@ -47,7 +54,7 @@ public class PermissionInteractor extends BaseInteractor<User> {
     private class SendContactSubscriber extends DefaultSubscriber<User> {
         @Override
         public void onNext(User user) {
-            listener.onSendContactCompleted();
+            sendContactCompleted();
         }
 
         @Override
@@ -57,12 +64,12 @@ public class PermissionInteractor extends BaseInteractor<User> {
 
         @Override
         protected void onError(String err) {
-            listener.onSendContactCompleted();
+            sendContactCompleted();
         }
 
         @Override
         protected void onAuthError() {
-            listener.onSendContactCompleted();
+            sendContactCompleted();
         }
     }
 

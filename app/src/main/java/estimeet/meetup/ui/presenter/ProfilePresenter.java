@@ -15,6 +15,7 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 
 import estimeet.meetup.interactor.FriendsInteractor;
+import estimeet.meetup.interactor.PermissionInteractor;
 import estimeet.meetup.interactor.ProfileInteractor;
 import estimeet.meetup.ui.BaseView;
 
@@ -25,10 +26,13 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
 
     private WeakReference<ProfileView> view;
     private ProfileInteractor interactor;
+    //called when sdk version below M, will send contact in background
+    private PermissionInteractor permissionInteractor;
 
     @Inject
-    public ProfilePresenter(ProfileInteractor interactor) {
+    public ProfilePresenter(ProfileInteractor interactor, PermissionInteractor permissionInteractor) {
         this.interactor = interactor;
+        this.permissionInteractor = permissionInteractor;
     }
 
     @Override
@@ -52,6 +56,10 @@ public class ProfilePresenter extends BasePresenter implements ProfileInteractor
     //region fragment call
     public void setView(ProfileView view) {
         this.view = new WeakReference<>(view);
+    }
+
+    public void sendContact(String contacts) {
+        permissionInteractor.sendContacts(contacts, null);
     }
 
     public void intentToStartCamera() {

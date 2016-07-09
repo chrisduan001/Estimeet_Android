@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Callback;
+
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -26,6 +29,7 @@ import estimeet.meetup.R;
 import estimeet.meetup.di.components.SignInComponent;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.ProfilePresenter;
+import estimeet.meetup.util.ContactList;
 
 /**
  * Created by AmyDuan on 9/02/16.
@@ -72,8 +76,16 @@ public class ProfileFragment extends DpBaseFragment implements ProfilePresenter.
 
         presenter.setView(this);
 
+        sendContactIfNecessary();
         picasso.load(getDrawable()).resize(300, 300).centerCrop()
                 .transform(circleTransform).into(profileImage);
+    }
+
+    @Background
+    protected void sendContactIfNecessary() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            presenter.sendContact(ContactList.getUserContactList(getActivity()));
+        }
     }
 
     @Override
