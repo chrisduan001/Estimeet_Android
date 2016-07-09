@@ -149,7 +149,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     private void requestPermission(String... permissionsRequired) {
-        ActivityCompat.requestPermissions(getActivity(), permissionsRequired, PERMISSION_REQUEST_CODE);
+        requestPermissions(permissionsRequired, PERMISSION_REQUEST_CODE);
     }
 
     @Override
