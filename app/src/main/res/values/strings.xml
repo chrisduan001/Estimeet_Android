@@ -25,7 +25,7 @@
 
     <string name="progress_loading">Loading</string>
 
-    <string name="search_id">Search By ID</string>
+    <string name="search_phone">Search By phone</string>
 
     <string name="error_unable_to_crop_image">An error occurred while crop the image</string>
     <string name="error_create_temp_file">An error occurred when accessing your camera</string>

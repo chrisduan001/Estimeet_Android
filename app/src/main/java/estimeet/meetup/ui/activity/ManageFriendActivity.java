@@ -41,16 +41,6 @@ public class ManageFriendActivity extends BaseActivity implements HasComponent<M
         replaceFragment(R.id.container, new ManageFriendFragment_());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu_search, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.toolbar_search)
-                .getActionView();
-        searchView.setQueryHint(getResources().getString(R.string.search_id));
-        
-        return true;
-    }
-
     @SuppressWarnings("ConstantConditions")
     @AfterViews
     public void setupToolbar() {
@@ -67,9 +57,6 @@ public class ManageFriendActivity extends BaseActivity implements HasComponent<M
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
-                return true;
-            case R.id.toolbar_search:
-                Log.d(this.getClass().getSimpleName(), "search clicked");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

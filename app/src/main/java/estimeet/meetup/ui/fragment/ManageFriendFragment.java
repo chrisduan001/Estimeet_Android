@@ -3,12 +3,22 @@ package estimeet.meetup.ui.fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 import javax.inject.Inject;
@@ -38,7 +48,16 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
     @ViewById(R.id.recyclerView) RecyclerView recyclerView;
     @ViewById(R.id.progress_bar) ProgressBar progressBar;
 
+    private SearchView searchView;
+
     //region lifecycle
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return null;
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -64,6 +83,30 @@ public class ManageFriendFragment extends BaseFragment implements ManageFriendPr
         recyclerView.setAdapter(manageFriendListAdapter);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        setUpSearchView(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void setUpSearchView(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_menu_search, menu);
+        searchView = (SearchView) menu.findItem(R.id.toolbar_search)
+                .getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.search_phone));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
     //endregion
 
     //region presenter callback
