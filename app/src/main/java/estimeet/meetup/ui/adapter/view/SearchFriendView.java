@@ -11,6 +11,7 @@ import java.lang.ref.WeakReference;
 
 import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.UserFromSearch;
 import estimeet.meetup.util.CircleTransform;
 
 /**
@@ -19,14 +20,16 @@ import estimeet.meetup.util.CircleTransform;
 @EViewGroup(R.layout.item_manage_friends_list)
 public class SearchFriendView extends BaseFriendListView {
 
+    private UserFromSearch user;
     private WeakReference<SearchFriendViewCallback> callback;
 
     public SearchFriendView(Context context) {
         super(context);
     }
 
-    public void bind(Friend friend, Picasso picasso, CircleTransform circleTransform, SearchFriendViewCallback callback) {
-        super.bind(friend);
+    public void bind(UserFromSearch user, Picasso picasso, CircleTransform circleTransform,
+                     SearchFriendViewCallback callback) {
+        super.bind(user);
         this.callback = new WeakReference<>(callback);
         loadUserDpImage(picasso, circleTransform);
     }
@@ -37,10 +40,11 @@ public class SearchFriendView extends BaseFriendListView {
 
     @Click(R.id.friend_action)
     protected void friendActionClicked() {
-        callback.get().onAddFriend();
+        user.isFriend = true;
+        callback.get().onAddFriend(user);
     }
 
     public interface SearchFriendViewCallback {
-        void onAddFriend();
+        void onAddFriend(UserFromSearch user);
     }
 }

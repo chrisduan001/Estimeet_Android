@@ -25,9 +25,11 @@ import javax.inject.Inject;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.ManageFriendComponent;
 import estimeet.meetup.model.Friend;
+import estimeet.meetup.model.UserFromSearch;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
 import estimeet.meetup.ui.adapter.ManageFriendListAdapter;
+import estimeet.meetup.ui.adapter.SearchFriendListAdapter;
 import estimeet.meetup.ui.presenter.BasePresenter;
 import estimeet.meetup.ui.presenter.ManageFriendPresenter;
 import estimeet.meetup.util.AnimationUtil;
@@ -37,7 +39,7 @@ import estimeet.meetup.util.AnimationUtil;
  */
 @EFragment(R.layout.fragment_manage_friend)
 public class ManageFriendFragment extends BaseFragment implements MenuItemCompat.OnActionExpandListener,
-        ManageFriendPresenter.ManageFriendView,
+        ManageFriendPresenter.ManageFriendView, SearchFriendListAdapter.SearchFriendCallback,
         LoaderManager.LoaderCallbacks<Cursor>, ManageFriendListAdapter.ManageFriendAdapterCallback {
 
     public static final int ACTIVITY_RESULT = 1000;
@@ -46,6 +48,7 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
     @Inject ManageFriendPresenter presenter;
 
     @Inject ManageFriendListAdapter manageFriendListAdapter;
+    @Inject SearchFriendListAdapter searchFriendListAdapter;
 
     @ViewById(R.id.recyclerView) RecyclerView recyclerView;
     @ViewById(R.id.searchResult_list) RecyclerView searchResultList;
@@ -70,7 +73,6 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
         manageFriendListAdapter.setCallback(this);
 
         initRecyclerView();
-        initSearchResultRecycler();
 
         initFriendCursor();
 
@@ -89,8 +91,11 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
     }
 
     private void initSearchResultRecycler() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (searchResultList.getAdapter() == null) {
+            searchResultList.setHasFixedSize(true);
+            searchResultList.setLayoutManager(new LinearLayoutManager(getContext()));
+            searchResultList.setAdapter(searchFriendListAdapter);
+        }
     }
 
     @Override
@@ -163,6 +168,11 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
     public void onUpdateFriend(Friend friend) {
         presenter.onUpdateFriend(friend);
         getActivity().setResult(ACTIVITY_RESULT, getActivity().getIntent().putExtra(RESULT_MESSAGE, true));
+    }
+
+    @Override
+    public void onAddFriend(UserFromSearch user) {
+
     }
     //endregion
 
