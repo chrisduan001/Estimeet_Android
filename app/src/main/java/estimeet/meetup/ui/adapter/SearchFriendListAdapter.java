@@ -1,6 +1,5 @@
 package estimeet.meetup.ui.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -16,6 +15,7 @@ import estimeet.meetup.ui.adapter.util.ViewWrapper;
 import estimeet.meetup.ui.adapter.view.SearchFriendView;
 import estimeet.meetup.ui.adapter.view.SearchFriendView_;
 import estimeet.meetup.util.CircleTransform;
+
 
 /**
  * Created by AmyDuan on 16/07/16.
@@ -49,6 +49,22 @@ public class SearchFriendListAdapter extends RecyclerView.Adapter<ViewWrapper>
         this.callback = new WeakReference<>(callback);
     }
 
+    public void onAddFriendFailed(int userId) {
+        if (users != null) {
+            for (UserFromSearch user: users) {
+                if (user.id == userId) {
+                    user.isFriend = false;
+                }
+            }
+        }
+
+        notifyAdapterDataChange();
+    }
+
+    public void notifyAdapterDataChange() {
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(ViewWrapper holder, int position) {
         SearchFriendView view = (SearchFriendView)holder.getView();
@@ -62,6 +78,7 @@ public class SearchFriendListAdapter extends RecyclerView.Adapter<ViewWrapper>
 
     @Override
     public void onAddFriend(UserFromSearch user) {
+        notifyDataSetChanged();
         callback.get().onAddFriend(user);
     }
 

@@ -21,6 +21,9 @@ import android.widget.ProgressBar;
 
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.List;
+
 import javax.inject.Inject;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.ManageFriendComponent;
@@ -95,6 +98,7 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
             searchResultList.setHasFixedSize(true);
             searchResultList.setLayoutManager(new LinearLayoutManager(getContext()));
             searchResultList.setAdapter(searchFriendListAdapter);
+            searchFriendListAdapter.setCallback(this);
         }
     }
 
@@ -111,6 +115,24 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
         restartFriendCursor();
     }
 
+    @Override
+    public void onSearchCompleted(List<UserFromSearch> users) {
+        dismissProgressDialog();
+        initSearchResultRecycler();
+        searchFriendListAdapter.setListData(users);
+        searchFriendListAdapter.notifyAdapterDataChange();
+    }
+
+    @Override
+    public void onAddFriendFailed(int userId) {
+        dismissProgressDialog();
+        searchFriendListAdapter.onAddFriendFailed(userId);
+    }
+
+    @Override
+    public void onAddFriendSuccessful() {
+        dismissProgressDialog();
+    }
     //endregion
 
     //region base
@@ -172,7 +194,8 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
 
     @Override
     public void onAddFriend(UserFromSearch user) {
-
+        showProgressDialog();
+        presenter.addFriend(user);
     }
     //endregion
 
@@ -196,7 +219,13 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if (newText.length() > 6) {
+                    presenter.searchFriendByPhone(newText);
+                    showProgressDialog();
+                } else {
+                    searchFriendListAdapter.setListData(null);
+                }
+                return true;
             }
         });
     }

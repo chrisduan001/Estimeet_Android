@@ -10,7 +10,6 @@ import org.androidannotations.annotations.EViewGroup;
 import java.lang.ref.WeakReference;
 
 import estimeet.meetup.R;
-import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.UserFromSearch;
 import estimeet.meetup.util.CircleTransform;
 
@@ -31,6 +30,9 @@ public class SearchFriendView extends BaseFriendListView {
                      SearchFriendViewCallback callback) {
         super.bind(user);
         this.callback = new WeakReference<>(callback);
+        this.user = user;
+
+        actionButton.setVisibility(user.isFriend ? GONE : VISIBLE);
         loadUserDpImage(picasso, circleTransform);
     }
 

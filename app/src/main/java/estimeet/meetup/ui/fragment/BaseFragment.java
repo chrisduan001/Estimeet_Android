@@ -3,6 +3,7 @@ package estimeet.meetup.ui.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.support.annotation.Keep;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -69,6 +70,7 @@ public abstract class BaseFragment extends Fragment {
         showToastMessage(true, message);
     }
 
+    @Keep
     protected void showProgressDialog(String message) {
         getProgressBar().setVisibility(View.VISIBLE);
     }
@@ -88,9 +90,7 @@ public abstract class BaseFragment extends Fragment {
         int code = 0;
         try {
             code = Integer.parseInt(errCode);
-        } catch (Exception e) {
-            Crashlytics.logException(e);
-        }
+        } catch (Exception e) {}
 
         switch (code) {
             case 500:
