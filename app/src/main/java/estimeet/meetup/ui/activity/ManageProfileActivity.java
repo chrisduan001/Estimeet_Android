@@ -59,7 +59,7 @@ public class ManageProfileActivity extends BaseActivity implements HasComponent<
         getSupportActionBar().setTitle("");
         estimeetIcon.setVisibility(View.GONE);
         toolbarTitle.setVisibility(View.VISIBLE);
-        toolbarTitle.setText(getString(R.string.title_manage_profile));
+        toolbarTitle.setText(getString(R.string.title_profile_and_setting));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

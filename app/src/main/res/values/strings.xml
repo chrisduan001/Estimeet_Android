@@ -25,14 +25,14 @@
 
     <string name="progress_loading">Loading</string>
 
-    <string name="search_phone">Search By phone</string>
+    <string name="search_phone">Search By phone number</string>
 
-    <string name="error_unable_to_crop_image">An error occurred while crop the image</string>
+    <string name="error_unable_to_crop_image">An error occurred while cropping the image</string>
     <string name="error_create_temp_file">An error occurred when accessing your camera</string>
-    <string name="error_500">An error occurred on server, please try again later</string>
-    <string name="error_digits">An error occurred while process your phone number please try again</string>
+    <string name="error_500">An error occurred on the server, please try again later</string>
+    <string name="error_digits">An error occurred while processing your phone number, please try again</string>
     <string name="error_network">Request failed, please check your internet and try again</string>
-    <string name="error_generic">An error occurred, please try again</string>
+    <string name="error_generic">An error has occurred, please try again</string>
     
     <string name="title_manage_friend">Manage Friends</string>
     <string name="title_profile_and_setting">Profile and settings</string>
@@ -43,9 +43,8 @@
     <string name="profile_title_mobile_number">Mobile Number:</string>
     <string name="fab_manage_friends">Manage Friends</string>
     <string name="fab_profile">Profile</string>
-    <string name="title_manage_profile">Profile and Settings</string>
     <string name="send_request_title">Send Estimeet</string>
-    <string name="send_request_sub_title">Release to request</string>
+    <string name="send_request_sub_title">Swipe to request</string>
     <string name="profile_greeting_message">Hi %s !</string>
 
     <string name="push_SENDER_ID">403360413079</string>
@@ -57,17 +56,17 @@
     <string name="ignore">Ignore</string>
     <string name="push_session_starts">New session created</string>
     <string name="session_length_15">15 Minutes</string>
-    <string name="error_location_permission">We need your permission for your location, please enable it in settings.</string>
+    <string name="error_location_permission">We need permission for your location, please enable it in settings.</string>
     <string name="error_play_service">Google play service not available, the core functionality is based on the Play Service.</string>
     <string name="error_title">Error</string>
     <string name="meetup_subtitle">Estimeet helps you meet up with your friends. \nNo more calls and texts to find out where they are!</string>
-    <string name="error_session_expired">Session expired, user deleted the session or expired</string>
-    <string name="error_session_generic">An error occurred while get the distance, please try again</string>
+    <string name="error_session_expired">Session has expired. Please send another estimeet.</string>
+    <string name="error_session_generic">An error occurred while getting the distance, please try again</string>
     <string name="distance_format">KM</string>
     <string name="travel_walk">Walk</string>
     <string name="travel_drive">Drive</string>
     <string name="location_unknown">Unknown</string>
-    <string name="expired_string">(Need Refresh)</string>
+    <string name="expired_string">(Needs Refresh)</string>
     <string name="minute_string">Minute(s)</string>
     <string name="hour_string">Hour(s)</string>
 
