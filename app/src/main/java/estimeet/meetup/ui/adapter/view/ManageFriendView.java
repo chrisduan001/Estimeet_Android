@@ -4,11 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -16,7 +11,6 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
@@ -29,45 +23,19 @@ import estimeet.meetup.util.CircleTransform;
  * Created by AmyDuan on 16/03/16.
  */
 @EViewGroup(R.layout.item_manage_friends_list)
-public class ManageFriendListView extends RelativeLayout {
-
-    @ViewById(R.id.friend_name) TextView friendName;
-    @ViewById(R.id.friend_dp) ImageView friendDp;
-    @ViewById(R.id.friend_action) ImageButton actionButton;
-    @ViewById(R.id.friend_header) TextView friendHeader;
+public class ManageFriendView extends BaseFriendListView {
 
     private WeakReference<FriendListViewCallback> callback;
-    private Friend friend;
 
-    public ManageFriendListView(Context context) {
-        super(context);  
+    public ManageFriendView(Context context) {
+        super(context);
     }
 
     public void bind(Friend friend, Picasso picasso, CircleTransform circleTransform, FriendListViewCallback callback) {
+        super.bind(friend);
+
         this.callback = new WeakReference<>(callback);
-        this.friend = friend;
-
-        setView();
-        setManageFriendAction();
         loadUserDpImage(picasso, circleTransform);
-    }
-
-    public void showSectionHeader(String header) {
-        friendHeader.setVisibility(VISIBLE);
-        friendHeader.setText(header);
-    }
-
-    private void setView() {
-        friendName.setText(friend.userName);
-        friendHeader.setVisibility(GONE);
-    }
-
-    private void setManageFriendAction() {
-        if (friend.isFavourite) {
-            actionButton.setImageResource(R.drawable.ic_person_add_green_48dp);
-        } else {
-            actionButton.setImageResource(R.drawable.ic_person_add_grey_48dp);
-        }
     }
 
     private void loadUserDpImage(Picasso picasso, CircleTransform circleTransform) {
@@ -87,6 +55,11 @@ public class ManageFriendListView extends RelativeLayout {
         } else {
             loadImageAsync(friend.image);
         }
+    }
+
+    public void showSectionHeader(String header) {
+        friendHeader.setVisibility(VISIBLE);
+        friendHeader.setText(header);
     }
 
     @Background

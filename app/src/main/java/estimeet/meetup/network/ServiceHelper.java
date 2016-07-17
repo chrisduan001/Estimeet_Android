@@ -8,6 +8,7 @@ import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.LocationModel;
 import estimeet.meetup.model.NotificationEntity;
+import estimeet.meetup.model.PostModel.AddFriendModel;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.RequestLocationModel;
 import estimeet.meetup.model.PostModel.SendContact;
@@ -16,6 +17,7 @@ import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.Session;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
+import estimeet.meetup.model.UserFromSearch;
 import rx.Observable;
 
 /**
@@ -86,6 +88,14 @@ public class ServiceHelper {
 
     public Observable<ListItem<LocationModel>> getTravelInfo(String token, RequestLocationModel model) {
         return estimeetApi.getTravelInfo(buildToken(token), model);
+    }
+
+    public Observable<Boolean> requestAddFriend(String token, AddFriendModel model) {
+        return estimeetApi.requestAddFriend(buildToken(token), model);
+    }
+
+    public Observable<ListItem<UserFromSearch>> searchFriendByPhone(String token, String phone) {
+        return estimeetApi.searchFriendByPhone(buildToken(token), phone);
     }
 
     private String buildToken(String token) {

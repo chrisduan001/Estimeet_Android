@@ -5,6 +5,7 @@ import estimeet.meetup.model.Friend;
 import estimeet.meetup.model.ListItem;
 import estimeet.meetup.model.LocationModel;
 import estimeet.meetup.model.NotificationEntity;
+import estimeet.meetup.model.PostModel.AddFriendModel;
 import estimeet.meetup.model.PostModel.AuthUser;
 import estimeet.meetup.model.PostModel.RequestLocationModel;
 import estimeet.meetup.model.PostModel.SendContact;
@@ -13,6 +14,7 @@ import estimeet.meetup.model.PostModel.UpdateModel;
 import estimeet.meetup.model.Session;
 import estimeet.meetup.model.TokenResponse;
 import estimeet.meetup.model.User;
+import estimeet.meetup.model.UserFromSearch;
 import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -100,6 +102,18 @@ public interface EstimeetApi {
             @Query("id") int id,
             @Query("userId") long userId,
             @Query("notificationId") long notificationId
+    );
+
+    @GET("/user/findfriendbyphonenumber")
+    Observable<ListItem<UserFromSearch>> searchFriendByPhone(
+        @Header("Authorization") String token,
+        @Query("phoneNumber") String phoneNumber
+    );
+
+    @POST("/user/requestaddfriend")
+    Observable<Boolean> requestAddFriend (
+            @Header("Authorization") String token,
+            @Body AddFriendModel addFriendModel
     );
 
     @POST("/session/cancelsession")

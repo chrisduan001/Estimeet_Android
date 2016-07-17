@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -72,7 +73,7 @@ public class AnimationUtil {
         }
     }
 
-    public static void performFadeOutAnimation(Context context, Animation.AnimationListener listener,
+    public static void performFadeOutAnimation(Context context, @NonNull Animation.AnimationListener listener,
                                                View... views) {
         Animation fadeOutAnim = null;
         for (View view: views) {

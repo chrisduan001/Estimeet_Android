@@ -14,15 +14,16 @@ import estimeet.meetup.R;
 import estimeet.meetup.model.Friend;
 import estimeet.meetup.ui.adapter.util.CursorRecyclerAdapter;
 import estimeet.meetup.ui.adapter.util.ViewWrapper;
-import estimeet.meetup.ui.adapter.view.ManageFriendListView;
-import estimeet.meetup.ui.adapter.view.ManageFriendListView_;
+import estimeet.meetup.ui.adapter.view.BaseFriendListView_;
+import estimeet.meetup.ui.adapter.view.ManageFriendView;
+import estimeet.meetup.ui.adapter.view.ManageFriendView_;
 import estimeet.meetup.util.CircleTransform;
 
 /**
  * Created by AmyDuan on 15/03/16.
  */
 public class ManageFriendListAdapter extends CursorRecyclerAdapter
-        implements ManageFriendListView.FriendListViewCallback {
+        implements ManageFriendView.FriendListViewCallback {
 
     private Context context;
     private Picasso picasso;
@@ -38,7 +39,7 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter
 
     @Override
     public void onBindViewHolder(ViewWrapper holder, Cursor cursor, int position) {
-        ManageFriendListView view = (ManageFriendListView)holder.getView();
+        ManageFriendView view = (ManageFriendView)holder.getView();
         Friend friend = Friend.fromCursor(cursor);
         view.bind(friend, picasso, circleTransform, this);
         if (position == 0) {
@@ -53,7 +54,7 @@ public class ManageFriendListAdapter extends CursorRecyclerAdapter
 
     @Override
     public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewWrapper(ManageFriendListView_.build(context));
+        return new ViewWrapper(ManageFriendView_.build(context));
     }
 
     public void setCallback(ManageFriendAdapterCallback callback) {

@@ -87,7 +87,9 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
         }
 
         @Override
-        protected void onAuthError() {}
+        protected void onAuthError() {
+            listener.onAuthFailed();
+        }
 
         @Override
         protected void onError(String err) {
