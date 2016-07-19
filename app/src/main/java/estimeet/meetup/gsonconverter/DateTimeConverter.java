@@ -1,5 +1,7 @@
 package estimeet.meetup.gsonconverter;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -14,6 +16,7 @@ import java.util.Locale;
 /**
  * Created by AmyDuan on 25/01/16.
  */
+@Keep
 public class DateTimeConverter extends TypeAdapter<Date> {
 
     final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US);

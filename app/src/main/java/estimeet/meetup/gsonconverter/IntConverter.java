@@ -1,5 +1,6 @@
 package estimeet.meetup.gsonconverter;
 
+import android.support.annotation.Keep;
 import android.text.TextUtils;
 
 import com.google.gson.JsonSyntaxException;
@@ -12,6 +13,7 @@ import java.io.IOException;
 /**
  * Created by AmyDuan on 25/01/16.
  */
+@Keep
 public class IntConverter extends TypeAdapter<Integer> {
     @Override
     public void write(JsonWriter out, Integer value) throws IOException {

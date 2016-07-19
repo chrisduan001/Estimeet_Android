@@ -88,6 +88,7 @@ public class GetNotificationInteractor extends BaseInteractor<ListItem<Notificat
 
         @Override
         protected void onAuthError() {
+            sharedPreference.removeSharedPreference();
             listener.onAuthFailed();
         }
 

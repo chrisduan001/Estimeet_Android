@@ -32,11 +32,25 @@
    *;
 }
 
+#retrofit 2
+#-dontwarn retrofit2.**
+#-keep class retrofit2.** { *; }
+#-keepattributes Signature
+#-keepattributes Exceptions
+
 #retrofit
--dontwarn retrofit2.**
--keep class retrofit2.** { *; }
--keepattributes Signature
--keepattributes Exceptions
+-keep class com.squareup.okhttp.** { *; }
+-keep class retrofit.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn retrofit.**
+-dontwarn rx.**
+
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.** { *; }
+-keep class com.google.gson.stream.** { *; }
 
 #
 # rxjava
@@ -60,3 +74,6 @@
     long producerNode;
     long consumerNode;
 }
+
+#searchview
+-keep class android.support.v7.widget.** { *; }

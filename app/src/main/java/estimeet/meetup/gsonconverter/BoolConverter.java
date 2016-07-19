@@ -1,5 +1,7 @@
 package estimeet.meetup.gsonconverter;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -10,6 +12,7 @@ import java.io.IOException;
 /**
  * Created by AmyDuan on 25/01/16.
  */
+@Keep
 public class BoolConverter extends TypeAdapter<Boolean> {
     @Override
     public void write(JsonWriter out, Boolean value) throws IOException {

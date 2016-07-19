@@ -70,7 +70,7 @@ dependencies {
     compile 'org.androidannotations:androidannotations-api:4.0.0'
 
     //retrofit
-
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
 
     //facebook
     compile 'com.facebook.android:facebook-android-sdk:4.10.0'
