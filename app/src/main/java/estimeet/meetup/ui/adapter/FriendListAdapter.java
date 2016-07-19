@@ -160,6 +160,7 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
     public void onStopSwipe() {
         if (itemSelected != Adapter.NO_SELECTION && viewSwiped != null) {
             viewSwiped.bindFriend(viewSwiped.getFriendSession());
+            resetItemSelection();
         }
     }
 
@@ -176,9 +177,13 @@ public class FriendListAdapter extends CursorRecyclerAdapter implements ItemTouc
         } else return false;
     }
 
-    private void resetSelection(View view, int position) {
+    private void resetItemSelection() {
         itemSelected = Adapter.NO_SELECTION;
         viewSwiped = null;
+    }
+
+    private void resetSelection(View view, int position) {
+        resetItemSelection();
 
         FriendSession session;
         if (view instanceof FriendListView) {
