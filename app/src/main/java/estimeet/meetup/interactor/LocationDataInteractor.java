@@ -1,5 +1,7 @@
 package estimeet.meetup.interactor;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import rx.schedulers.Schedulers;
 public class LocationDataInteractor extends BaseInteractor<ListItem<LocationModel>> {
 
     private FriendSession friendSession;
-    private BaseListener listener;
+    private LocationDataListener listener;
 
     private List<FriendSession> sessionList;
 
@@ -35,12 +37,18 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
         super(service, data, sp);
     }
 
-    public void call(BaseListener listener) {
+    public void call(LocationDataListener listener) {
         this.listener = listener;
     }
 
     public void onRequestLocation(FriendSession friendSession) {
         this.friendSession = friendSession;
+        //user's location not available
+        String userLocation = sharedPreference.getUserGeoCoord();
+        if (TextUtils.isEmpty(userLocation)) {
+            listener.onFailedToGetLocation();
+            return;
+        }
         makeRequest(new RequestLocationSubscriber(), true);
     }
 
@@ -124,5 +132,9 @@ public class LocationDataInteractor extends BaseInteractor<ListItem<LocationMode
         protected void onError(String err) {
             listener.onError(err);
         }
+    }
+
+    public interface LocationDataListener extends BaseListener {
+        void onFailedToGetLocation();
     }
 }

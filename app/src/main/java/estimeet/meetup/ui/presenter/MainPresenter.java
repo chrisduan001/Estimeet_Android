@@ -29,7 +29,7 @@ import estimeet.meetup.factory.SessionCreationFactory;
  * Created by AmyDuan on 6/02/16.
  */
 public class MainPresenter extends BasePresenter implements GetNotificationInteractor.GetNotificationListener,
-        MainInteractor.MainListener{
+        MainInteractor.MainListener, LocationDataInteractor.LocationDataListener{
 
     @Inject MainInteractor mainInteractor;
     @Inject PushInteractor pushInteractor;
@@ -221,6 +221,11 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         if (result != null) {
             mainInteractor.getTravelMode();
         }
+    }
+
+    @Override
+    public void onFailedToGetLocation() {
+        view.get().onError(BaseFragment.ERROR_NULL_USER_SESSION_LOCATION + "");
     }
 
     @Override

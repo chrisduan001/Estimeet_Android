@@ -31,6 +31,7 @@ public abstract class BaseFragment extends Fragment {
     public static final int ERROR_CODE_500 = 500;
     public static final int ERROR_SESSION_GENERIC = 700;
     public static final int ERROR_SESSION_EXPIRED = 701;
+    public static final int ERROR_NULL_USER_SESSION_LOCATION = 710;
     public static final int ERROR_GENERIC = 1000;
     public static final int ERROR_LOCATION_PERMISSION = 1001;
     public static final int ERROR_PLAY_SERVICE = 1002;
@@ -101,6 +102,9 @@ public abstract class BaseFragment extends Fragment {
                 break;
             case ERROR_SESSION_GENERIC:
                 showShortToastMessage(getString(R.string.error_session_generic));
+                break;
+            case ERROR_NULL_USER_SESSION_LOCATION:
+                showShortToastMessage(getString(R.string.error_null_user_geo));
                 break;
             case ERROR_LOCATION_PERMISSION:
                 showShortToastMessage(getString(R.string.error_location_permission));

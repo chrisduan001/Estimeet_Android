@@ -33,6 +33,7 @@
     <string name="error_digits">An error occurred while processing your phone number, please try again</string>
     <string name="error_network">Request failed, please check your internet and try again</string>
     <string name="error_generic">An error has occurred, please try again</string>
+    <string name="error_null_user_geo">An error occurred when getting your location, please try again</string>
     
     <string name="title_manage_friend">Manage Friends</string>
     <string name="title_profile_and_setting">Profile and settings</string>
