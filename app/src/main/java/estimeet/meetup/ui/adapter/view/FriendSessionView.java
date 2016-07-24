@@ -46,6 +46,7 @@ public class FriendSessionView extends RelativeLayout {
     @ViewById(R.id.session_eta)                     TextView  sessionEta;
     @ViewById(R.id.session_location)                TextView  sessionLocation;
     @ViewById(R.id.active_session_friend_name)      TextView  sessionFriendName;
+    @ViewById(R.id.active_session_refresh_message)      TextView  sessionRefreshMessage;
     @ViewById(R.id.reward_progress)                 ProgressBar progressBar;
 
     private FriendSession friendSession;
@@ -111,7 +112,8 @@ public class FriendSessionView extends RelativeLayout {
     private void showEmptyActivitySessionView() {
         //// TODO: 16/06/16 need to find a proper ui for when unable to get friend's location due to network connection or they turned off location manually
         sessionFriendName.setText(friendSession.getFriendName() + (isWaitingTimeExceeded() ? "Location unavailable" : ""));
-        setVisibility(VISIBLE, sessionFriendName);
+        sessionRefreshMessage.setText(getContext().getString(R.string.session_refresh_message));
+        setVisibility(VISIBLE, sessionFriendName, sessionRefreshMessage);
         setVisibility(GONE, sessionDistance, sessionEta, sessionLocation);
     }
 
@@ -135,7 +137,7 @@ public class FriendSessionView extends RelativeLayout {
                 TravelInfoFactory.getEtaString(friendSession.getEta(), getContext()) + expireString;
         sessionEta.setText(etaString);
 
-        setVisibility(GONE, sessionFriendName);
+        setVisibility(GONE, sessionFriendName, sessionRefreshMessage);
         setVisibility(VISIBLE, sessionDistance, sessionEta, sessionLocation);
     }
 

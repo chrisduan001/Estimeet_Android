@@ -33,7 +33,7 @@
     <string name="error_digits">An error occurred while processing your phone number, please try again</string>
     <string name="error_network">Request failed, please check your internet and try again</string>
     <string name="error_generic">An error has occurred, please try again</string>
-    <string name="error_null_user_geo">An error occurred when getting your location, please try again</string>
+    <string name="error_null_user_geo">An error has occurred while getting your location. Is your GPS turned on?</string>
     
     <string name="title_manage_friend">Manage Friends</string>
     <string name="title_profile_and_setting">Profile and settings</string>
@@ -53,6 +53,7 @@
     <string name="push_HUB_LISTENER_STRING">Endpoint=sb://meetup.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=3XEU5LpvQH7DsLfWIj4t+6csDar4B0PE83rxlm1qJDE="</string>
     <string name="push_session_request">You have a session request</string>
     <string name="send_estimeet_message">Estimeet request sent</string>
+    <string name="session_refresh_message">Swipe to Refresh</string>
     <string name="accept">Accept</string>
     <string name="ignore">Ignore</string>
     <string name="push_session_starts">New session created</string>

@@ -123,7 +123,16 @@
             app:typeface="semiBold"
             tools:text="Friend name"
             android:visibility="visible"/>
-
+        <estimeet.meetup.util.widget.OmnesTextView
+            android:id="@+id/active_session_refresh_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/greyDarker"
+            app:typeface="regular"
+            tools:text="@string/session_refresh_message"
+            android:visibility="visible"/>
         <estimeet.meetup.util.widget.OmnesTextView
             android:id="@+id/session_distance"
             android:layout_width="match_parent"
