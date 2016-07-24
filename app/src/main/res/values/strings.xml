@@ -51,12 +51,12 @@
     <string name="push_SENDER_ID">403360413079</string>
     <string name="push_HUB_NAME">meetup</string>
     <string name="push_HUB_LISTENER_STRING">Endpoint=sb://meetup.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=3XEU5LpvQH7DsLfWIj4t+6csDar4B0PE83rxlm1qJDE="</string>
-    <string name="push_session_request">You have a session request</string>
+    <string name="push_session_request">Your friend wants to estimeet you!</string>
     <string name="send_estimeet_message">Estimeet request sent</string>
-    <string name="session_refresh_message">Swipe to Refresh</string>
+    <string name="session_refresh_message">Swipe to Refresh  (15 min timeout)</string>
     <string name="accept">Accept</string>
     <string name="ignore">Ignore</string>
-    <string name="push_session_starts">New session created</string>
+    <string name="push_session_starts">New estimeet session created</string>
     <string name="session_length_15">15 Minutes</string>
     <string name="error_location_permission">We need permission for your location, please enable it in settings.</string>
     <string name="error_play_service">Google play service not available, the core functionality is based on the Play Service.</string>
