@@ -52,6 +52,7 @@ public class SessionCreationFactory {
         friendSession.setDistance(locationModel.distance);
         friendSession.setEta(locationModel.eta);
         friendSession.setTravelMode(locationModel.travelMode);
+        friendSession.setLocation(locationModel.location);
         friendSession.setDateUpdated(System.currentTimeMillis());
         friendSession.setWaitingTime(0);
 

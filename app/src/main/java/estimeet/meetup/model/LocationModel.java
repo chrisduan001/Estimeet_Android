@@ -14,4 +14,7 @@ public class LocationModel extends BaseModel {
 
     @SerializedName("travelMode")
     public int travelMode;
+
+    @SerializedName("location")
+    public String location;
 }
