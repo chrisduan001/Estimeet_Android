@@ -186,6 +186,9 @@ public class FriendSessionView extends RelativeLayout {
     @Click(R.id.btn_cancel_session)
     protected void onCancelSession() {
         cancelSession();
+        Snackbar snackbar = Snackbar
+                .make(getRootView(), getContext().getString(R.string.cancel_session_message), Snackbar.LENGTH_SHORT);
+        snackbar.show();
     }
 
     @Click(R.id.action_accept_request)
@@ -202,9 +205,6 @@ public class FriendSessionView extends RelativeLayout {
     @Background
     void cancelSession() {
         callback.get().onCancelSession(friendSession);
-        Snackbar snackbar = Snackbar
-                .make(getRootView(), getContext().getString(R.string.cancel_session_message), Snackbar.LENGTH_SHORT);
-        snackbar.show();
     }
 
     @Background
