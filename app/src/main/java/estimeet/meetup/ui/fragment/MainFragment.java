@@ -114,7 +114,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         initFriendCursor();
 
         registerPushChannel();
-        
+
     }
 
     @Override
