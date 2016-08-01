@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     @ViewById(R.id.toolbar_action_walking)  ImageButton toolbarWalking;
     @ViewById(R.id.toolbar_action_transit)  ImageButton toolbarTransit;
     @ViewById(R.id.toolbar_action_car)      ImageButton toolbarCar;
-    @ViewById(R.id.toolbar_action_bike)     ImageButton toolbarBike;
+    @ViewById(R.id.toolbar_message)      TextView toolbarMessage;
 
     @Inject @Named("currentUser") User user;
 
@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
                         public void onAnimationRepeat(Animation animation) {
 
                         }
-                    }, toolbarWalking, toolbarTransit, toolbarCar, toolbarBike);
+                    }, toolbarWalking, toolbarTransit, toolbarCar);
         } else {
             resetToolbar();
         }
@@ -150,7 +150,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         if (toolbarAppIcon.getVisibility() != View.GONE) {
             toolbarAppIcon.setVisibility(View.GONE);
             actionGroup.setVisibility(View.VISIBLE);
-            AnimationUtil.performFadeInAnimation(this, toolbarWalking, toolbarTransit, toolbarCar, toolbarBike);
+            AnimationUtil.performFadeInAnimation(this, toolbarWalking, toolbarTransit, toolbarCar);
         }
 
         //reset icon to default and reselect
@@ -164,18 +164,17 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
             case TravelInfoFactory.TRAVEL_MODE_WALK:
                 toolbarWalking.setImageResource(reset ?
                         R.drawable.ic_directions_walk_grey_48dp : R.drawable.ic_directions_walk_green_48dp);
-                break;
-            case TravelInfoFactory.TRAVEL_MODE_BIKE:
-                toolbarBike.setImageResource(reset ?
-                        R.drawable.ic_directions_bike_grey_48dp : R.drawable.ic_directions_bike_green_48dp);
+                toolbarMessage.setText(getString(R.string.travel_walk_message));
                 break;
             case TravelInfoFactory.TRAVEL_MODE_DRIVE:
                 toolbarCar.setImageResource(reset ?
                         R.drawable.ic_directions_car_grey_48dp : R.drawable.ic_directions_car_green_48dp);
+                toolbarMessage.setText(getString(R.string.travel_car_message));
                 break;
             case TravelInfoFactory.TRAVEL_MODE_TRANSIT:
                 toolbarTransit.setImageResource(reset ?
                         R.drawable.ic_directions_bus_grey_48dp : R.drawable.ic_directions_bus_green_48dp);
+                toolbarMessage.setText(getString(R.string.travel_bus_message));
                 break;
             default:
                 break;
@@ -200,11 +199,6 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         getMainFragment().setTravelMode(TravelInfoFactory.TRAVEL_MODE_TRANSIT);
     }
 
-    @Click(R.id.toolbar_action_bike)
-    protected void onBikeClicked() {
-        setupActionGroup(TravelInfoFactory.TRAVEL_MODE_BIKE);
-        getMainFragment().setTravelMode(TravelInfoFactory.TRAVEL_MODE_BIKE);
-    }
 
     private MainFragment getMainFragment() {
         return (MainFragment) getSupportFragmentManager().getFragments().get(0);

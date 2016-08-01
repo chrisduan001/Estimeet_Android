@@ -25,14 +25,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@null"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/ic_launcher" />
 
     <LinearLayout
         android:id="@+id/toolbar_action_group"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:visibility="gone"
+        android:layout_height="42dp"
+        android:visibility="visible"
         android:orientation="horizontal">
+        <estimeet.meetup.util.widget.OmnesTextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/greyDarker"
+            app:typeface="regular"
+            android:text="@string/travel_walk_message"
+            />
         <ImageButton
             android:id="@+id/toolbar_action_walking"
             style="@style/ToolbarActionIcon"
@@ -53,13 +62,6 @@
             android:contentDescription="@null"
             android:background="@drawable/image_button_selector"
             android:src="@drawable/ic_directions_car_grey_48dp"/>
-
-        <ImageButton
-            android:id="@+id/toolbar_action_bike"
-            style="@style/ToolbarActionIcon"
-            android:contentDescription="@null"
-            android:background="@drawable/image_button_selector"
-            android:src="@drawable/ic_directions_bike_grey_48dp"/>
     </LinearLayout>
 
     

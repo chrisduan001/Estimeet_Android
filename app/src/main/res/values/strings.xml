@@ -72,6 +72,10 @@
     <string name="minute_string">Minute(s)</string>
     <string name="hour_string">Hour(s)</string>
 
+    <string name="travel_walk_message">You are \non foot</string>
+    <string name="travel_bus_message">You are \nin a bus</string>
+    <string name="travel_car_message">You are \nin a car</string>
+
     <string name="distance_title">Distance: </string>
     <string name="eta_title">ETA: </string>
     <string name="location_title">Location: </string>

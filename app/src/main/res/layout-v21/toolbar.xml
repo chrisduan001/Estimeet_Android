@@ -30,9 +30,19 @@
     <LinearLayout
         android:id="@+id/toolbar_action_group"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:visibility="gone"
         android:orientation="horizontal">
+        <estimeet.meetup.util.widget.OmnesTextView
+            android:id="@+id/toolbar_message"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/greyDarker"
+            app:typeface="regular"
+            android:text="@string/travel_walk_message"
+            />
         <ImageButton
             android:id="@+id/toolbar_action_walking"
             style="@style/ToolbarActionIcon"
@@ -54,12 +64,6 @@
             android:contentDescription="@null"
             android:src="@drawable/ic_directions_car_grey_48dp"/>
 
-        <ImageButton
-            android:id="@+id/toolbar_action_bike"
-            style="@style/ToolbarActionIcon"
-            android:background="@drawable/ripple_effect"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_directions_bike_grey_48dp"/>
     </LinearLayout>
 
 </android.support.v7.widget.Toolbar>
