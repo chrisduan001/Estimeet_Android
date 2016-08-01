@@ -1,5 +1,6 @@
 package estimeet.meetup.ui.fragment;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -113,6 +114,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         initFriendCursor();
 
         registerPushChannel();
+        
     }
 
     @Override
@@ -125,6 +127,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onResume() {
         super.onResume();
         adapter.resumeTimer();
+        removeNotification();
     }
 
     @Override
@@ -190,6 +193,13 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     //in case that user add friend or delete friend from managefriendfragment
     public void restartFriendCursor() {
         getActivity().getSupportLoaderManager().restartLoader(MAINCURSORLOADER, null, this);
+    }
+
+    //Removes all notification
+    private void removeNotification(){
+        String ns = Context.NOTIFICATION_SERVICE;
+        NotificationManager nMgr = (NotificationManager) getContext().getSystemService(ns);
+        nMgr.cancelAll();
     }
 
     @Override
