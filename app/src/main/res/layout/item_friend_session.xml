@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:visibility="gone"
-            app:typeface="regular"
+            app:typeface="medium"
             style="@style/SingleLineText"
             android:textColor="@color/greyDarker"
             tools:text="Distance: 2.5Km"/>
@@ -150,7 +150,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:gravity="center_vertical"
-            app:typeface="regular"
+            app:typeface="medium"
             style="@style/SingleLineText"
             android:textColor="@color/greyDarker"
             tools:text="Time: 5 Minutes(Walk)"/>
@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:visibility="gone"
-            app:typeface="regular"
+            app:typeface="medium"
             style="@style/SingleLineText"
             android:textColor="@color/greyDarker"
             tools:text="Location: Auckland CBD"/>

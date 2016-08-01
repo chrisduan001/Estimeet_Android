@@ -20,11 +20,11 @@ public class TravelInfoFactory {
     public static String getTravelModeString(int mode, Context context) {
         switch (mode) {
             case TRAVEL_MODE_WALK:
-                return context.getString(R.string.travel_walk);
+                return String.format(" by %s",context.getString(R.string.travel_walk));
             case TRAVEL_MODE_DRIVE:
-                return context.getString(R.string.travel_drive);
+                return String.format(" by %s",context.getString(R.string.travel_drive));
             case TRAVEL_MODE_TRANSIT:
-                return "";
+                return String.format(" by %s",context.getString(R.string.travel_transit));
             case TRAVEL_MODE_BIKE:
                 return "";
             default:
