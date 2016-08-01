@@ -3,6 +3,7 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -199,6 +200,9 @@ public class FriendSessionView extends RelativeLayout {
     @Background
     void cancelSession() {
         callback.get().onCancelSession(friendSession);
+        Snackbar snackbar = Snackbar
+                .make(getRootView(), getContext().getString(R.string.cancel_session_message), Snackbar.LENGTH_SHORT);
+        snackbar.show();
     }
 
     @Background
