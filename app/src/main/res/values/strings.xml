@@ -53,7 +53,7 @@
     <string name="push_HUB_LISTENER_STRING">Endpoint=sb://meetup.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=3XEU5LpvQH7DsLfWIj4t+6csDar4B0PE83rxlm1qJDE="</string>
     <string name="push_session_request">Your friend wants to estimeet you!</string>
     <string name="send_estimeet_message">Estimeet request sent</string>
-    <string name="session_refresh_message">Swipe to Refresh  (15 min timeout)</string>
+    <string name="session_refresh_message">Swipe to Refresh  (expire in 15 min)</string>
     <string name="accept">Accept</string>
     <string name="ignore">Ignore</string>
     <string name="push_session_starts">New estimeet session created</string>
@@ -65,8 +65,9 @@
     <string name="error_session_expired">Session has expired. Please send another estimeet.</string>
     <string name="error_session_generic">An error occurred while getting the distance, please try again</string>
     <string name="distance_format">KM</string>
-    <string name="travel_walk">Walk</string>
-    <string name="travel_drive">Drive</string>
+    <string name="travel_walk">walk</string>
+    <string name="travel_drive">car</string>
+    <string name="travel_transit">bus</string>
     <string name="location_unknown">Unknown</string>
     <string name="expired_string">(Needs Refresh)</string>
     <string name="minute_string">Minute(s)</string>

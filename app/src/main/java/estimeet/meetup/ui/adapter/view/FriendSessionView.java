@@ -135,7 +135,9 @@ public class FriendSessionView extends RelativeLayout {
                 getContext().getString(R.string.location_unknown) : friendSession.getLocation() + expireString));
 
         String etaString = getContext().getString(R.string.eta_title) +
-                TravelInfoFactory.getEtaString(friendSession.getEta(), getContext()) + expireString;
+                TravelInfoFactory.getEtaString(friendSession.getEta(), getContext())
+                + TravelInfoFactory.getTravelModeString(friendSession.getTravelMode(),getContext())
+                + expireString;
         sessionEta.setText(etaString);
 
         setVisibility(GONE, sessionFriendName, sessionRefreshMessage);
