@@ -10,6 +10,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ProgressBar;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
@@ -58,6 +60,7 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
     @ViewById(R.id.progress_bar) ProgressBar progressBar;
 
     private SearchView searchView;
+    private Menu menu;
 
     //region lifecycle
     @Nullable
@@ -106,6 +109,7 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         setUpSearchView(menu, inflater);
         super.onCreateOptionsMenu(menu, inflater);
+        this.menu = menu;
     }
     //endregion
 
@@ -228,6 +232,11 @@ public class ManageFriendFragment extends BaseFragment implements MenuItemCompat
                 return true;
             }
         });
+    }
+
+    @Click(R.id.search_friend)
+    protected void searchFriendsButtonClicked() {
+        menu.findItem(R.id.toolbar_search).expandActionView();
     }
 
     @Override

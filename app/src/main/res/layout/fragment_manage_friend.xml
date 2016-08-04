@@ -9,33 +9,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/add_friend_icon"
-            android:layout_width="30dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_search_black_24dp"
-            android:layout_marginLeft="20dp"
-            />
+        <RelativeLayout
+            android:id="@+id/search_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <estimeet.meetup.util.widget.OmnesTextView
-            android:id="@+id/add_friend_label"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_toRightOf="@+id/add_friend_icon"
-            android:textColor="@color/greyDarker"
-            app:typeface="medium"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            tools:text="@string/search_phone"
-            android:visibility="visible"/>
+            <ImageView
+                android:id="@+id/search_friend_icon"
+                android:layout_width="30dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_search_black_24dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                />
+
+            <estimeet.meetup.util.widget.OmnesTextView
+                android:id="@+id/search_friend_label"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_toRightOf="@+id/search_friend_icon"
+                android:layout_toEndOf="@+id/search_friend_icon"
+                android:textColor="@color/greyDarker"
+                app:typeface="regular"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/search_phone"
+                android:visibility="visible"/>
+        </RelativeLayout>
+
 
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/add_friend_label"
+            android:layout_below="@+id/search_friend"
             tools:listitem="@layout/item_manage_friends_list"/>
 
         <android.support.v7.widget.RecyclerView
