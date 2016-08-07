@@ -79,7 +79,7 @@ public class SessionCreationFactory {
     public static String getSessionLengthString(int length, Context context) {
         switch (length) {
             case 0:
-                return context.getString(R.string.session_length_15);
+                return context.getString(R.string.session_length_30);
             case 1:
                 return "";
             case 2:
@@ -92,13 +92,13 @@ public class SessionCreationFactory {
     public static int getSessionLengthInMinutes(int length) {
         switch (length) {
             case 0:
-                return 15;
-            case 1:
                 return 30;
+            case 1:
+                return 45;
             case 2:
                 return 60;
             default:
-                return 15;
+                return 30;
         }
     }
 }
