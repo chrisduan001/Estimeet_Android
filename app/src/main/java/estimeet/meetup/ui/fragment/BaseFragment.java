@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.annotation.Keep;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.digits.sdk.android.Digits;
+
+import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +88,14 @@ public abstract class BaseFragment extends Fragment {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.setOnDismissListener(listener);
+    }
+
+    protected void showSnackBarMessage (String message){
+        if(getView() != null){
+            Snackbar snackbar = Snackbar
+                    .make(getView(), message, Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        }
     }
 
     public void onError(String errCode) {

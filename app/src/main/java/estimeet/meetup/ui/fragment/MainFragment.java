@@ -337,6 +337,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
+        showSnackBarMessage(getString(R.string.cancel_session_message));
     }
 
     @Override @Background
