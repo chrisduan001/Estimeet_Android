@@ -52,6 +52,7 @@
     <string name="push_HUB_NAME">meetup</string>
     <string name="push_HUB_LISTENER_STRING">Endpoint=sb://meetup.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=3XEU5LpvQH7DsLfWIj4t+6csDar4B0PE83rxlm1qJDE="</string>
     <string name="push_session_request">Your friend wants to estimeet you!</string>
+    <string name="push_session_request_friend">wants to estimeet you!</string>
     <string name="send_estimeet_message">Estimeet request sent</string>
     <string name="session_refresh_message">Swipe to Refresh  (expire in 15 min)</string>
     <string name="accept">Accept</string>

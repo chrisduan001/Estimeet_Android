@@ -30,6 +30,7 @@ public class NotificationHandler extends NotificationsHandler {
     public void onReceive(Context context, Bundle bundle) {
 
         String message = bundle.getString("message");
+        String name = bundle.getString("name", null);
         if (!TextUtils.isEmpty(message)) {
             String[] msgArray = message.split(",");
             int code = Integer.parseInt(msgArray[0]);
@@ -46,7 +47,8 @@ public class NotificationHandler extends NotificationsHandler {
                 case 101:
                     sendGeneralPush(context);
                     displayOnMainScreen(0, context, context.getString(R.string.app_name),
-                            context.getString(R.string.push_session_request));
+                            TextUtils.isEmpty(name) ? context.getString(R.string.push_session_request)
+                                                    : name + " " + context.getString(R.string.push_session_request_friend));
                     break;
                 //friend accepted session
                 case 102:
@@ -137,7 +139,6 @@ public class NotificationHandler extends NotificationsHandler {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_estimeet_notification)
