@@ -2,15 +2,21 @@ package estimeet.meetup.ui.fragment;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -22,6 +28,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.Receiver;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -253,6 +260,39 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override
     public void onTravelMode(int travelMode) {
         mainCallback.showToolbarActionGroup(travelMode);
+    }
+
+    @UiThread
+    @Override
+    public void checkGPSOn(){
+        LocationManager manager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE );
+
+        //Checks to see if GPS is off
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+
+            //Creates a dialog box prompting user to turn on GPS
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+            alertDialogBuilder.setMessage("GPS is currently turned off. Would you like to turn it on?");
+
+            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    //Turn on GPS
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Do Nothing
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
     //endregion
 
