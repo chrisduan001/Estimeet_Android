@@ -270,28 +270,15 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         //Checks to see if GPS is off
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
 
-            //Creates a dialog box prompting user to turn on GPS
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setMessage(getString(R.string.dialog_GPS_on));
-
-            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            showAlertDialog(getString(R.string.dialog_GPS_on_heading),getString(R.string.dialog_GPS_on),
+            new DialogInterface.OnDismissListener() {
                 @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    //Turn on GPS
+                public void onDismiss(DialogInterface dialog) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
                 }
             });
 
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Do Nothing
-                }
-            });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
         }
     }
     //endregion
