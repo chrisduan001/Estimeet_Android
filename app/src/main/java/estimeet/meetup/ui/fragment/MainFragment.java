@@ -272,7 +272,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
             //Creates a dialog box prompting user to turn on GPS
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setMessage("GPS is currently turned off. Would you like to turn it on?");
+            alertDialogBuilder.setMessage(getString(R.string.dialog_GPS_on));
 
             alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override

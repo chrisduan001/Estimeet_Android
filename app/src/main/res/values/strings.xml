@@ -85,6 +85,7 @@
     <string name="error_session_friend_expired">Friend didn\'t upload their location yet, please try again later</string>
     <string name="save">Save</string>
     <string name="cancel_session_message">Estimeet session cancelled</string>
+    <string name ="dialog_GPS_on">GPS is currently turned off. Would you like to turn it on?</string>
 
     <string name="no_friend_top_line">Its empty here :\'(</string>
     <string name="no_friend_bot_line">Add friends to send Estimeets</string>
