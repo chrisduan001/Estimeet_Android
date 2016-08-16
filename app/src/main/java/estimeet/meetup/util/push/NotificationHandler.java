@@ -140,7 +140,7 @@ public class NotificationHandler extends NotificationsHandler {
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_estimeet_notification)
+                .setSmallIcon(R.drawable.ic_notification_round)
                 .setColor(0xff77a500)
                 .setContentTitle(title)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
