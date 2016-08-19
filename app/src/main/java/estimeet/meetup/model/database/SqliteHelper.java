@@ -16,7 +16,7 @@ import static estimeet.meetup.model.database.SqliteContract.SessionColumns;
 public class SqliteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "meetup.db";
-    private static final int DATABASE_VERSION = 115;
+    private static final int DATABASE_VERSION = 116;
 
     public SqliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,6 +50,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + SessionColumns.SESSION_REQUESTED_TIME + " INTEGER,"
             + SessionColumns.SESSION_DISTANCE + " INTEGER,"
             + SessionColumns.SESSION_ETA + " INTEGER,"
+            + SessionColumns.GEO_COORDINATE + " TEXT,"
             + SessionColumns.TRAVEL_MODE + " INTEGER,"
             + SessionColumns.WAITING_TIME + " INTEGER,"
             + SessionColumns.SESSION_LOCATION + " TEXT,"
@@ -68,9 +69,15 @@ public class SqliteHelper extends SQLiteOpenHelper {
         Log.d(this.getClass().getSimpleName(), "Upgrading database from version " + oldVersion + " to "
                 + newVersion);
 
-        db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.FRIENDS);
-        db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.SESSIONS);
-        onCreate(db);
+        if (oldVersion == 115 && newVersion == 116) {
+            //insert geo coordinate column
+            db.execSQL("ALTER TABLE " + SqliteContract.Tables.SESSIONS + " ADD COLUMN "
+            + SessionColumns.GEO_COORDINATE + " TEXT;");
+        } else {
+            db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.USERS);
+            db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.FRIENDS);
+            db.execSQL("DROP TABLE IF EXISTS " + SqliteContract.Tables.SESSIONS);
+            onCreate(db);
+        }
     }
 }

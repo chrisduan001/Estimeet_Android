@@ -42,6 +42,7 @@ public class SqliteContract {
         String SESSION_DISTANCE = "Distance";
         String SESSION_ETA = "ETA";
         String TRAVEL_MODE = "TravelMode";
+        String GEO_COORDINATE = "GeoCoordinate";
         //time wait for friend location update
         String WAITING_TIME = "WaitingTime";
         String SESSION_LOCATION = "Location";
