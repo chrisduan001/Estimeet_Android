@@ -3,7 +3,6 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
@@ -50,6 +51,7 @@ public class FriendSessionView extends RelativeLayout {
     @ViewById(R.id.active_session_refresh_message)      TextView  sessionRefreshMessage;
     @ViewById(R.id.reward_progress)                 ProgressBar progressBar;
 
+    @ViewById(R.id.google_map_static)                       ImageView googlemapstatic;
     private FriendSession friendSession;
     private WeakReference<SessionActionCallback> callback;
 
@@ -94,10 +96,20 @@ public class FriendSessionView extends RelativeLayout {
 
     private void setupSessionInfoView() {
         setViewVisibility(SessionActivityFactory.ACTIVE_SESSION);
-        if (friendSession.getDistance() == 0 && friendSession.getEta() == 0) {
+        if (friendSession.getLocation() == null) {
             showEmptyActivitySessionView();
         } else {
             showActivitySessionView();
+        }
+
+        //Hayden testing location - delete after done
+        // show The Image in a ImageView
+        String mapkey = "AIzaSyDnQO1YQdPv9G1O3R_l_u74pqMvrKTDa5c";
+        String geoCo = friendSession.getGeoCoordinate();
+        if(geoCo != null) {
+
+            String mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+geoCo+"&zoom=16&scale=2&size=640x130&maptype=roadmap&key="+mapkey+"&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0x77a500%7Clabel:%7C"+geoCo;
+            Picasso.with(getContext()).load(mapurl).into(googlemapstatic);
         }
 
         setProgressBarView();

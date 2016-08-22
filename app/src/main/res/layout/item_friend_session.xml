@@ -6,6 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/grey_Lighter">
 
+    <ImageView
+        android:id="@+id/google_map_static"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@null"
+        />
     <FrameLayout
         android:id="@+id/dp_section"
         android:layout_width="60dp"
@@ -13,6 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp">
+
 
         <ProgressBar
             android:id="@+id/reward_progress"
@@ -112,6 +120,7 @@
         android:visibility="visible"
         android:gravity="center_vertical"
         style="@style/SessionLayoutStyle">
+
 
         <estimeet.meetup.util.widget.OmnesTextView
             android:id="@+id/active_session_friend_name"
