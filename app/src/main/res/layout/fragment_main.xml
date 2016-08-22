@@ -61,11 +61,21 @@
             android:src="@drawable/no_friend_icon"
             android:visibility="gone"
             />
+
+
+
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
         <estimeet.meetup.util.widget.OmnesTextView
             android:id="@+id/map_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/google_map_static"
+            android:layout_alignBottom="@+id/map"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:background="#80000000"
             android:textColor="@color/white"
@@ -74,14 +84,14 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="@string/map_message"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/item_manage_friends_list"
-            android:layout_below="@+id/google_map_static"
+            android:layout_below="@+id/map"
             android:visibility="gone"/>
     </RelativeLayout>
 

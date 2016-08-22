@@ -1,11 +1,13 @@
 package estimeet.meetup.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -19,11 +21,18 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 import com.squareup.picasso.Picasso;
 
@@ -57,7 +66,7 @@ import estimeet.meetup.util.push.NotificationHandler;
  */
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView, LoaderManager.LoaderCallbacks<Cursor>,
-        FriendListAdapter.FriendAdapterCallback {
+        FriendListAdapter.FriendAdapterCallback, OnMapReadyCallback {
 
     public interface MainCallback {
         void navToFriendList();
@@ -89,6 +98,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @ViewById(R.id.map_message) TextView mapMessage;
 
     private MainCallback mainCallback;
+
+    private GoogleMap mMap;
 
     //region lifecycle
     @Override
@@ -129,6 +140,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         initFriendCursor();
 
         registerPushChannel();
+
+        initialiseGoogleMaps();
 
     }
 
@@ -180,6 +193,38 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
                 }
             }
         });
+    }
+    private void initialiseGoogleMaps(){
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @UiThread
+    public void placeMarkerOnMap(FriendSession friendSession){
+        String friendGeo = friendSession.getGeoCoordinate();
+
+
+        if(friendGeo != null && friendSession.getDistance() <= 3000) {
+            String[] latlong =  friendGeo.split(",");
+            double latitude = Double.parseDouble(latlong[0]);
+            double longitude = Double.parseDouble(latlong[1]);
+            LatLng friendLocation = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(friendLocation).title(friendSession.getFriendName()));
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(friendLocation, 16.0f));
+        }
+
     }
 
     @Background
@@ -308,6 +353,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     }
 
+
+
     @UiThread
     public void hideMap(){
         googleMapStatic.setVisibility(View.GONE);
@@ -370,12 +417,13 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
         showSnackBarMessage(getString(R.string.cancel_session_message));
-        hideMap();
+        //hideMap();
     }
 
     @Override @Background
     public void onAcceptSession(FriendSession friendSession) {
         presenter.createNewSession(friendSession);
+
     }
 
     @Override @Background
@@ -386,7 +434,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onRequestLocation(FriendSession friendSession) {
         presenter.requestLocationData(friendSession);
-        showMap(friendSession);
+        //showMap(friendSession);
+        placeMarkerOnMap(friendSession);
     }
     //endregion
 }
