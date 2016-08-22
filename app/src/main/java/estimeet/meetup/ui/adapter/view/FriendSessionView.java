@@ -51,7 +51,6 @@ public class FriendSessionView extends RelativeLayout {
     @ViewById(R.id.active_session_refresh_message)      TextView  sessionRefreshMessage;
     @ViewById(R.id.reward_progress)                 ProgressBar progressBar;
 
-    @ViewById(R.id.google_map_static)                       ImageView googlemapstatic;
     private FriendSession friendSession;
     private WeakReference<SessionActionCallback> callback;
 
@@ -100,16 +99,6 @@ public class FriendSessionView extends RelativeLayout {
             showEmptyActivitySessionView();
         } else {
             showActivitySessionView();
-        }
-
-        //Hayden testing location - delete after done
-        // show The Image in a ImageView
-        String mapkey = "AIzaSyDnQO1YQdPv9G1O3R_l_u74pqMvrKTDa5c";
-        String geoCo = friendSession.getGeoCoordinate();
-        
-        if(geoCo != null && friendSession.getDistance() <= 3000) {
-            String mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+geoCo+"&zoom=18&scale=2&size=640x540&maptype=roadmap&key="+mapkey+"&format=png&visual_refresh=true&markers=color:0x77a500%7Clabel:%7C"+geoCo;
-            Picasso.with(getContext()).load(mapurl).into(googlemapstatic);
         }
 
         setProgressBarView();

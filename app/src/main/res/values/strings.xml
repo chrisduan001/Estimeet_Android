@@ -91,4 +91,6 @@
     <string name="no_friend_top_line">Its empty here :\'(</string>
     <string name="no_friend_bot_line">Add friends to send Estimeets</string>
     <string name="btn_add_friends">Add Friends</string>
+
+    <string name="map_message">Hint: You can only see friends that are closeby</string>
 </resources>

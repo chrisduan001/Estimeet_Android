@@ -20,9 +20,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.microsoft.windowsazure.notifications.NotificationsManager;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
@@ -37,6 +40,7 @@ import javax.inject.Named;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.model.FriendSession;
+import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
@@ -72,6 +76,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Inject MainPresenter presenter;
     @Inject @Named("currentUser") User user;
     @Inject FriendListAdapter adapter;
+    @Inject MeetUpSharedPreference sharedPreference;
 
     @ViewById(R.id.recycler)        RecyclerView recyclerView;
     @ViewById(R.id.fab)             FloatingActionButton fab;
@@ -79,6 +84,9 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @ViewById(R.id.fab_action2)     ViewGroup fabAction2;
 
     @ViewById(R.id.no_friend_layout)FrameLayout noFriendLayout;
+
+    @ViewById(R.id.google_map_static) ImageView googleMapStatic;
+    @ViewById(R.id.map_message) TextView mapMessage;
 
     private MainCallback mainCallback;
 
@@ -281,6 +289,30 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
         }
     }
+
+    @UiThread
+    public void showMap(FriendSession friendSession){
+        //Hayden testing location - delete after done
+        // show The Image in a ImageView
+        String googleMapKey = "AIzaSyDnQO1YQdPv9G1O3R_l_u74pqMvrKTDa5c";
+        String friendGeo = friendSession.getGeoCoordinate();
+        String userGeo = sharedPreference.getUserGeoCoord();
+
+        if(friendGeo != null && friendSession.getDistance() <= 3000) {
+            googleMapStatic.setVisibility(View.VISIBLE);
+            mapMessage.setVisibility(View.VISIBLE);
+            String mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+userGeo+"&scale=2&size=640x540&maptype=roadmap&key="+googleMapKey+"&format=png&visual_refresh=true&markers=color:0xf39c12%7Clabel:%7C"+friendGeo+ "&markers=color:0x77a500%7Clabel:%7C"+ userGeo;
+            Picasso.with(getContext()).load(mapurl).into(googleMapStatic);
+
+        }
+
+    }
+
+    @UiThread
+    public void hideMap(){
+        googleMapStatic.setVisibility(View.GONE);
+        mapMessage.setVisibility(View.GONE);
+    }
     //endregion
 
     //region button
@@ -338,6 +370,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
         showSnackBarMessage(getString(R.string.cancel_session_message));
+        hideMap();
     }
 
     @Override @Background
@@ -353,6 +386,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onRequestLocation(FriendSession friendSession) {
         presenter.requestLocationData(friendSession);
+        showMap(friendSession);
     }
     //endregion
 }
