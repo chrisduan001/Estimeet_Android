@@ -106,9 +106,9 @@ public class FriendSessionView extends RelativeLayout {
         // show The Image in a ImageView
         String mapkey = "AIzaSyDnQO1YQdPv9G1O3R_l_u74pqMvrKTDa5c";
         String geoCo = friendSession.getGeoCoordinate();
-        if(geoCo != null) {
-
-            String mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+geoCo+"&zoom=16&scale=2&size=640x130&maptype=roadmap&key="+mapkey+"&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0x77a500%7Clabel:%7C"+geoCo;
+        
+        if(geoCo != null && friendSession.getDistance() <= 3000) {
+            String mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+geoCo+"&zoom=18&scale=2&size=640x540&maptype=roadmap&key="+mapkey+"&format=png&visual_refresh=true&markers=color:0x77a500%7Clabel:%7C"+geoCo;
             Picasso.with(getContext()).load(mapurl).into(googlemapstatic);
         }
 
