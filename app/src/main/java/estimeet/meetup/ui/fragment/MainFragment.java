@@ -235,10 +235,10 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
             double latitude = Double.parseDouble(latlong[0]);
             double longitude = Double.parseDouble(latlong[1]);
             Bitmap bitmapDP = BitmapFactory.decodeByteArray(friendSession.getFriendDp(), 0, friendSession.getFriendDp().length);
-            Bitmap scaledDP = Bitmap.createScaledBitmap(bitmapDP, bitmapDP.getWidth()/2, bitmapDP.getHeight()/2, false);
+            Bitmap scaledDP = Bitmap.createScaledBitmap(bitmapDP, dpToPx(50), dpToPx(50), false);
 
             //Clear previous markers
-            removeMarkers();
+            mMap.clear();
 
             LatLng friendLocation = new LatLng(latitude, longitude);
 

@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -96,6 +97,12 @@ public abstract class BaseFragment extends Fragment {
                     .make(getView(), message, Snackbar.LENGTH_SHORT);
             snackbar.show();
         }
+    }
+
+    protected int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 
     public void onError(String errCode) {
