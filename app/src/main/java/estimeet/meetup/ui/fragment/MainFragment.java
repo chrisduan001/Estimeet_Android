@@ -5,12 +5,16 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -27,11 +31,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 import com.squareup.picasso.Picasso;
@@ -100,6 +108,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     private MainCallback mainCallback;
 
     private GoogleMap mMap;
+    private Marker friendMarker;
 
     //region lifecycle
     @Override
@@ -198,16 +207,22 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Check to see if permission granted
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) return;
+
+        mMap.setMyLocationEnabled(true);
+
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng( -36.848461,174.763336) , 14.0f) );
+
+
     }
 
     @UiThread
@@ -215,16 +230,41 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         String friendGeo = friendSession.getGeoCoordinate();
 
 
-        if(friendGeo != null && friendSession.getDistance() <= 3000) {
+        if(friendGeo != null && friendSession.getDistance() <= 20000) {
             String[] latlong =  friendGeo.split(",");
             double latitude = Double.parseDouble(latlong[0]);
             double longitude = Double.parseDouble(latlong[1]);
-            LatLng friendLocation = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(friendLocation).title(friendSession.getFriendName()));
+            Bitmap bitmapDP = BitmapFactory.decodeByteArray(friendSession.getFriendDp(), 0, friendSession.getFriendDp().length);
+            Bitmap scaledDP = Bitmap.createScaledBitmap(bitmapDP, bitmapDP.getWidth()/2, bitmapDP.getHeight()/2, false);
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(friendLocation, 16.0f));
+            //Clear previous markers
+            removeMarkers();
+
+            LatLng friendLocation = new LatLng(latitude, longitude);
+
+            friendMarker = mMap.addMarker(new MarkerOptions()
+                    .position(friendLocation)
+                    .title(friendSession.getFriendName())
+                    .icon(BitmapDescriptorFactory.fromBitmap(scaledDP)));
+
+            mMap.animateCamera(getCameraCenter());
         }
 
+    }
+
+    private CameraUpdate getCameraCenter(){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        //Get friend geocoord and add to builder
+        builder.include(friendMarker.getPosition());
+
+        //Get user geocoord and add to builder
+        String[] userLatLong = sharedPreference.getUserGeoCoord().split(",");
+        builder.include(new LatLng(Double.parseDouble(userLatLong[0]),Double.parseDouble(userLatLong[1])));
+        LatLngBounds bounds = builder.build();
+
+        //Returns the camera update with padding
+        return CameraUpdateFactory.newLatLngBounds(bounds, 300);
     }
 
     @Background
@@ -335,31 +375,6 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         }
     }
 
-    @UiThread
-    public void showMap(FriendSession friendSession){
-        //Hayden testing location - delete after done
-        // show The Image in a ImageView
-        String googleMapKey = "AIzaSyDnQO1YQdPv9G1O3R_l_u74pqMvrKTDa5c";
-        String friendGeo = friendSession.getGeoCoordinate();
-        String userGeo = sharedPreference.getUserGeoCoord();
-
-        if(friendGeo != null && friendSession.getDistance() <= 3000) {
-            googleMapStatic.setVisibility(View.VISIBLE);
-            mapMessage.setVisibility(View.VISIBLE);
-            String mapurl = "http://maps.googleapis.com/maps/api/staticmap?center="+userGeo+"&scale=2&size=640x540&maptype=roadmap&key="+googleMapKey+"&format=png&visual_refresh=true&markers=color:0xf39c12%7Clabel:%7C"+friendGeo+ "&markers=color:0x77a500%7Clabel:%7C"+ userGeo;
-            Picasso.with(getContext()).load(mapurl).into(googleMapStatic);
-
-        }
-
-    }
-
-
-
-    @UiThread
-    public void hideMap(){
-        googleMapStatic.setVisibility(View.GONE);
-        mapMessage.setVisibility(View.GONE);
-    }
     //endregion
 
     //region button
@@ -417,7 +432,14 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
         showSnackBarMessage(getString(R.string.cancel_session_message));
-        //hideMap();
+        removeMarkers();
+
+    }
+
+    @UiThread
+    public void removeMarkers() {
+        //Clear previous markers
+        mMap.clear();
     }
 
     @Override @Background
