@@ -4,15 +4,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.annotation.Keep;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.digits.sdk.android.Digits;
+
+import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +89,20 @@ public abstract class BaseFragment extends Fragment {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.setOnDismissListener(listener);
+    }
+
+    protected void showSnackBarMessage (String message){
+        if(getView() != null){
+            Snackbar snackbar = Snackbar
+                    .make(getView(), message, Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        }
+    }
+
+    protected int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 
     public void onError(String errCode) {

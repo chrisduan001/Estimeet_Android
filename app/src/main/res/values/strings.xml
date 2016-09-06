@@ -25,7 +25,7 @@
 
     <string name="progress_loading">Loading</string>
 
-    <string name="search_phone">Search By Phone Number</string>
+    <string name="search_phone">Add By Phone Number</string>
 
     <string name="error_unable_to_crop_image">An error occurred while cropping the image</string>
     <string name="error_create_temp_file">An error occurred when accessing your camera</string>
@@ -54,7 +54,7 @@
     <string name="push_session_request">Your friend wants to estimeet you!</string>
     <string name="push_session_request_friend">wants to estimeet you!</string>
     <string name="send_estimeet_message">Estimeet request sent</string>
-    <string name="session_refresh_message">Swipe to Refresh  (expire in 15 min)</string>
+    <string name="session_refresh_message">Swipe to Refresh  (expire in 30 min)</string>
     <string name="accept">Accept</string>
     <string name="ignore">Ignore</string>
     <string name="push_session_starts">New estimeet session created</string>
@@ -86,8 +86,12 @@
     <string name="error_session_friend_expired">Friend didn\'t upload their location yet, please try again later</string>
     <string name="save">Save</string>
     <string name="cancel_session_message">Estimeet session cancelled</string>
+    <string name ="dialog_GPS_on_heading">Locations is Off</string>
+    <string name ="dialog_GPS_on">Please turn locations on to use Estimeet</string>
 
     <string name="no_friend_top_line">Its empty here :\'(</string>
     <string name="no_friend_bot_line">Add friends to send Estimeets</string>
     <string name="btn_add_friends">Add Friends</string>
+
+    <string name="map_message">Hint: You can only see friends that are closeby</string>
 </resources>

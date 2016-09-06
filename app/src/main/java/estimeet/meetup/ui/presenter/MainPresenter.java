@@ -141,6 +141,8 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         this.friendSession = friendSession;
         isRequestSession = true;
         view.get().checkPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+        view.get().checkGPSOn();
+
     }
 
     public void requestNotification() {
@@ -153,7 +155,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         isRequestSession = false;
         this.friendSession = friendSession;
         view.get().checkPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-
+        view.get().checkGPSOn();
     }
 
     private void onPermissionGrantedForNewSession() {
@@ -257,5 +259,7 @@ public class MainPresenter extends BasePresenter implements GetNotificationInter
         void onNoActiveSessions();
 
         void onTravelMode(int travelMode);
+
+        void checkGPSOn();
     }
 }

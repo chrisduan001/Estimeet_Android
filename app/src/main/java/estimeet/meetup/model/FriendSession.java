@@ -18,6 +18,7 @@ public class FriendSession {
     private long timeToExpireInMilli;
     private int distance;
     private int eta;
+    private String geoCoordinate;
     private String location;
     private int type;
     private String friendName;
@@ -155,6 +156,14 @@ public class FriendSession {
         this.waitingTime = waitingTime;
     }
 
+    public String getGeoCoordinate() {
+        return geoCoordinate;
+    }
+
+    public void setGeoCoordinate(String geoCoordinate) {
+        this.geoCoordinate = geoCoordinate;
+    }
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(11);
         contentValues.put(SqliteContract.SessionColumns.SESSION_ID, getSessionId());
@@ -165,6 +174,7 @@ public class FriendSession {
         contentValues.put(SqliteContract.SessionColumns.SESSION_DISTANCE, getDistance());
         contentValues.put(SqliteContract.SessionColumns.SESSION_ETA, getEta());
         contentValues.put(SqliteContract.SessionColumns.SESSION_LOCATION, getLocation());
+        contentValues.put(SqliteContract.SessionColumns.GEO_COORDINATE, getGeoCoordinate());
         contentValues.put(SqliteContract.SessionColumns.SESSION_TYPE, getType());
         contentValues.put(SqliteContract.SessionColumns.SESSION_REQUESTED_TIME, getRequestedLength());
         contentValues.put(SqliteContract.SessionColumns.TRAVEL_MODE, getTravelMode());
@@ -183,6 +193,7 @@ public class FriendSession {
         friendSession.setTimeToExpireInMilli(cursor.getLong(DataHelper.FriendSessionQuery.EXPIRE_MINUTES));
         friendSession.setDistance(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_DISTANCE));
         friendSession.setEta(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_ETA));
+        friendSession.setGeoCoordinate(cursor.getString(DataHelper.FriendSessionQuery.GEO_COORDINATE));
         friendSession.setLocation(cursor.getString(DataHelper.FriendSessionQuery.SESSION_LOCATION));
         friendSession.setType(cursor.getInt(DataHelper.FriendSessionQuery.SESSION_TYPE));
         friendSession.setFriendName(cursor.getString(DataHelper.FriendSessionQuery.FRIEND_NAME));

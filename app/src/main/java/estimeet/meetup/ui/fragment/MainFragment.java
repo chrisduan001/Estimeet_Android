@@ -1,27 +1,54 @@
 package estimeet.meetup.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.Receiver;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -30,6 +57,7 @@ import javax.inject.Named;
 import estimeet.meetup.R;
 import estimeet.meetup.di.components.MainComponent;
 import estimeet.meetup.model.FriendSession;
+import estimeet.meetup.model.MeetUpSharedPreference;
 import estimeet.meetup.model.User;
 import estimeet.meetup.model.database.DataHelper;
 import estimeet.meetup.model.database.SqliteContract;
@@ -46,7 +74,7 @@ import estimeet.meetup.util.push.NotificationHandler;
  */
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends BaseFragment implements MainPresenter.MainView, LoaderManager.LoaderCallbacks<Cursor>,
-        FriendListAdapter.FriendAdapterCallback {
+        FriendListAdapter.FriendAdapterCallback, OnMapReadyCallback {
 
     public interface MainCallback {
         void navToFriendList();
@@ -65,6 +93,7 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Inject MainPresenter presenter;
     @Inject @Named("currentUser") User user;
     @Inject FriendListAdapter adapter;
+    @Inject MeetUpSharedPreference sharedPreference;
 
     @ViewById(R.id.recycler)        RecyclerView recyclerView;
     @ViewById(R.id.fab)             FloatingActionButton fab;
@@ -73,7 +102,13 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
 
     @ViewById(R.id.no_friend_layout)FrameLayout noFriendLayout;
 
+    @ViewById(R.id.google_map_static) ImageView googleMapStatic;
+    @ViewById(R.id.map_message) TextView mapMessage;
+
     private MainCallback mainCallback;
+
+    private GoogleMap mMap;
+    private Marker friendMarker;
 
     //region lifecycle
     @Override
@@ -114,6 +149,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
         initFriendCursor();
 
         registerPushChannel();
+
+        initialiseGoogleMaps();
 
     }
 
@@ -165,6 +202,69 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
                 }
             }
         });
+    }
+    private void initialiseGoogleMaps(){
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        //Check to see if permission granted
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) return;
+
+        mMap.setMyLocationEnabled(true);
+
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng( -36.848461,174.763336) , 14.0f) );
+
+
+    }
+
+    @UiThread
+    public void placeMarkerOnMap(FriendSession friendSession){
+        String friendGeo = friendSession.getGeoCoordinate();
+
+
+        if(friendGeo != null && friendSession.getDistance() <= 20000) {
+            String[] latlong =  friendGeo.split(",");
+            double latitude = Double.parseDouble(latlong[0]);
+            double longitude = Double.parseDouble(latlong[1]);
+            Bitmap bitmapDP = BitmapFactory.decodeByteArray(friendSession.getFriendDp(), 0, friendSession.getFriendDp().length);
+            Bitmap scaledDP = Bitmap.createScaledBitmap(bitmapDP, dpToPx(50), dpToPx(50), false);
+
+            //Clear previous markers
+            mMap.clear();
+
+            LatLng friendLocation = new LatLng(latitude, longitude);
+
+            friendMarker = mMap.addMarker(new MarkerOptions()
+                    .position(friendLocation)
+                    .title(friendSession.getFriendName())
+                    .icon(BitmapDescriptorFactory.fromBitmap(scaledDP)));
+
+            mMap.animateCamera(getCameraCenter());
+        }
+
+    }
+
+    private CameraUpdate getCameraCenter(){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        //Get friend geocoord and add to builder
+        builder.include(friendMarker.getPosition());
+
+        //Get user geocoord and add to builder
+        String[] userLatLong = sharedPreference.getUserGeoCoord().split(",");
+        builder.include(new LatLng(Double.parseDouble(userLatLong[0]),Double.parseDouble(userLatLong[1])));
+        LatLngBounds bounds = builder.build();
+
+        //Returns the camera update with padding
+        return CameraUpdateFactory.newLatLngBounds(bounds, 300);
     }
 
     @Background
@@ -254,6 +354,27 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     public void onTravelMode(int travelMode) {
         mainCallback.showToolbarActionGroup(travelMode);
     }
+
+    @UiThread
+    @Override
+    public void checkGPSOn(){
+        LocationManager manager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE );
+
+        //Checks to see if GPS is off
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+
+            showAlertDialog(getString(R.string.dialog_GPS_on_heading),getString(R.string.dialog_GPS_on),
+            new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+
+        }
+    }
+
     //endregion
 
     //region button
@@ -310,11 +431,21 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onCancelSession(FriendSession friendSession) {
         presenter.cancelSession(friendSession);
+        showSnackBarMessage(getString(R.string.cancel_session_message));
+        removeMarkers();
+
+    }
+
+    @UiThread
+    public void removeMarkers() {
+        //Clear previous markers
+        mMap.clear();
     }
 
     @Override @Background
     public void onAcceptSession(FriendSession friendSession) {
         presenter.createNewSession(friendSession);
+
     }
 
     @Override @Background
@@ -325,6 +456,8 @@ public class MainFragment extends BaseFragment implements MainPresenter.MainView
     @Override @Background
     public void onRequestLocation(FriendSession friendSession) {
         presenter.requestLocationData(friendSession);
+        //showMap(friendSession);
+        placeMarkerOnMap(friendSession);
     }
     //endregion
 }

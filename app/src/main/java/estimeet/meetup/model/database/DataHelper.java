@@ -200,7 +200,8 @@ public class DataHelper {
                 SqliteContract.FriendColumns.IMAGE,
                 SqliteContract.FriendColumns.USER_NAME,
                 SqliteContract.FriendColumns.ID,
-                SqliteContract.SessionColumns.WAITING_TIME
+                SqliteContract.SessionColumns.WAITING_TIME,
+                SqliteContract.SessionColumns.GEO_COORDINATE
         };
 
         int B_ID = 0;
@@ -220,5 +221,6 @@ public class DataHelper {
         int FRIEND_NAME = 14;
         int FRIEND_ID = 15;
         int WAITING_TIME = 16;
+        int GEO_COORDINATE = 17;
     }
 }

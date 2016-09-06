@@ -54,6 +54,7 @@ public class SessionCreationFactory {
         friendSession.setTravelMode(locationModel.travelMode);
         friendSession.setLocation(locationModel.location);
         friendSession.setDateUpdated(System.currentTimeMillis());
+        friendSession.setGeoCoordinate(locationModel.geoCoordinate);
         friendSession.setWaitingTime(0);
 
         return friendSession;

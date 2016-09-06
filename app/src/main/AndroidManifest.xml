@@ -19,7 +19,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher_new_round"
         tools:replace="android:icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -74,6 +74,10 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3079a9957e68f68df335e1a9b7c0639f58b480a4" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCGH0u_R3N9K367lkl5yLzwgJ-g46ge53U"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_id" />
     </application>

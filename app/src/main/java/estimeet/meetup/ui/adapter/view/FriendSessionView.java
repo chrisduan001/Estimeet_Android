@@ -3,7 +3,6 @@ package estimeet.meetup.ui.adapter.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
@@ -94,7 +95,7 @@ public class FriendSessionView extends RelativeLayout {
 
     private void setupSessionInfoView() {
         setViewVisibility(SessionActivityFactory.ACTIVE_SESSION);
-        if (friendSession.getDistance() == 0 && friendSession.getEta() == 0) {
+        if (friendSession.getLocation() == null) {
             showEmptyActivitySessionView();
         } else {
             showActivitySessionView();
@@ -186,11 +187,8 @@ public class FriendSessionView extends RelativeLayout {
     @Click(R.id.btn_cancel_session)
     protected void onCancelSession() {
         cancelSession();
-        Snackbar snackbar = Snackbar
-                .make(getRootView(), getContext().getString(R.string.cancel_session_message), Snackbar.LENGTH_SHORT);
-        snackbar.show();
     }
-
+    
     @Click(R.id.action_accept_request)
     protected void onAcceptRequest() {
         acceptRequest();

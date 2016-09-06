@@ -17,4 +17,7 @@ public class LocationModel extends BaseModel {
 
     @SerializedName("location")
     public String location;
+
+    @SerializedName("geoCoordinate")
+    public String geoCoordinate;
 }
